@@ -34,7 +34,8 @@ CFLAGS	+=	$(INCLUDE)
 #---------------------------------------------------------------------------------
 LIBDIRS	:=	$(PVSNESLIB)
 
-OBJDIR := ./obj/
+GFXDIR := ./gfx/bmp/
+OBJDIR := ./src/
 BINDIR := ./bin/
 
 export OUTPUT:=	$(BINDIR)/$(TARGET)
@@ -43,7 +44,7 @@ CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.asm)))
  
 #---------------------------------------------------------------------------------
-export OFILES	:=	$(wildcard $(OBJDIR)/*.obj)
+export OFILES	:=	$(wildcard $(OBJDIR)/*.obj) $(wildcard $(GFXDIR)/*.obj)
  
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \

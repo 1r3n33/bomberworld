@@ -15,10 +15,10 @@ endif
 include $(DEVKIT65XX)/snes_rules
 
 #---------------------------------------------------------------------------------
-all: gfx
+all: gfx gfx.obj
 
 clean:	
-	rm -f *.pic *.pal *.map
+	rm -f gfx.obj *.pic *.pal *.map
 
 #---------------------------------------------------------------------------------
 spr_sprites.pic: spr_sprites.bmp
