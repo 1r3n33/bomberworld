@@ -20,7 +20,7 @@ include $(DEVKIT65XX)/snes_rules
 # SOURCES is a list of directories containing source code
 # INCLUDES is a list of directories containing extra header files
 #---------------------------------------------------------------------------------
-TARGET		:=	$(shell basename $(CURDIR))
+TARGET		:=	bw
 SOURCES		:=	.
 
 #---------------------------------------------------------------------------------
@@ -33,14 +33,17 @@ CFLAGS	+=	$(INCLUDE)
 # include and lib
 #---------------------------------------------------------------------------------
 LIBDIRS	:=	$(PVSNESLIB)
- 
-export OUTPUT	:=	$(CURDIR)/$(TARGET)
+
+OBJDIR := ./obj/
+BINDIR := ./bin/
+
+export OUTPUT:=	$(BINDIR)/$(TARGET)
  
 CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.asm)))
  
 #---------------------------------------------------------------------------------
-export OFILES	:=	$(BINFILES:.bin=.obj) $(CFILES:.c=.obj) $(SFILES:.asm=.obj)
+export OFILES	:=	$(wildcard $(OBJDIR)/*.obj)
  
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
@@ -49,9 +52,11 @@ export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 GTITLE 		:= -ht"$(TARGET)"
  
 #---------------------------------------------------------------------------------
-all:
-	$(SNTOOLS) -hi! $(GTITLE) $(TARGET).sfc
+all:	$(OUTPUT).sfc
+		$(SNTOOLS) -hi! $(GTITLE) $(OUTPUT).sfc
 
 clean:
-	@echo clean...
-	@rm -f $(TARGET).sfc *.sym
+	rm -f $(OUTPUT).sfc $(OUTPUT).sym
+
+#---------------------------------------------------------------------------------
+$(OUTPUT).sfc: $(OFILES)
