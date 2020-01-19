@@ -53,10 +53,15 @@ export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 GTITLE 		:= -ht"$(TARGET)"
  
 #---------------------------------------------------------------------------------
-all:	$(OUTPUT).sfc
-		$(SNTOOLS) -hi! $(GTITLE) $(OUTPUT).sfc
+all:
+	$(MAKE) -C $(GFXDIR)
+	$(MAKE) -f Makefile.2 -C $(OBJDIR)
+	$(MAKE) $(OUTPUT).sfc
+	$(SNTOOLS) -hi! $(GTITLE) $(OUTPUT).sfc
 
 clean:
+	$(MAKE) clean -C $(GFXDIR)
+	$(MAKE) clean -C $(OBJDIR)
 	rm -f $(OUTPUT).sfc $(OUTPUT).sym
 
 #---------------------------------------------------------------------------------
