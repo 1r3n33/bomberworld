@@ -22,7 +22,7 @@ void init_bomb(u8 id)
     bombs[id].dropped = 0;
 
 	oamSet(bombs[id].spr, 0xFF, 0xFF, 3, 0, 0, SPR_BOMB, 0);
-	oamSetEx(bombs[id].spr, OBJ_SMALL, OBJ_HIDE);
+	oamSetEx(bombs[id].spr, OBJ_LARGE, OBJ_HIDE);
 }
 
 void drop_bomb(u8 id, u16 x, u16 y)

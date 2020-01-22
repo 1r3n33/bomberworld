@@ -7,15 +7,13 @@ void init_graphics();
 // Update graphics each frame
 void update_graphics();
 
-// No real reason to start at 0x2000 unless using pvsneslib fonts
-// 0x2000 steps because of the 256 colors BG Mode3 titlescreen 
-#define VRAM_BG0_GFX    0x0000
-#define VRAM_BG0_MAP    0x1000
-#define VRAM_BG1_GFX    0x2000
-#define VRAM_BG1_MAP    0x3000
-#define VRAM_BG2_GFX    0x4000
-#define VRAM_BG2_MAP    0x5000
-#define VRAM_SPR_32x32  0x6000
+#define VRAM_ADDR_BG0_GFX    0x0000
+#define VRAM_ADDR_BG0_MAP    0x1000
+#define VRAM_ADDR_BG1_GFX    0x2000
+#define VRAM_ADDR_BG1_MAP    0x3000
+#define VRAM_ADDR_BG2_GFX    0x4000
+#define VRAM_ADDR_BG2_MAP    0x5000
+#define VRAM_ADDR_SPR        0x6000
 
 // OAM OBJ id
 #define OBJ_PILOT_0 0
@@ -28,7 +26,9 @@ void update_graphics();
 #define OBJ_BOMB_2  24
 #define OBJ_BOMB_3  28
 
-#define OBJ_LAST    508 
+#define OBJ_TEXT    128
+
+#define OBJ_NEXT_AVAILABLE_ID  256 
 
 // 32x32 sprite id (spr_sprites.bmp)
 #define SPR_PILOT               0
@@ -40,6 +40,8 @@ void update_graphics();
 #define SPR_68                  68
 #define SPR_72                  72
 #define SPR_76                  76
+
+#define SPR_ASCIITABLE          256
 
 // building tiles (bkg_buildings.bmp)
 #define TIL_BUILDING_BLANK                      0

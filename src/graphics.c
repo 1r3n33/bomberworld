@@ -40,7 +40,7 @@ void init_graphics()
 		(&bkg_buildings_til_end - &bkg_buildings_til_begin),
 		(&bkg_buildings_pal_end - &bkg_buildings_pal_begin),
 		BG_4COLORS0,
-		VRAM_BG0_GFX
+		VRAM_ADDR_BG0_GFX
 	);
 	bgInitTileSet(
 		1,
@@ -50,14 +50,14 @@ void init_graphics()
 		(&bkg_city0_til_end - &bkg_city0_til_begin),
 		(&bkg_city0_pal_end - &bkg_city0_pal_begin),
 		BG_4COLORS0,
-		VRAM_BG1_GFX
+		VRAM_ADDR_BG1_GFX
 	);
 	bgInitMapSet(
 		1,
 		&bkg_city0_map_begin,
 		(&bkg_city0_map_end - &bkg_city0_map_begin),
 		SC_32x32,
-		VRAM_BG1_MAP
+		VRAM_ADDR_BG1_MAP
 	);
 	bgInitTileSet(
 		2,
@@ -67,14 +67,14 @@ void init_graphics()
 		(&bkg_sky_4_til_end - &bkg_sky_4_til_begin),
 		(&bkg_sky_4_pal_end - &bkg_sky_4_pal_begin),
 		BG_4COLORS0,
-		VRAM_BG2_GFX
+		VRAM_ADDR_BG2_GFX
 	);
 	bgInitMapSet(
 		2,
 		&bkg_sky_4_map_begin,
 		(&bkg_sky_4_map_end - &bkg_sky_4_map_begin),
 		SC_32x32,
-		VRAM_BG2_MAP
+		VRAM_ADDR_BG2_MAP
 	);
 
 	setMode(BG_MODE0, 0);
@@ -98,7 +98,7 @@ void init_graphics()
 		&palsprite,
 		(&palsprite_end-&palsprite),
 		0,
-		VRAM_SPR_32x32,
+		VRAM_ADDR_SPR,
 		OBJ_SIZE32
 	);
 }

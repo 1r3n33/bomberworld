@@ -123,7 +123,7 @@ void bomb_buildings_collision(struct bomb_t * bomb, u8 id)
 				(u8*)map,
 				32*32*2,
 				SC_32x32,
-				VRAM_BG0_MAP
+				VRAM_ADDR_BG0_MAP
 			);
 
 			return;

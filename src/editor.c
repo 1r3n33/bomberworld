@@ -34,7 +34,7 @@ void init_tilemap()
         (u8*)editor_tilemap,
         32*32*2,
         SC_32x32,
-        VRAM_BG0_MAP
+        VRAM_ADDR_BG0_MAP
     );
 }
 
@@ -107,7 +107,7 @@ void add_block(u8 id)
         (u8*)editor_tilemap,
         32*32*2,
         SC_32x32,
-        VRAM_BG0_MAP
+        VRAM_ADDR_BG0_MAP
     );
 } 
 
@@ -123,7 +123,7 @@ void remove_block(u8 id)
         (u8*)editor_tilemap,
         32*32*2,
         SC_32x32,
-        VRAM_BG0_MAP
+        VRAM_ADDR_BG0_MAP
     );
 } 
 
@@ -131,17 +131,15 @@ u8 run_editor()
 {
     init_graphics();
 
-#if 1
 	oamInitGfxSet(
 		&spr_editor_til_begin,
 		(&spr_editor_til_end-&spr_editor_til_begin),
 		&spr_editor_pal_begin,
 		(&spr_editor_pal_end-&spr_editor_pal_begin),
 		0,
-		VRAM_SPR_32x32,
+		VRAM_ADDR_SPR,
 		OBJ_SIZE8
 	);
-#endif 
 
     reset_building();
 

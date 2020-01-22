@@ -22,9 +22,8 @@ void init_pilot(u8 id)
 		pilots[id].y = 0;
 
 		// Define sprites parameters
-		// Because there is only a single OBJ_SIZE32 initialized, it will be considered the OBJ_SMALL one.
 		oamSet(pilots[id].spr, 0xFF, 0xFF, 3, 0, 0, SPR_PILOT, 0);
-		oamSetEx(pilots[id].spr, OBJ_SMALL, OBJ_SHOW);
+		oamSetEx(pilots[id].spr, OBJ_LARGE, OBJ_SHOW);
 	}
 	else
 	{
@@ -33,9 +32,8 @@ void init_pilot(u8 id)
 		pilots[id].y = GAMEPLAY_PILOT_ID1_OFFSET;		
 
 		// Define sprites parameters
-		// Because there is only a single OBJ_SIZE32 initialized, it will be considered the OBJ_SMALL one.
 		oamSet(pilots[id].spr, 0xFF, 0xFF, 3, 1, 0, SPR_PILOT, 0);
-		oamSetEx(pilots[id].spr, OBJ_SMALL, OBJ_SHOW);
+		oamSetEx(pilots[id].spr, OBJ_LARGE, OBJ_SHOW);
 	}
 }
 

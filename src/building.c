@@ -27,7 +27,7 @@ void reset_building()
         (u8*)tilemap,
         32*32*2,
         SC_32x32,
-        VRAM_BG0_MAP
+        VRAM_ADDR_BG0_MAP
     );
 }
 
@@ -70,7 +70,7 @@ void init_building(u8 min, u8 max)
 		(u8*)tilemap,
 		32*32*2,
 		SC_32x32,
-		VRAM_BG0_MAP
+		VRAM_ADDR_BG0_MAP
 	);
 }
 
@@ -98,7 +98,7 @@ void copy_building(u16 * editor_tilemap)
         (u8*)tilemap,
         32*32*2,
         SC_32x32,
-        VRAM_BG0_MAP
+        VRAM_ADDR_BG0_MAP
     );
 }
 

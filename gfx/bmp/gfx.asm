@@ -74,4 +74,12 @@ bkg_titlescreen_map_begin:
 .incbin "bkg_titlescreen.map"
 bkg_titlescreen_map_end:
 
+spr_fonts_til_begin:
+.incbin "spr_fonts.pic"
+spr_fonts_til_end:
+
+spr_fonts_pal_begin:
+.incbin "spr_fonts.pal"
+spr_fonts_pal_end:
+
 .ends

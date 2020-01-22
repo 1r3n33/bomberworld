@@ -1,0 +1,8 @@
+*.sfc
+*.sym
+
+*.map
+*.pal
+*.pic
+
+*.obj

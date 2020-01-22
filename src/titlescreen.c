@@ -2,7 +2,6 @@
 #include "graphics.h"
 #include "pilot.h"
 
-// sprites
 extern char gfxpsrite, gfxpsrite_end;
 extern char palsprite, palsprite_end;
 
@@ -14,6 +13,39 @@ extern char bkg_sky_16_til_begin, bkg_sky_16_til_end;
 extern char bkg_sky_16_pal_begin, bkg_sky_16_pal_end;
 extern char bkg_sky_16_map_begin, bkg_sky_16_map_end;
 
+extern char spr_fonts_til_begin, spr_fonts_til_end;
+extern char spr_fonts_pal_begin, spr_fonts_pal_end;
+
+u8 text_char_id = OBJ_TEXT;
+
+u8 selection = 0;
+
+void reset_text()
+{
+	text_char_id = OBJ_TEXT;
+
+	u16 i=0;
+	for (i=0; i<128; i++)
+	{
+		oamSet(OBJ_TEXT+(i*4), 0xFF, 0xFF, 0, 0, 0, 0, 0);
+		oamSetEx(OBJ_TEXT+(i*4), OBJ_SMALL, OBJ_HIDE);
+	}
+}
+
+void set_text(char * text, u8 x, u8 y)
+{
+	u8 len = strlen(text);
+
+	u8 i=0;
+	for (i=0; i<len; i++)
+	{
+		oamSet(text_char_id, x+(i*8), y, 3, 0, 0, SPR_ASCIITABLE+(text[i]-32), 1);
+		oamSetEx(text_char_id, OBJ_SMALL, OBJ_SHOW);
+		
+		text_char_id += 4;
+	}
+}
+
 void init_titlescreen()
 {
 	setMode(BG_MODE1, 0);
@@ -22,36 +54,36 @@ void init_titlescreen()
 		0,
 		&bkg_titlescreen_til_begin,
 		&bkg_titlescreen_pal_begin,
-		0,
+		1,
 		(&bkg_titlescreen_til_end - &bkg_titlescreen_til_begin),
 		(&bkg_titlescreen_pal_end - &bkg_titlescreen_pal_begin),
 		BG_16COLORS,
-		VRAM_BG0_GFX
+		VRAM_ADDR_BG0_GFX
 	);
 	bgInitMapSet(
 		0,
 		&bkg_titlescreen_map_begin,
 		(&bkg_titlescreen_map_end - &bkg_titlescreen_map_begin),
 		SC_32x32,
-		VRAM_BG0_MAP
+		VRAM_ADDR_BG0_MAP
 	);
 
 	bgInitTileSet(
 		1,
 		&bkg_sky_16_til_begin,
 		&bkg_sky_16_pal_begin,
-		2,
+		3,
 		(&bkg_sky_16_til_end - &bkg_sky_16_til_begin),
 		(&bkg_sky_16_pal_end - &bkg_sky_16_pal_begin),
 		BG_16COLORS,
-		VRAM_BG1_GFX
+		VRAM_ADDR_BG1_GFX
 	);
 	bgInitMapSet(
 		1,
 		&bkg_sky_16_map_begin,
 		(&bkg_sky_16_map_end - &bkg_sky_16_map_begin),
 		SC_32x32,
-		VRAM_BG1_MAP
+		VRAM_ADDR_BG1_MAP
 	);
 
     // Important to disable non-used bkg to avoid artefacts
@@ -61,19 +93,27 @@ void init_titlescreen()
 	bgSetScroll(0, 0, 8);
 	bgSetScroll(1, 0, 160);
 
-	// Init Sprites gfx and palette with default size of 32x32.
-	oamInitGfxSet(
-		&gfxpsrite,
-		(&gfxpsrite_end-&gfxpsrite),
-		&palsprite,
-		(&palsprite_end-&palsprite),
-		0,
-		VRAM_SPR_32x32,
-		OBJ_SIZE32
-	); 
+	// Init sprites
+	{
+		WaitForVBlank(); 
+
+		// Sprites tiles
+		dmaCopyVram(&gfxpsrite,           VRAM_ADDR_SPR+0x0000, (&gfxpsrite_end-&gfxpsrite));
+		dmaCopyVram(&spr_fonts_til_begin, VRAM_ADDR_SPR+0x1000, (&spr_fonts_til_end-&spr_fonts_til_begin));
+
+		// Sprites palettes
+		dmaCopyCGram(&palsprite,           128+(0*16), (&palsprite_end-&palsprite));
+		dmaCopyCGram(&spr_fonts_pal_begin, 128+(1*16), (&spr_fonts_pal_end-&spr_fonts_pal_begin));
+
+		REG_OBSEL = (1<<5) | (VRAM_ADDR_SPR >> 13); // 1<<5 is for 8x8 and 32x32 mode
+
+		reset_text();
+		set_text("1 player",   (SCREEN_WIDTH/2)-32, (SCREEN_HEIGHT/2)+(0*16));
+		set_text("2 players",  (SCREEN_WIDTH/2)-32, (SCREEN_HEIGHT/2)+(1*16));
+		set_text("Map Editor", (SCREEN_WIDTH/2)-32, (SCREEN_HEIGHT/2)+(2*16));
+	}
 
     init_pilot(0);
-    set_pilot_pos(0, 128-16, 112+16);
 
     setScreenOn();
 }
@@ -82,16 +122,56 @@ u8 run_titlescreen()
 {
     u16 i = 0;
     u16 scroll = 0;
+	u16 input_throttle = 0;
 
     init_titlescreen();
 
-    for (i=0; i<60*1; i++)
+    while(1)
     {
+		u16 pad0 = padsCurrent(0);
+
+		if (input_throttle == 0)
+		{
+			if (pad0 & KEY_UP)
+			{
+				if (selection > 0)
+				{
+					selection--;
+					input_throttle = 16;
+				}
+			}	
+
+			if (pad0 & KEY_DOWN)
+			{
+				if (selection < 2)
+				{
+					selection++;
+					input_throttle = 16;
+				}
+			}
+		}
+		else
+		{
+			if (pad0 == 0)
+			{
+				input_throttle = 0;
+			}
+			else
+			{
+				input_throttle--;
+			}
+		}
+		
+		// Move cursor
+    	set_pilot_pos(0, (SCREEN_WIDTH/2)-64, (SCREEN_HEIGHT/2)+(selection*16)-4);
+
+		// Animate background
 	    bgSetScroll(1, scroll>>4, 160);
-        WaitForVBlank();
         scroll += 8;
+
+        WaitForVBlank();
     }
 
     setFadeEffect(FADE_OUT);
-    return 0;
+    return selection;
 }
