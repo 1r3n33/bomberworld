@@ -9,9 +9,20 @@ int main()
 
     while(1)
     {
-        run_titlescreen();
-        //u8 editor = run_editor();
-        run_game(0);
+        u8 selection = run_titlescreen();
+        
+        if (selection == TITLESCREEN_SELECTION_1P)
+        {
+            run_game(0);
+        }
+        else if (selection == TITLESCREEN_SELECTION_2P)
+        {
+            run_game(1);
+        }
+        else if (selection == TITLESCREEN_SELECTION_EDIT)
+        {
+            run_editor();
+        }
     }
 
     return 0;

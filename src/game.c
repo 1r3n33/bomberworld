@@ -71,13 +71,15 @@ u8 game_loop(u8 speed)
 	}
 }
 
-// Run the game.
-u8 run_game(u8 editor)
+// Run the game. mode 1P (0) or 2P (1)
+u8 run_game(u8 mode)
 {
 	u8 res;
 	u8 speed = 8;
 	u8 min_building_size = 2;
 	u8 max_building_size = 8;
+
+	game_mode = mode;
 	
 	init_graphics();
 	
@@ -88,14 +90,7 @@ u8 run_game(u8 editor)
 		init_bomb(0);
 		init_bomb(1);
 
-		if (editor)
-		{
-			copy_building(get_editor_tilemap());
-		}
-		else
-		{
-			init_building(min_building_size, max_building_size);	
-		}
+		init_building(min_building_size, max_building_size);	
 
 		setFadeEffect(FADE_IN);
 		res = game_loop(speed);

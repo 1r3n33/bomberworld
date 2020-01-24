@@ -91,16 +91,16 @@ void init_graphics()
 	bgSetScroll(2, bg2_scroll_x >> 4, 0xFF);
 	bgSetScroll(3, bg3_scroll_x >> 4, 0xFF);
 
-	// Init Sprites gfx and palette with default size of 32x32.
-	oamInitGfxSet(
-		&gfxpsrite,
-		(&gfxpsrite_end-&gfxpsrite),
-		&palsprite,
-		(&palsprite_end-&palsprite),
-		0,
-		VRAM_ADDR_SPR,
-		OBJ_SIZE32
-	);
+	// Init sprites. Inspired from oamInitGfxSet. Large mode for sprites.
+	WaitForVBlank(); 
+
+	// Sprites tiles
+	dmaCopyVram(&gfxpsrite, VRAM_ADDR_SPR+0x0000, (&gfxpsrite_end-&gfxpsrite));
+
+	// Sprites palettes
+	dmaCopyCGram(&palsprite, 128+(0*16), (&palsprite_end-&palsprite));
+
+	REG_OBSEL = (1<<5) | (VRAM_ADDR_SPR >> 13); // 1<<5 is for 8x8 and 32x32 mode
 }
 
 void update_graphics()

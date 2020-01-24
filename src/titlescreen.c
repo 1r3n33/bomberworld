@@ -93,40 +93,41 @@ void init_titlescreen()
 	bgSetScroll(0, 0, 8);
 	bgSetScroll(1, 0, 160);
 
-	// Init sprites
-	{
-		WaitForVBlank(); 
+	// Init sprites. Inspired from oamInitGfxSet, use two sources of sprites.
+	WaitForVBlank(); 
 
-		// Sprites tiles
-		dmaCopyVram(&gfxpsrite,           VRAM_ADDR_SPR+0x0000, (&gfxpsrite_end-&gfxpsrite));
-		dmaCopyVram(&spr_fonts_til_begin, VRAM_ADDR_SPR+0x1000, (&spr_fonts_til_end-&spr_fonts_til_begin));
+	// Sprites tiles
+	dmaCopyVram(&gfxpsrite,           VRAM_ADDR_SPR+0x0000, (&gfxpsrite_end-&gfxpsrite));
+	dmaCopyVram(&spr_fonts_til_begin, VRAM_ADDR_SPR+0x1000, (&spr_fonts_til_end-&spr_fonts_til_begin));
 
-		// Sprites palettes
-		dmaCopyCGram(&palsprite,           128+(0*16), (&palsprite_end-&palsprite));
-		dmaCopyCGram(&spr_fonts_pal_begin, 128+(1*16), (&spr_fonts_pal_end-&spr_fonts_pal_begin));
+	// Sprites palettes
+	dmaCopyCGram(&palsprite,           128+(0*16), (&palsprite_end-&palsprite));
+	dmaCopyCGram(&spr_fonts_pal_begin, 128+(1*16), (&spr_fonts_pal_end-&spr_fonts_pal_begin));
 
-		REG_OBSEL = (1<<5) | (VRAM_ADDR_SPR >> 13); // 1<<5 is for 8x8 and 32x32 mode
+	REG_OBSEL = (1<<5) | (VRAM_ADDR_SPR >> 13); // 1<<5 is for 8x8 and 32x32 mode
 
-		reset_text();
-		set_text("1 player",   (SCREEN_WIDTH/2)-32, (SCREEN_HEIGHT/2)+(0*16));
-		set_text("2 players",  (SCREEN_WIDTH/2)-32, (SCREEN_HEIGHT/2)+(1*16));
-		set_text("Map Editor", (SCREEN_WIDTH/2)-32, (SCREEN_HEIGHT/2)+(2*16));
-	}
+	// Set text for menu
+	reset_text();
+	set_text("1 player",   (SCREEN_WIDTH/2)-32, (SCREEN_HEIGHT/2)+(0*16));
+	set_text("2 players",  (SCREEN_WIDTH/2)-32, (SCREEN_HEIGHT/2)+(1*16));
+	set_text("Map Editor", (SCREEN_WIDTH/2)-32, (SCREEN_HEIGHT/2)+(2*16));
 
+	// Use pilot as menu cursor
     init_pilot(0);
 
     setScreenOn();
 }
 
+// Execute the titlescreen and return the selection.
 u8 run_titlescreen()
 {
-    u16 i = 0;
-    u16 scroll = 0;
-	u16 input_throttle = 0;
+    u16 bkg_scroll = 0;
+	u8 input_throttle = 0; // prevent taking inputs into consideration for a number of frames
+	u8 selected = 0;
 
     init_titlescreen();
 
-    while(1)
+    while(selected == 0)
     {
 		u16 pad0 = padsCurrent(0);
 
@@ -149,6 +150,11 @@ u8 run_titlescreen()
 					input_throttle = 16;
 				}
 			}
+
+			if (pad0 & (KEY_A | KEY_START))
+			{
+				selected = 1;
+			}
 		}
 		else
 		{
@@ -162,16 +168,19 @@ u8 run_titlescreen()
 			}
 		}
 		
-		// Move cursor
+		// Move cursor according to the selection.
     	set_pilot_pos(0, (SCREEN_WIDTH/2)-64, (SCREEN_HEIGHT/2)+(selection*16)-4);
 
-		// Animate background
-	    bgSetScroll(1, scroll>>4, 160);
-        scroll += 8;
+		// Animate background.
+	    bgSetScroll(1, bkg_scroll>>1, 160);
+        bkg_scroll += 1;
 
         WaitForVBlank();
     }
 
+	// Leave gracefully.
     setFadeEffect(FADE_OUT);
+	reset_text();
+
     return selection;
 }
