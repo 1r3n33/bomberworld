@@ -11,11 +11,11 @@ struct bomb_t
 	u16 dropped;
 };
 
-// Bomb collision box (based on 32x32 sprite dimension)
+// Bomb collision box (based on 16x16 sprite dimension)
 #define BOMB_COLLISION_OFFSET_TOP       0	//
 #define BOMB_COLLISION_OFFSET_BOTTOM    7  	// 1 pixel penetration looks better
-#define BOMB_COLLISION_OFFSET_LEFT      13	//
-#define BOMB_COLLISION_OFFSET_RIGHT     18	//
+#define BOMB_COLLISION_OFFSET_LEFT      5	//
+#define BOMB_COLLISION_OFFSET_RIGHT     10	//
 
 void init_bomb(u8 id);
 

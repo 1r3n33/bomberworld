@@ -2,8 +2,8 @@
 #include "graphics.h"
 #include "pilot.h"
 
-extern char gfxpsrite, gfxpsrite_end;
-extern char palsprite, palsprite_end;
+extern char spr_game_til_begin, spr_game_til_end;
+extern char spr_game_pal_begin, spr_game_pal_end;
 
 extern char bkg_titlescreen_til_begin, bkg_titlescreen_til_end;
 extern char bkg_titlescreen_pal_begin, bkg_titlescreen_pal_end;
@@ -97,14 +97,14 @@ void init_titlescreen()
 	WaitForVBlank(); 
 
 	// Sprites tiles
-	dmaCopyVram(&gfxpsrite,           VRAM_ADDR_SPR+0x0000, (&gfxpsrite_end-&gfxpsrite));
+	dmaCopyVram(&spr_game_til_begin,  VRAM_ADDR_SPR+0x0000, (&spr_game_til_end-&spr_game_til_begin));
 	dmaCopyVram(&spr_fonts_til_begin, VRAM_ADDR_SPR+0x1000, (&spr_fonts_til_end-&spr_fonts_til_begin));
 
 	// Sprites palettes
-	dmaCopyCGram(&palsprite,           128+(0*16), (&palsprite_end-&palsprite));
+	dmaCopyCGram(&spr_game_pal_begin,  128+(0*16), (&spr_game_pal_end-&spr_game_pal_begin));
 	dmaCopyCGram(&spr_fonts_pal_begin, 128+(1*16), (&spr_fonts_pal_end-&spr_fonts_pal_begin));
 
-	REG_OBSEL = (1<<5) | (VRAM_ADDR_SPR >> 13); // 1<<5 is for 8x8 and 32x32 mode
+	REG_OBSEL = (0<<5) | (VRAM_ADDR_SPR >> 13); // 0<<5 is for 8x8+16x16 mode
 
 	// Set text for menu
 	reset_text();

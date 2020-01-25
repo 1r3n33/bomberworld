@@ -11,13 +11,13 @@ struct pilot_t
 	u16 pad;
 };
 
-// Pilot collision box (based on 32x32 sprite dimension)
-#define PILOT_BUILDING_COLLISION_OFFSET_TOP		0	//
-#define PILOT_BOMB_COLLISION_OFFSET_TOP     	7	//
-#define PILOT_BUILDING_COLLISION_OFFSET_BOTTOM	11	//
-#define PILOT_BOMB_COLLISION_OFFSET_BOTTOM		13	//
-#define PILOT_COLLISION_OFFSET_LEFT      		8	//
-#define PILOT_COLLISION_OFFSET_RIGHT     		23	//
+// Pilot collision box (based on 16x16 sprite dimension)
+#define PILOT_BUILDING_COLLISION_OFFSET_TOP		0
+#define PILOT_BOMB_COLLISION_OFFSET_TOP     	6
+#define PILOT_BUILDING_COLLISION_OFFSET_BOTTOM	11
+#define PILOT_BOMB_COLLISION_OFFSET_BOTTOM		13
+#define PILOT_COLLISION_OFFSET_LEFT      		0
+#define PILOT_COLLISION_OFFSET_RIGHT     		15
 
 struct pilot_t * get_pilot(u8 id);
 

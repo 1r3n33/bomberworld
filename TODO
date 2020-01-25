@@ -1,2 +1,4 @@
+FIXME line glitch in game sky scrolling
 CLEAN the Makefiles
-CLEAN original 32x32 sprites
+TODO  bomb in front of pilot
+FIXME garbage sprite in titlescreen from map editor

@@ -30,16 +30,15 @@ void update_graphics();
 
 #define OBJ_NEXT_AVAILABLE_ID  256 
 
-// 32x32 sprite id (spr_sprites.bmp)
-#define SPR_PILOT               0
-#define SPR_BOMB                4
-#define SPR_BUILDING_CEILING    8
-#define SPR_BUILDING_BODY       12
-
-#define SPR_BUILDING_FLOOR      64
-#define SPR_68                  68
-#define SPR_72                  72
-#define SPR_76                  76
+// 16x16 sprite id (spr_game.bmp)
+#define SPR_PILOT_0_FRAME_0     0
+#define SPR_PILOT_0_FRAME_1     2
+#define SPR_PILOT_1_FRAME_0     4
+#define SPR_PILOT_1_FRAME_1     6
+#define SPR_BOMB                8
+#define SPR_EXPLOSION_FRAME_0   10
+#define SPR_EXPLOSION_FRAME_1   12
+#define SPR_EXPLOSION_FRAME_2   14
 
 #define SPR_ASCIITABLE          256
 
