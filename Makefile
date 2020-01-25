@@ -55,7 +55,7 @@ GTITLE 		:= -ht"$(TARGET)"
 #---------------------------------------------------------------------------------
 all:
 	$(MAKE) -C $(GFXDIR)
-	$(MAKE) -f Makefile.2 -C $(OBJDIR)
+	$(MAKE) -C $(OBJDIR)
 	$(MAKE) $(OUTPUT).sfc
 	$(SNTOOLS) -hi! $(GTITLE) $(OUTPUT).sfc
 
