@@ -1,4 +1,4 @@
-FIXME line glitch in game sky scrolling
+FIXME line glitch in game sky scrolling (possibly caused by cpu behind vsync)
 CLEAN the Makefiles
 TODO  bomb in front of pilot
 FIXME garbage sprite in titlescreen from map editor
