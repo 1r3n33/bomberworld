@@ -82,4 +82,25 @@ bkg_titlescreen_map_begin:
 .incbin "bkg_titlescreen.map"
 bkg_titlescreen_map_end:
 
+; Egypt level
+til_pyramid_til_begin:
+.incbin "til_pyramid.pic"
+til_pyramid_til_end:
+
+til_pyramid_pal_begin:
+.incbin "til_pyramid.pal"
+til_pyramid_pal_end:
+
+bkg_egypt_til_begin:
+.incbin "bkg_egypt.pic"
+bkg_egypt_til_end:
+
+bkg_egypt_pal_begin:
+.incbin "bkg_egypt.pal"
+bkg_egypt_pal_end:
+
+bkg_egypt_map_begin:
+.incbin "bkg_egypt.map"
+bkg_egypt_map_end:
+
 .ends
