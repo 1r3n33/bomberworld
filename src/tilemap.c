@@ -18,7 +18,7 @@ void reset_tilemap()
     }
 }
 
-void init_tilemap(tilemap_builder builder)
+void init_tilemap(tilemap_builder_t builder)
 {
     reset_tilemap();
 

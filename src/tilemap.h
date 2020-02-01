@@ -3,9 +3,9 @@
 
 #include <snes.h>
 
-typedef void (*tilemap_builder)(u16 [32][32]);
+typedef void (*tilemap_builder_t)(u16 [32][32]);
 
-void init_tilemap(tilemap_builder builder);
+void init_tilemap(tilemap_builder_t builder);
 
 u16 * get_tilemap();
 
