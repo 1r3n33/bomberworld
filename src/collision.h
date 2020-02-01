@@ -1,13 +1,14 @@
 #ifndef COLLISION_H
 #define COLLISION_H
 
-// Check bomb to buildings collision
-void bomb_buildings_collision(struct bomb_t * bomb, u8 id);
+#include <snes.h>
 
-// Check bomb to pilot collision
+typedef u8 (*tilemap_collider)(u8, u8);
+
+void bomb_tilemap_collision(u8 bomb_id, tilemap_collider checker);
+
+void pilot_tilemap_collision(u8 pilot_id, tilemap_collider checker);
+
 void bomb_pilot_collision(struct bomb_t * bomb, struct pilot_t * pilot);
-
-// Check pilot to buildings collision
-void pilot_buildings_collision(struct pilot_t * pilot, u8 id);
 
 #endif // COLLISION_H

@@ -9,13 +9,9 @@ endif
 include $(DEVKIT65XX)/snes_rules
 
 #---------------------------------------------------------------------------------
-# TARGET is the name of the output
-# BUILD is the directory where object files & intermediate files will be placed
 # SOURCES is a list of directories containing source code
-# INCLUDES is a list of directories containing extra header files
 #---------------------------------------------------------------------------------
-TARGET		:=	$(shell basename $(CURDIR))
-SOURCES		:=	.
+SOURCES		:=	. $(shell ls -d */)
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -27,11 +23,9 @@ CFLAGS	+=	$(INCLUDE)
 # include and lib
 #---------------------------------------------------------------------------------
 LIBDIRS	:=	$(PVSNESLIB)
- 
-export OUTPUT	:=	$(CURDIR)/$(TARGET)
- 
-CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
-SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.asm)))
+  
+CFILES		:=	$(foreach dir,$(SOURCES),$(wildcard $(dir)/*.c))
+SFILES		:=	$(foreach dir,$(SOURCES),$(wildcard $(dir)/*.asm))
  
 #---------------------------------------------------------------------------------
 export OFILES	:=	$(BINFILES:.bin=.obj) $(CFILES:.c=.obj) $(SFILES:.asm=.obj)
@@ -45,3 +39,6 @@ all: $(OFILES)
 
 clean:
 	rm -f $(OFILES)
+
+info:
+	@echo $(OFILES)

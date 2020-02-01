@@ -1,12 +1,14 @@
 #include <snes.h>
 
 #include "bomb.h"
-#include "building.h"
 #include "collision.h"
 #include "editor.h"
 #include "graphics.h"
 #include "pilot.h"
+#include "tilemap.h"
 #include "titlescreen.h"
+
+#include "levels/city.h"
 
 // Game mode: 1 player (0) or 2 players (1)
 u8 game_mode = 0;
@@ -16,7 +18,7 @@ void update_bomb(struct bomb_t * bomb, u8 id, u16 pad, struct pilot_t * pilot)
 	if (bomb->dropped)
 	{
 		move_bomb(id);
-		bomb_buildings_collision(bomb, id);
+		bomb_tilemap_collision(id, check_city_level_bomb_collision);
 	}
 	else
 	{
@@ -58,13 +60,13 @@ u8 game_loop(u8 speed)
 
 		bomb_pilot_collision(get_bomb(0), get_pilot(1));
 
-		pilot_buildings_collision(get_pilot(0), 0);
-		pilot_buildings_collision(get_pilot(1), 1);
+		pilot_tilemap_collision(0, check_city_level_pilot_collision);
+		pilot_tilemap_collision(1, check_city_level_pilot_collision);
 
-		update_graphics();
+		update_city_level_gfx();
 		WaitForVBlank();
 
-		if (is_building_destroyed())
+		if (check_city_level_done())
 		{
 			return 1;
 		}
@@ -74,14 +76,13 @@ u8 game_loop(u8 speed)
 // Run the game. mode 1P (0) or 2P (1)
 u8 run_game(u8 mode)
 {
-	u8 res;
+	u8 level = 0;
 	u8 speed = 8;
-	u8 min_building_size = 2;
-	u8 max_building_size = 8;
 
 	game_mode = mode;
 	
 	init_graphics();
+	init_city_level_gfx();
 	
 	while (1)
 	{
@@ -90,31 +91,22 @@ u8 run_game(u8 mode)
 		init_bomb(0);
 		init_bomb(1);
 
-		init_building(min_building_size, max_building_size);	
+		init_city_level_state(level);
+		init_tilemap(build_city_level_tilemap);
 
 		setFadeEffect(FADE_IN);
-		res = game_loop(speed);
+		u8 res = game_loop(speed);
 		setFadeEffect(FADE_OUT);
 		
 		if (res == 1)
 		{
+			level++;
 			speed += 4;
-			min_building_size += 1;
-			max_building_size += 2;
-			if (min_building_size > 16)
-			{
-				min_building_size = 16;
-			}
-			if (max_building_size > 16)
-			{
-				max_building_size = 16;
-			}
 		}
 		else
 		{
+			level = 0;
 			speed = 8;
-			min_building_size = 2;
-			max_building_size = 8;
 		}
 	}
 

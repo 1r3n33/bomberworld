@@ -1,7 +1,9 @@
 #include <snes.h>
-#include "building.h"
 #include "editor.h"
 #include "graphics.h"
+#include "tilemap.h"
+
+#include "levels/city.h"
 
 extern char spr_editor_til_begin, spr_editor_til_end;
 extern char spr_editor_pal_begin, spr_editor_pal_end;
@@ -18,24 +20,8 @@ struct cursor_t
 
 struct cursor_t cursors[2];
 
-void init_tilemap()
+void do_nothing()
 {
-    u8 i, j;
-    for (j=0; j<32; j++)
-    {
-        for (j=0; j<32; j++)
-        {
-            editor_tilemap[j][i] = 0;
-        }
-    }
-
-    bgInitMapSet(
-        0,
-        (u8*)editor_tilemap,
-        32*32*2,
-        SC_32x32,
-        VRAM_ADDR_BG0_MAP
-    );
 }
 
 u16 * get_editor_tilemap()
@@ -141,9 +127,7 @@ u8 run_editor()
 		OBJ_SIZE8
 	);
 
-    reset_building();
-
-    init_tilemap();
+    init_tilemap(do_nothing);
 
     init_cursor(0);
     init_cursor(1);
@@ -153,7 +137,7 @@ u8 run_editor()
     u8 frame_count = 0;
 	while (1)
 	{
-        if ((frame_count & 3)==0) // input rate limiter
+        if ((frame_count & 3)==0) // input rate limiter. a superior version can be found in the titlescreen.
         {
             u16 pad0 = padsCurrent(0);
             u16 pad1 = padsCurrent(1);
