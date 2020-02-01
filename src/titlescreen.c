@@ -1,4 +1,5 @@
 #include <snes.h>
+#include <string.h>
 #include "graphics.h"
 #include "pilot.h"
 
