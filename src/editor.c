@@ -116,6 +116,7 @@ void remove_block(u8 id)
 u8 run_editor()
 {
     init_graphics();
+	init_city_level_gfx();
 
 	oamInitGfxSet(
 		&spr_editor_til_begin,
