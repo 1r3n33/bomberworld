@@ -48,6 +48,7 @@ void level_manager_init()
 {
 	u8 i = 0;
 
+#if 0
 	level_manager.levels[i].level 					= 0;
 	level_manager.levels[i].sub_level 				= 0;
 	level_manager.levels[i].speed 					= 8;
@@ -60,7 +61,6 @@ void level_manager_init()
 	level_manager.levels[i].pilot_collider 			= check_city_level_pilot_collision;
 	i++;
 
-#if 0
 	level_manager.levels[i].level 					= 0;
 	level_manager.levels[i].sub_level 				= 1;
 	level_manager.levels[i].speed 					= 12;
