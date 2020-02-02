@@ -105,7 +105,7 @@ void update_egypt_level_gfx()
 {
 }
 
-u8 check_egypt_level_bomb_collision(u8 x, u8 y)
+u8 check_egypt_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
 {
 	return 0;
 }

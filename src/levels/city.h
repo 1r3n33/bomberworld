@@ -47,7 +47,7 @@ void build_city_level_tilemap(u16 tilemap[32][32]);
 
 void update_city_level_gfx();
 
-u8 check_city_level_bomb_collision(u8 x, u8 y);
+u8 check_city_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right);
 
 u8 check_city_level_pilot_collision(u8 x, u8 y);
 
