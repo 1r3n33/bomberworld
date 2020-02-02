@@ -14,15 +14,15 @@ extern char bkg_sky_4_map_begin, bkg_sky_4_map_end;
 extern char bkg_buildings_til_begin, bkg_buildings_til_end;
 extern char bkg_buildings_pal_begin, bkg_buildings_pal_end;
 
-u16 bg0_scroll_x = 0;
-u16 bg1_scroll_x = 0;
-u16 bg2_scroll_x = 0;
-u16 bg3_scroll_x = 0;
+u16 city_bg0_scroll_x = 0;
+u16 city_bg1_scroll_x = 0;
+u16 city_bg2_scroll_x = 0;
+u16 city_bg3_scroll_x = 0;
 
-u16 block_count = 0;
+u16 city_block_count = 0;
 
-u8 min_building_size = 2;
-u8 max_building_size = 8;
+u8 city_min_building_size = 2;
+u8 city_max_building_size = 8;
 
 u16 * city_level_tilemap = 0;
 
@@ -31,23 +31,23 @@ void init_city_level_state(u8 level)
 	switch (level)
 	{
 	case 0:
-		min_building_size = 2;
-		max_building_size = 8;
+		city_min_building_size = 2;
+		city_max_building_size = 8;
 		break;
 	
 	case 1:
-		min_building_size = 6;
-		max_building_size = 12;
+		city_min_building_size = 6;
+		city_max_building_size = 12;
 		break;
 
 	case 2:
-		min_building_size = 10;
-		max_building_size = 16;
+		city_min_building_size = 10;
+		city_max_building_size = 16;
 		break;
 
 	default:
-		min_building_size = 8;
-		max_building_size = 8;
+		city_min_building_size = 8;
+		city_max_building_size = 8;
 		break;
 	}
 }
@@ -109,10 +109,10 @@ void init_city_level_gfx()
 	// The very first line, though, wouldn't have any OBJ data loaded.
 	// So the SNES doesn't actually output scanline 0, although it does everything to render it.
 	// I want the first line of the BGs to be visible so set offset -1.
-	bgSetScroll(0, bg0_scroll_x >> 4, 0xFF);
-	bgSetScroll(1, bg1_scroll_x >> 4, 0xFF);
-	bgSetScroll(2, bg2_scroll_x >> 4, 0xFF);
-	bgSetScroll(3, bg3_scroll_x >> 4, 0xFF);
+	bgSetScroll(0, city_bg0_scroll_x >> 4, 0xFF);
+	bgSetScroll(1, city_bg1_scroll_x >> 4, 0xFF);
+	bgSetScroll(2, city_bg2_scroll_x >> 4, 0xFF);
+	bgSetScroll(3, city_bg3_scroll_x >> 4, 0xFF);
 }
 
 void build_city_level_tilemap(u16 tilemap[32][32])
@@ -120,11 +120,11 @@ void build_city_level_tilemap(u16 tilemap[32][32])
 	u8 i, j;
 	u8 rnd;
 
-	block_count = 0;
+	city_block_count = 0;
 
 	for (i=0; i<32; i+=4)
     {
-		rnd = (rand()%(max_building_size-min_building_size))+min_building_size;
+		rnd = (rand()%(city_max_building_size-city_min_building_size))+city_min_building_size;
 
     	for (j=0; j<rnd; j++)
         {
@@ -132,19 +132,19 @@ void build_city_level_tilemap(u16 tilemap[32][32])
 			{
             	tilemap[26-j][i+1] = TIL_BUILDING_FLOOR_SIDE_DOOR;
             	tilemap[26-j][i+2] = TIL_BUILDING_FLOOR_SIDE_DOOR | 0x4000;
-				block_count += 2;
+				city_block_count += 2;
 			}
 			else if (j == (rnd-1))
 			{
             	tilemap[26-j][i+1] = TIL_BUILDING_CEILING_SIDE_WINDOW_0;
             	tilemap[26-j][i+2] = TIL_BUILDING_CEILING_SIDE_WINDOW_0 | 0x4000;
-				block_count += 2;
+				city_block_count += 2;
 			}
 			else
 			{
             	tilemap[26-j][i+1] = TIL_BUILDING_BODY_SIDE_WINDOW_0;
             	tilemap[26-j][i+2] = TIL_BUILDING_BODY_SIDE_WINDOW_0 | 0x4000;
-				block_count += 2;
+				city_block_count += 2;
 			}
         }
     }
@@ -154,8 +154,8 @@ void build_city_level_tilemap(u16 tilemap[32][32])
 
 void update_city_level_gfx()
 {
-    bg2_scroll_x += 4;
-    bgSetScroll(2, bg2_scroll_x >> 4, 0xFF);
+    city_bg2_scroll_x += 4;
+    bgSetScroll(2, city_bg2_scroll_x >> 4, 0xFF);
 }
 
 u8 check_city_level_bomb_collision(u8 x, u8 y)
@@ -164,7 +164,7 @@ u8 check_city_level_bomb_collision(u8 x, u8 y)
 	// Check collision against solid building block
 	if (tile != 0 && tile < TIL_BUILDING_24)
 	{
-		block_count--;
+		city_block_count--;
 
 		// Change the look of the surrounding tiles
 		u16 tile_left  = city_level_tilemap[(y*32)+(x-1)];
@@ -276,5 +276,5 @@ u8 check_city_level_pilot_collision(u8 x, u8 y)
 
 u8 check_city_level_done()
 {
-	return (block_count == 0);
+	return (city_block_count == 0);
 }

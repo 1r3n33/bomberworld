@@ -42,10 +42,11 @@ bkg_sky_4.pic: bkg_sky_4.bmp
 # BG0 used for the pyramid tiles. The tilemap is generated programmaticaly
 # This image will generate 2 4-colors palettes
 til_pyramid.pic: til_pyramid.bmp
-	$(GFXCONV) -gs8 -m -mR! -pc4 -po4 -pe0 -pr -fbmp -n $<
+	$(GFXCONV) -gs8 -m -mR! -pc4 -pe0 -pr -fbmp -n $<
 # BG1 used for static background
+# This image will generate 5 4-colors palettes
 bkg_egypt.pic: bkg_egypt.bmp
-	$(GFXCONV) -gs8 -m -pc4 -po4 -pe0 -pr -fbmp -n $< 
+	$(GFXCONV) -gs8 -m -pc4 -pe0 -pr -fbmp -n $< 
 
 # Titlescreen (BG0 for mode 1)
 # 16-colors for the top title part
