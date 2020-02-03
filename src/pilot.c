@@ -77,5 +77,5 @@ u8 is_pilot_entirely_on_screen(u8 id, u8 off_left, u8 off_right)
 	left = x + off_left;
 	right = x + off_right;
 
-	return (left >= 512) && (right <= 512+256); 
+	return (left >= 512) && (right < 512+256); 
 }
