@@ -75,10 +75,6 @@ void init_egypt_level_gfx()
 
 void build_egypt_level_tilemap(u16 tilemap[32][32])
 {
-    const u16 mask_palette_0 = 0x0000;
-    const u16 mask_palette_1 = 0x0400;
-    const u16 mask_mirror_x  = 0x4000;
-
 	u8 i, j, height;
 
 	egypt_block_count = 0;
@@ -88,12 +84,29 @@ void build_egypt_level_tilemap(u16 tilemap[32][32])
     {
         for (j=0; j<height; j++)
         {
-            tilemap[26-j][i] = 2 | mask_palette_1;
-            tilemap[26-j][31-i] = 2 | mask_palette_1 | mask_mirror_x;
+			if (j < 10)
+			{
+				tilemap[26-j][i] = TIL_PYRAMID_BLOCK_NORMAL | TIL_PYRAMID_PALETTE_1_FLAG;
+				tilemap[26-j][31-i] = TIL_PYRAMID_BLOCK_NORMAL | TIL_PYRAMID_PALETTE_1_FLAG | TIL_PYRAMID_MIRROR_X_FLAG;
+			}
+			else
+			{
+				tilemap[26-j][i] = TIL_PYRAMID_BLOCK_GOLD;
+				tilemap[26-j][31-i] = TIL_PYRAMID_BLOCK_GOLD | TIL_PYRAMID_MIRROR_X_FLAG;				
+			}			
         }
-        tilemap[26-j][i] = 1 | mask_palette_1;
-        tilemap[26-j][31-i] = 1 | mask_palette_1 | mask_mirror_x;
 
+		if (j < 10)
+		{
+			tilemap[26-j][i] = TIL_PYRAMID_SIDE_NORMAL | TIL_PYRAMID_PALETTE_1_FLAG;
+			tilemap[26-j][31-i] = TIL_PYRAMID_SIDE_NORMAL | TIL_PYRAMID_PALETTE_1_FLAG | TIL_PYRAMID_MIRROR_X_FLAG;
+		}
+		else
+		{
+			tilemap[26-j][i] = TIL_PYRAMID_SIDE_GOLD;
+			tilemap[26-j][31-i] = TIL_PYRAMID_SIDE_GOLD | TIL_PYRAMID_MIRROR_X_FLAG;
+		}
+		
         egypt_block_count += (2*(height+1));
         height++;
     }
@@ -120,6 +133,38 @@ u8 check_egypt_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
 
 		if (tile_id > 0 && tile_id < TIL_PYRAMID_BROKEN_FIRST_ID)
 		{
+			// Collision against the gold cap
+			switch (tile_id)
+			{
+			case TIL_PYRAMID_SIDE_GOLD:
+			case TIL_PYRAMID_BLOCK_GOLD:
+				egypt_level_tilemap[(y*32)+x] += 2; // offset by 2 in the tilemap gets the corresponding cracked tile
+				bgInitMapSet(
+					0,
+					(u8*)egypt_level_tilemap,
+					32*32*2,
+					SC_32x32,
+					VRAM_ADDR_BG0_MAP
+				);
+				return 2;
+			
+			case TIL_PYRAMID_SIDE_GOLD_CRACK:
+			case TIL_PYRAMID_BLOCK_GOLD_CRACK:
+				egypt_level_tilemap[(y*32)+x] -= 4; // offset by -4 in the tilemap gets the corresponding brick tile
+				egypt_level_tilemap[(y*32)+x] |= TIL_PYRAMID_PALETTE_1_FLAG;
+				bgInitMapSet(
+					0,
+					(u8*)egypt_level_tilemap,
+					32*32*2,
+					SC_32x32,
+					VRAM_ADDR_BG0_MAP
+				);
+				return 2;
+
+			default:
+				break;
+			}
+
 			egypt_block_count--;
 
 			// Change the look of the surrounding tiles
@@ -236,37 +281,42 @@ u8 check_egypt_level_pilot_collision(u8 x, u8 y)
 	u8 tile_id = tile & 0xF;
 	u8 tile_mirror_x = (tile & 0x4000) ? 1 : 0;
 
-	if (tile_id == 1)
+	switch (tile_id)
 	{
-		//(x)
-		// 0 [ ][ ][ ][ ][ ][ ][ ][X]	X are the solid pixels of the tile.
-		// 1 [ ][ ][ ][ ][ ][ ][X][X] 	There is a collision if (7-y) >= x
-		// 2 [ ][ ][ ][ ][ ][X][X][X]
-		// 3 [ ][ ][ ][ ][X][X][X][X]
-		// 4 [ ][ ][ ][X][X][X][X][X]
-		// 5 [ ][ ][X][X][X][X][X][X]
-		// 6 [ ][X][X][X][X][X][X][X]
-		// 7 [X][X][X][X][X][X][X][X]
-		//    0  1  2  3  4  5  6  7 (y)
-
-		u8 rem_x = x & 7;
-		u8 rem_y = y & 7;
-
-		u8 collision = 0;
-		if (tile_mirror_x == 0)
+	case TIL_PYRAMID_SIDE_NORMAL:
+	case TIL_PYRAMID_SIDE_GOLD:
+	case TIL_PYRAMID_SIDE_GOLD_CRACK:
 		{
-			collision = (7-rem_y) >= rem_x ? 1 : 0; 
-		}
-		else
-		{
-			collision = rem_x <= rem_y ? 1 : 0;
-		}
-		
-		return collision;
-	}
+			//(x)
+			// 0 [ ][ ][ ][ ][ ][ ][ ][X]	X are the solid pixels of the tile.
+			// 1 [ ][ ][ ][ ][ ][ ][X][X] 	There is a collision if (7-y) >= x
+			// 2 [ ][ ][ ][ ][ ][X][X][X]
+			// 3 [ ][ ][ ][ ][X][X][X][X]
+			// 4 [ ][ ][ ][X][X][X][X][X]
+			// 5 [ ][ ][X][X][X][X][X][X]
+			// 6 [ ][X][X][X][X][X][X][X]
+			// 7 [X][X][X][X][X][X][X][X]
+			//    0  1  2  3  4  5  6  7 (y)
 
-	if (tile_id == 2)
-	{
+			u8 rem_x = x & 7;
+			u8 rem_y = y & 7;
+
+			u8 collision = 0;
+			if (tile_mirror_x == 0)
+			{
+				collision = (7-rem_y) >= rem_x ? 1 : 0; 
+			}
+			else
+			{
+				collision = rem_x <= rem_y ? 1 : 0;
+			}
+			
+			return collision;
+		}
+	
+	case TIL_PYRAMID_BLOCK_NORMAL:
+	case TIL_PYRAMID_BLOCK_GOLD:
+	case TIL_PYRAMID_BLOCK_GOLD_CRACK:
 		return 1;
 	}
 

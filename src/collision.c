@@ -17,8 +17,21 @@ void bomb_tilemap_collision(u8 bomb_id, tilemap_box_collider_t collider)
 	u8 collision = collider(0, bomb_bottom, bomb_left, bomb_right);
 	if (collision > 0)
 	{
+		switch (collision)
+		{
+		case 1:
+			bomb->dropped--;
+			break;
+		
+		case 2:
+			bomb->dropped = 0;
+			break;
+
+		default:
+			break;
+		}
+
 		// Hide the bomb
-		bomb->dropped--;
 		if (bomb->dropped == 0)
 		{
 			init_bomb(bomb_id);
