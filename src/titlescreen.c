@@ -17,7 +17,7 @@ extern char bkg_sky_16_map_begin, bkg_sky_16_map_end;
 extern char spr_fonts_til_begin, spr_fonts_til_end;
 extern char spr_fonts_pal_begin, spr_fonts_pal_end;
 
-u8 text_char_id = OBJ_TEXT;
+u16 text_char_id = OBJ_TEXT;
 
 u8 selection = 0;
 
@@ -26,9 +26,9 @@ void reset_text()
 	text_char_id = OBJ_TEXT;
 
 	u16 i=0;
-	for (i=0; i<128; i++)
+	for (i=0; i<64; i++)
 	{
-		oamSet(OBJ_TEXT+(i*4), 0xFF, 0xFF, 0, 0, 0, 0, 0);
+		oamSet(OBJ_TEXT+(i*4), 0xFF, 0xFF, 3, 0, 0, SPR_ASCIITABLE+(' '-32), 1);
 		oamSetEx(OBJ_TEXT+(i*4), OBJ_SMALL, OBJ_HIDE);
 	}
 }

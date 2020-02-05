@@ -23,9 +23,7 @@ void init_graphics();
 #define OBJ_BOMB_2  24
 #define OBJ_BOMB_3  28
 
-#define OBJ_TEXT    128
-
-#define OBJ_NEXT_AVAILABLE_ID  256 
+#define OBJ_TEXT    256
 
 // 16x16 sprite id (spr_game.bmp)
 #define SPR_PILOT_0_FRAME_0     0
