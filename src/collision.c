@@ -39,7 +39,7 @@ void bomb_tilemap_collision(u8 bomb_id, tilemap_box_collider_t collider)
 	}
 }
 
-void pilot_tilemap_collision(u8 pilot_id, tilemap_point_collider_t collider)
+u8 pilot_tilemap_collision(u8 pilot_id, tilemap_point_collider_t collider)
 {
 	struct pilot_t * pilot = get_pilot(pilot_id);	
 
@@ -56,8 +56,10 @@ void pilot_tilemap_collision(u8 pilot_id, tilemap_point_collider_t collider)
 	u8 collision = collider(pilot_x, pilot_y);
 	if (collision > 0)
 	{
-		while (1);
+		return 1;
 	}
+
+	return 0;
 }
 
 void bomb_pilot_collision(struct bomb_t * bomb, struct pilot_t * pilot)

@@ -139,7 +139,7 @@ void update_bomb(struct bomb_t * bomb, u8 id, u16 pad, struct pilot_t * pilot)
 	}
 }
 
-// Game loop returns 1 if exited normaly, 0 for reset
+// Game loop returns 0 for reset, 1 for completed level, 2 for game over 
 u8 game_loop()
 {
 	u16 pad0, pad1;
@@ -169,8 +169,8 @@ u8 game_loop()
 
 		bomb_pilot_collision(get_bomb(0), get_pilot(1));
 
-		pilot_tilemap_collision(0, current_level.pilot_collider);
-		pilot_tilemap_collision(1, current_level.pilot_collider);
+		u8 p0_collision = pilot_tilemap_collision(0, current_level.pilot_collider);
+		u8 p1_collision = pilot_tilemap_collision(1, current_level.pilot_collider);
 
 		current_level.gfx_updater();
 		WaitForVBlank();
@@ -178,6 +178,16 @@ u8 game_loop()
 		if (current_level.state_end_level_checker())
 		{
 			return 1;
+		}
+
+		if (p0_collision == 1)
+		{
+			return 2;
+		}
+
+		if (p1_collision == 1)
+		{
+			return 2;
 		}
 	}
 }
@@ -207,16 +217,18 @@ u8 run_game(u8 mode)
 		u8 res = game_loop();
 		setFadeEffect(FADE_OUT);
 		
-		if (res == 1)
+		switch (res)
 		{
-			u8 next = level_manager_next();
-			if (next == 0)
+		case 1:
 			{
-				return 0;
+				u8 next = level_manager_next();
+				if (next == 0)
+				{
+					return 0;
+				}
 			}
-		}
-		else
-		{
+			break;
+		default:
 			return 0;
 		}
 	}
