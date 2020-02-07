@@ -44,6 +44,7 @@ GTITLE 		:= -ht"$(TARGET)"
 all:
 	$(MAKE) -C $(GFXDIR)
 	$(MAKE) -C $(SRCDIR)
+	mkdir -p $(BINDIR)
 	$(MAKE) $(OUTPUT).sfc
 	$(SNTOOLS) -hi! $(GTITLE) $(OUTPUT).sfc
 
