@@ -107,6 +107,8 @@ void init_titlescreen()
 
 	REG_OBSEL = (0<<5) | (VRAM_ADDR_SPR >> 13); // 0<<5 is for 8x8+16x16 mode
 
+	oamClear(0, 0);
+
 	// Set text for menu
 	reset_text();
 	set_text("1 player",   (SCREEN_WIDTH/2)-32, (SCREEN_HEIGHT/2)+(0*16));
