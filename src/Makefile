@@ -16,20 +16,20 @@ SOURCES		:=	. $(shell ls -d */)
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-CFLAGS	+=	$(INCLUDE) 
+CFLAGS	+=	$(INCLUDE)
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
 LIBDIRS	:=	$(PVSNESLIB)
-  
+
 CFILES		:=	$(foreach dir,$(SOURCES),$(wildcard $(dir)/*.c))
 SFILES		:=	$(foreach dir,$(SOURCES),$(wildcard $(dir)/*.asm))
- 
+
 #---------------------------------------------------------------------------------
 export OFILES	:=	$(BINFILES:.bin=.obj) $(CFILES:.c=.obj) $(SFILES:.asm=.obj)
- 
+
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
 					-I$(CURDIR)/$(BUILD)

@@ -20,8 +20,8 @@
 #define TIL_PYRAMID_BROKEN_FIRST_ID     TIL_PYRAMID_BROKEN_001
 
 #define TIL_PYRAMID_ID_MASK             0x00FF // remove mirror_x flag & palette_id
-#define TIL_PYRAMID_MIRROR_X_FLAG       0x4000    
-#define TIL_PYRAMID_PALETTE_1_FLAG      0x0400    
+#define TIL_PYRAMID_MIRROR_X_FLAG       0x4000
+#define TIL_PYRAMID_PALETTE_1_FLAG      0x0400
 
 void init_egypt_level_state(u8 level);
 

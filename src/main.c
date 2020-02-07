@@ -1,5 +1,5 @@
 #include <snes.h>
-#include "editor.h" 
+#include "editor.h"
 #include "game.h"
 #include "titlescreen.h"
 
@@ -10,7 +10,7 @@ int main()
     while(1)
     {
         u8 selection = run_titlescreen();
-        
+
         if (selection == TITLESCREEN_SELECTION_1P)
         {
             run_game(0);

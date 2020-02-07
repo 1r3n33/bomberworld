@@ -5,10 +5,10 @@
 
 struct bomb_t
 {
-	u16 spr;	// OAM obj id
-	u16 x;				
-	u16 y;
-	u16 dropped;
+    u16 spr;	// OAM obj id
+    u16 x;
+    u16 y;
+    u16 dropped;
 };
 
 // Bomb collision box (based on 16x16 sprite dimension)

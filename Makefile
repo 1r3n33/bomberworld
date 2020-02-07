@@ -16,7 +16,7 @@ TARGET		:=	bw
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-CFLAGS	+=	$(INCLUDE) 
+CFLAGS	+=	$(INCLUDE)
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
@@ -30,16 +30,16 @@ OBJDIR := $(SRCDIR) $(shell ls -d $(SRCDIR)/*/) $(GFXDIR)
 BINDIR := ./bin/
 
 export OUTPUT:=	$(BINDIR)/$(TARGET)
-  
+
 #---------------------------------------------------------------------------------
 export OFILES	:=	$(foreach dir,$(OBJDIR),$(wildcard $(dir)/*.obj))
- 
+
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
 					-I$(CURDIR)/$(BUILD)
 
 GTITLE 		:= -ht"$(TARGET)"
- 
+
 #---------------------------------------------------------------------------------
 all:
 	$(MAKE) -C $(GFXDIR)

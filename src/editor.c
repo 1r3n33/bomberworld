@@ -49,7 +49,7 @@ void move_cursor(u8 id, u16 pad)
         {
             cursors[id].y = (25-16)*8;
         }
-    }    
+    }
 
     if (pad & KEY_DOWN)
     {
@@ -58,7 +58,7 @@ void move_cursor(u8 id, u16 pad)
         {
             cursors[id].y = (25*8);
         }
-    }    
+    }
 
     if (pad & KEY_LEFT)
     {
@@ -67,7 +67,7 @@ void move_cursor(u8 id, u16 pad)
         {
             cursors[id].x = 8;
         }
-    }    
+    }
 
     if (pad & KEY_RIGHT)
     {
@@ -95,7 +95,7 @@ void add_block(u8 id)
         SC_32x32,
         VRAM_ADDR_BG0_MAP
     );
-} 
+}
 
 void remove_block(u8 id)
 {
@@ -111,22 +111,22 @@ void remove_block(u8 id)
         SC_32x32,
         VRAM_ADDR_BG0_MAP
     );
-} 
+}
 
 u8 run_editor()
 {
     init_graphics();
-	init_city_level_gfx();
+    init_city_level_gfx();
 
-	oamInitGfxSet(
-		&spr_editor_til_begin,
-		(&spr_editor_til_end-&spr_editor_til_begin),
-		&spr_editor_pal_begin,
-		(&spr_editor_pal_end-&spr_editor_pal_begin),
-		0,
-		VRAM_ADDR_SPR,
-		OBJ_SIZE8
-	);
+    oamInitGfxSet(
+        &spr_editor_til_begin,
+        (&spr_editor_til_end-&spr_editor_til_begin),
+        &spr_editor_pal_begin,
+        (&spr_editor_pal_end-&spr_editor_pal_begin),
+        0,
+        VRAM_ADDR_SPR,
+        OBJ_SIZE8
+    );
 
     init_tilemap(do_nothing);
 
@@ -136,8 +136,8 @@ u8 run_editor()
     setScreenOn();
 
     u8 frame_count = 0;
-	while (1)
-	{
+    while (1)
+    {
         if ((frame_count & 3)==0) // input rate limiter. a superior version can be found in the titlescreen.
         {
             u16 pad0 = padsCurrent(0);

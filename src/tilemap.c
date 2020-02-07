@@ -2,12 +2,12 @@
 #include "graphics.h"
 #include "tilemap.h"
 
-// BG tile map containing the buildings 
+// BG tile map containing the buildings
 u16 tilemap[32][32];
 
 void reset_tilemap()
 {
-	u8 i, j;
+    u8 i, j;
 
     for (j=0; j<32; j++)
     {
@@ -24,16 +24,16 @@ void init_tilemap(tilemap_builder_t builder)
 
     builder(tilemap);
 
-	bgInitMapSet(
-		0,
-		(u8*)tilemap,
-		32*32*2,
-		SC_32x32,
-		VRAM_ADDR_BG0_MAP
-	);
+    bgInitMapSet(
+        0,
+        (u8*)tilemap,
+        32*32*2,
+        SC_32x32,
+        VRAM_ADDR_BG0_MAP
+    );
 }
 
 u16 * get_tilemap()
 {
-	return (u16 *)tilemap;
+    return (u16 *)tilemap;
 }

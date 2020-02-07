@@ -6,7 +6,7 @@
   SLOT 1 $0 $2000
   SLOT 2 $2000 $E000
   SLOT 3 $0 $10000
-.ENDME          ; End MemoryMap definition
+.ENDME                          ; End MemoryMap definition
 
 .ROMBANKSIZE $8000              ; Every ROM bank is 32 KBytes in size
 .ROMBANKS 8                     ; 2 Mbits - Tell WLA we want to use 8 ROM Banks
@@ -40,6 +40,6 @@
   COP EmptyHandler
   ABORT EmptyHandler
   NMI EmptyHandler
-  RESET tcc__start                   ; where execution starts
+  RESET tcc__start              ; where execution starts
   IRQBRK EmptyHandler
 .ENDEMUVECTOR

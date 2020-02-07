@@ -5,10 +5,10 @@
 
 struct pilot_t
 {
-	u16 spr;
-	u16 x;
-	u16 y;
-	u16 pad;
+    u16 spr;
+    u16 x;
+    u16 y;
+    u16 pad;
 };
 
 // Pilot collision box (based on 16x16 sprite dimension)
