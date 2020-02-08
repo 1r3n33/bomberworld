@@ -1,3 +1,4 @@
+# Generated files
 *.sfc
 *.sym
 
@@ -6,3 +7,6 @@
 *.pic
 
 *.obj
+
+# IDE files
+.vscode/*
