@@ -66,9 +66,9 @@ u8 pilot_tilemap_collision(u8 pilot_id, tilemap_point_collider_t collider)
     return 0;
 }
 
-void bomb_pilot_collision(struct bomb_t * bomb, struct pilot_t * pilot)
+u8 bomb_pilot_collision(struct bomb_t * bomb, struct pilot_t * pilot)
 {
-    if (bomb->dropped == 0) return;
+    if (bomb->dropped == 0) return 0;
 
     // Compute bomb bounding box
     u16 bomb_top = bomb->y + BOMB_COLLISION_OFFSET_TOP;
@@ -82,10 +82,10 @@ void bomb_pilot_collision(struct bomb_t * bomb, struct pilot_t * pilot)
     u16 pilot_left = ((pilot->x>>4) - 512) + PILOT_COLLISION_OFFSET_LEFT;
     u16 pilot_right = ((pilot->x>>4) - 512) + PILOT_COLLISION_OFFSET_RIGHT;
 
-    if (bomb_top > pilot_bottom) return;
-    if (bomb_bottom < pilot_top) return;
-    if (bomb_left > pilot_right) return;
-    if (bomb_right < pilot_left) return;
+    if (bomb_top > pilot_bottom) return 0;
+    if (bomb_bottom < pilot_top) return 0;
+    if (bomb_left > pilot_right) return 0;
+    if (bomb_right < pilot_left) return 0;
 
-    while (1);
+    return 1;
 }

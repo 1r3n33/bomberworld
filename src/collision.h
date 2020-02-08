@@ -12,6 +12,6 @@ u8 bomb_tilemap_collision(u8 bomb_id, tilemap_box_collider_t collider);
 
 u8 pilot_tilemap_collision(u8 pilot_id, tilemap_point_collider_t collider);
 
-void bomb_pilot_collision(struct bomb_t * bomb, struct pilot_t * pilot);
+u8 bomb_pilot_collision(struct bomb_t * bomb, struct pilot_t * pilot);
 
 #endif // COLLISION_H

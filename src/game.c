@@ -176,7 +176,7 @@ u8 game_loop()
         update_bomb(get_bomb(0), 0, pad0, get_pilot(0));
         update_bomb(get_bomb(1), 1, pad1, get_pilot(1));
 
-        bomb_pilot_collision(get_bomb(0), get_pilot(1));
+        u8 bp_collision = bomb_pilot_collision(get_bomb(0), get_pilot(1));
 
         u8 p0_collision = pilot_tilemap_collision(0, current_level.pilot_collider);
         u8 p1_collision = pilot_tilemap_collision(1, current_level.pilot_collider);
@@ -191,6 +191,11 @@ u8 game_loop()
         if (current_level.state_end_level_checker())
         {
             return 1;
+        }
+
+        if (bp_collision == 1)
+        {
+            return 2;
         }
 
         if (p0_collision == 1)
