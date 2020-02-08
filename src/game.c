@@ -5,11 +5,16 @@
 #include "editor.h"
 #include "graphics.h"
 #include "pilot.h"
+#include "text.h"
 #include "tilemap.h"
 #include "titlescreen.h"
 
 #include "levels/city.h"
 #include "levels/egypt.h"
+
+#define GAMEPLAY_SCORE_INCREMENT 5
+
+u16 players_score[2];
 
 typedef void	(*state_initializer_t)(u8);
 typedef u8 		(*state_end_level_checker_t)(void);
@@ -48,7 +53,6 @@ void level_manager_init()
 {
     u8 i = 0;
 
-#if 0
     level_manager.levels[i].level 					= 0;
     level_manager.levels[i].sub_level 				= 0;
     level_manager.levels[i].speed 					= 8;
@@ -61,6 +65,7 @@ void level_manager_init()
     level_manager.levels[i].pilot_collider 			= check_city_level_pilot_collision;
     i++;
 
+#if 0
     level_manager.levels[i].level 					= 0;
     level_manager.levels[i].sub_level 				= 1;
     level_manager.levels[i].speed 					= 12;
@@ -125,7 +130,11 @@ void update_bomb(struct bomb_t * bomb, u8 id, u16 pad, struct pilot_t * pilot)
     if (bomb->dropped)
     {
         move_bomb(id);
-        bomb_tilemap_collision(id, current_level.bomb_collider);
+        u8 collision = bomb_tilemap_collision(id, current_level.bomb_collider);
+        if (collision > 0)
+        {
+            players_score[id] += GAMEPLAY_SCORE_INCREMENT;
+        }
     }
     else
     {
@@ -173,6 +182,10 @@ u8 game_loop()
         u8 p1_collision = pilot_tilemap_collision(1, current_level.pilot_collider);
 
         current_level.gfx_updater();
+
+        set_text_number(OBJ_TEXT, players_score[0], 0, 0);
+        set_text_number(OBJ_TEXT+32, players_score[1], SCREEN_WIDTH-64, 0);
+
         WaitForVBlank();
 
         if (current_level.state_end_level_checker())
@@ -201,6 +214,9 @@ u8 run_game(u8 mode)
 
     init_graphics();
 
+    players_score[0] = 0;
+    players_score[1] = 0;
+
     while (1)
     {
         current_level.gfx_initializer();
@@ -212,6 +228,8 @@ u8 run_game(u8 mode)
 
         current_level.state_initializer(current_level.sub_level);
         init_tilemap(current_level.tilemap_builder);
+
+        reset_text();
 
         setFadeEffect(FADE_IN);
         u8 res = game_loop();

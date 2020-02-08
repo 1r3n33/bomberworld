@@ -30,3 +30,31 @@ void set_text(char * text, u8 x, u8 y)
         text_char_id += 4;
     }
 }
+
+void set_text_number(u16 id, u16 number, u8 x, u8 y)
+{
+    char text[8];
+
+    u8 i = 7;
+    do
+    {
+        u16 div = number/10;
+        u16 rem = number-(div*10);
+
+        oamSet(id, x+(i*8), y, 3, 0, 0, SPR_ASCIITABLE+((48+rem)-32), 1);
+        oamSetEx(id, OBJ_SMALL, OBJ_SHOW);
+        id += 4;
+        i--;
+
+        number = div;
+
+    } while ((number > 0) && (i != 0xFF));
+
+    while (i != 0xFF)
+    {
+        oamSet(id, x+(i*8), y, 3, 0, 0, SPR_ASCIITABLE+('0'-32), 1);
+        oamSetEx(id, OBJ_SMALL, OBJ_SHOW);
+        id += 4;
+        i--;
+    }
+}

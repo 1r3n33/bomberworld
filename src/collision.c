@@ -5,7 +5,7 @@
 #include "pilot.h"
 #include "tilemap.h"
 
-void bomb_tilemap_collision(u8 bomb_id, tilemap_box_collider_t collider)
+u8 bomb_tilemap_collision(u8 bomb_id, tilemap_box_collider_t collider)
 {
     struct bomb_t * bomb = get_bomb(bomb_id);
 
@@ -36,7 +36,11 @@ void bomb_tilemap_collision(u8 bomb_id, tilemap_box_collider_t collider)
         {
             init_bomb(bomb_id);
         }
+
+        return 1;
     }
+
+    return 0;
 }
 
 u8 pilot_tilemap_collision(u8 pilot_id, tilemap_point_collider_t collider)
