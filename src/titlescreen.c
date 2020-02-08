@@ -1,7 +1,7 @@
 #include <snes.h>
-#include <string.h>
 #include "graphics.h"
 #include "pilot.h"
+#include "text.h"
 
 extern char spr_game_til_begin, spr_game_til_end;
 extern char spr_game_pal_begin, spr_game_pal_end;
@@ -16,36 +16,6 @@ extern char bkg_sky_16_map_begin, bkg_sky_16_map_end;
 
 extern char spr_fonts_til_begin, spr_fonts_til_end;
 extern char spr_fonts_pal_begin, spr_fonts_pal_end;
-
-u16 text_char_id = OBJ_TEXT;
-
-u8 selection = 0;
-
-void reset_text()
-{
-    text_char_id = OBJ_TEXT;
-
-    u16 i=0;
-    for (i=0; i<64; i++)
-    {
-        oamSet(OBJ_TEXT+(i*4), 0xFF, 0xFF, 3, 0, 0, SPR_ASCIITABLE+(' '-32), 1);
-        oamSetEx(OBJ_TEXT+(i*4), OBJ_SMALL, OBJ_HIDE);
-    }
-}
-
-void set_text(char * text, u8 x, u8 y)
-{
-    u8 len = strlen(text);
-
-    u8 i=0;
-    for (i=0; i<len; i++)
-    {
-        oamSet(text_char_id, x+(i*8), y, 3, 0, 0, SPR_ASCIITABLE+(text[i]-32), 1);
-        oamSetEx(text_char_id, OBJ_SMALL, OBJ_SHOW);
-
-        text_char_id += 4;
-    }
-}
 
 void init_titlescreen()
 {
@@ -126,6 +96,7 @@ u8 run_titlescreen()
 {
     u16 bkg_scroll = 0;
     u8 input_throttle = 0; // prevent taking inputs into consideration for a number of frames
+    u8 selection = 0;
     u8 selected = 0;
 
     init_titlescreen();
