@@ -29,7 +29,7 @@ void init_egypt_level_gfx();
 
 void build_egypt_level_tilemap(u16 tilemap[32][32]);
 
-void update_egypt_level_gfx();
+void update_egypt_level_gfx(u8 frame);
 
 u8 check_egypt_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right);
 

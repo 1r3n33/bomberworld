@@ -152,7 +152,7 @@ void build_city_level_tilemap(u16 tilemap[32][32])
     city_level_tilemap = (u16*)tilemap;
 }
 
-void update_city_level_gfx()
+void update_city_level_gfx(u8 frame)
 {
     city_bg2_scroll_x += 4;
     bgSetScroll(2, city_bg2_scroll_x >> 4, 0xFF);

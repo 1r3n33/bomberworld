@@ -19,7 +19,7 @@ u16 players_score[2];
 typedef void	(*state_initializer_t)(u8);
 typedef u8 		(*state_end_level_checker_t)(void);
 typedef void 	(*graphics_initializer_t)(void);
-typedef void 	(*graphics_updater_t)(void);
+typedef void 	(*graphics_updater_t)(u8);
 
 struct level_t
 {
@@ -151,11 +151,14 @@ void update_bomb(struct bomb_t * bomb, u8 id, u16 pad, struct pilot_t * pilot)
 // Game loop returns 0 for reset, 1 for completed level, 2 for game over
 u8 game_loop()
 {
+    u8 frame = 0;
     u16 pad0, pad1;
 
     u8 speed = current_level.speed;
 
     while(1) {
+        WaitForVBlank();
+
         pad0 = padsCurrent(0);
         pad1 = padsCurrent(1);
 
@@ -181,12 +184,10 @@ u8 game_loop()
         u8 p0_collision = pilot_tilemap_collision(0, current_level.pilot_collider);
         u8 p1_collision = pilot_tilemap_collision(1, current_level.pilot_collider);
 
-        current_level.gfx_updater();
+        current_level.gfx_updater(frame);
 
         set_text_number(OBJ_TEXT, players_score[0], 0, 0);
         set_text_number(OBJ_TEXT+32, players_score[1], SCREEN_WIDTH-64, 0);
-
-        WaitForVBlank();
 
         if (current_level.state_end_level_checker())
         {
@@ -207,6 +208,8 @@ u8 game_loop()
         {
             return 2;
         }
+
+        frame++;
     }
 }
 

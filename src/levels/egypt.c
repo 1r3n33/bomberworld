@@ -1,6 +1,7 @@
 #include <snes.h>
 #include "egypt.h"
 #include "graphics.h"
+#include "vfx.h"
 
 // backgrounds
 extern char bkg_egypt_til_begin, bkg_egypt_til_end;
@@ -71,6 +72,9 @@ void init_egypt_level_gfx()
     bgSetScroll(1, egypt_bg1_scroll_x >> 4, 0xFF);
     bgSetScroll(2, egypt_bg2_scroll_x >> 4, 0xFF);
     bgSetScroll(3, egypt_bg3_scroll_x >> 4, 0xFF);
+
+    // Heat fx
+    init_vfx_bkg_waves();
 }
 
 void build_egypt_level_tilemap(u16 tilemap[32][32])
@@ -114,8 +118,9 @@ void build_egypt_level_tilemap(u16 tilemap[32][32])
     egypt_level_tilemap = (u16*)tilemap;
 }
 
-void update_egypt_level_gfx()
+void update_egypt_level_gfx(u8 frame)
 {
+    update_vfx_bkg_waves(frame);
 }
 
 u8 check_egypt_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)

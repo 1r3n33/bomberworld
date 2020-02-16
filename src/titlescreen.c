@@ -19,6 +19,7 @@ extern char spr_fonts_pal_begin, spr_fonts_pal_end;
 
 void init_titlescreen()
 {
+    REG_HDMAEN = 0;
     setMode(BG_MODE1, 0);
 
     bgInitTileSet(
