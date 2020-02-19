@@ -103,4 +103,17 @@ bkg_egypt_map_begin:
 .incbin "bkg_egypt.map"
 bkg_egypt_map_end:
 
+; Sea level
+bkg_sea_til_begin:
+.incbin "bkg_ship.pic"
+bkg_sea_til_end:
+
+bkg_sea_pal_begin:
+.incbin "bkg_ship.pal"
+bkg_sea_pal_end:
+
+bkg_sea_map_begin:
+.incbin "bkg_ship.map"
+bkg_sea_map_end:
+
 .ends

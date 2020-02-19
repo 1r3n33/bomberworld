@@ -48,6 +48,12 @@ til_pyramid.pic: til_pyramid.bmp
 bkg_egypt.pic: bkg_egypt.bmp
 	$(GFXCONV) -gs8 -m -pc4 -pe0 -pr -fbmp -n $<
 
+# Sea level (mode 0 BGs)
+# BG0 used for the ship tiles.
+# This image will generate 4 4-colors palettes
+bkg_ship.pic: bkg_ship.bmp
+	$(GFXCONV) -gs8 -m -pc4 -pe0 -pr -fbmp -n $<
+
 # Titlescreen (BG0 for mode 1)
 # 16-colors for the top title part
 # 16-colors for the subtitle part
@@ -69,5 +75,6 @@ gfx:	spr_game.pic		\
 		bkg_sky_4.pic		\
 		til_pyramid.pic		\
 		bkg_egypt.pic		\
+		bkg_ship.pic		\
 		bkg_titlescreen.pic	\
 		bkg_sky_16.pic
