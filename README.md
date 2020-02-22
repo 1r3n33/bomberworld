@@ -2,6 +2,8 @@
 
 SNES homebrew inspired by the [Bomber](https://www.mobygames.com/game/cpc/bomber_________) Amstrad CPC game.
 
+[![Build Status](https://travis-ci.com/1r3n33/bomberworld.svg?branch=master)](https://travis-ci.com/1r3n33/bomberworld)
+
 ## Installation on Linux
 
 ## Wine
