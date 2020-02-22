@@ -16,3 +16,5 @@ deploy:
     api_key: ${GITHUB_OAUTH_TOKEN}"
     file: bomberworld-${TRAVIS_BUILD_NUMBER}.zip
     skip_cleanup: true
+    on:
+        all_branches: true
