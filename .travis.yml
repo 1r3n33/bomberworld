@@ -1,0 +1,13 @@
+before_install:
+	sudo apt-get update
+
+install:
+	sudo apt-get install wine
+	git clone -b local-dev-env git@github.com:1r3n33/pvsneslib.git
+
+before_script:
+	export DEVKITSNES=$(pwd)/pvsneslib
+	export DEVKIT65XX=$DEVKITSNES/devkitsnes
+
+script:
+	make
