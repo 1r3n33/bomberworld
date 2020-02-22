@@ -13,8 +13,10 @@ before deploy:
     - zip bomberworld-${TRAVIS_BUILD_NUMBER}.zip *
 deploy:
     provider: releases
-    api_key: ${GITHUB_OAUTH_TOKEN}"
+    api_key:
+        secure: Vzb4cl6Jk127PN9UDgGXfHCRR3GonlIwO+qvTVSSlPQ0yzS+PK32r0Qptriwc67WCDS0q7M+alHSS7FSG+eu4HZU+Brg7JY+AgyJlIe5QQ5CEhBJM2wx6likTkpKQkZI+rJmO5+ml7B3FyG18kc1CyEgr3QsqIloLwc6mUE4IRpZzfFUohXebkxUD/C93Gf3uohV1Bvdfca5IWJc0WSXb5CQjYngX8AT8+sqXB9ye3dVsUoQgyAPAHqiobxoE1Fm7/993plM238tW9qiZaduDEUl7h4WYaAokZXZ6I6G6Ld5rvYJ8jDK2w6TDe/JfP8xR8icO7WYFYVtkbZ2JUpstJrGrRMOoFWTHKiuPddynLrgt0ULSPX5/xBAOcAp2l3ZniG7NhCtWaL7IuIwmiulbqicEtBs1kreiYGWOVvLolaw3S3g4ieoy54F9YzIdVEGgWShTEQONqODQnijkU5V+dxoVFcT2VgPRnmV9CJAceTHYuLDnM6+bgn0ItEOW0EnO3dfDXWw8VKmd3rx1ijBGSwxHvg7Tse1TODm3ygNypxFLZsNxryHqc/rCgVE0digjCqJeJBseBLGcZIoQsc/V6t7updHjFRmSujEaNM3FpCM1OuYQgT4JSn86Pm3g4Sp0tm3jSdwg0+JixHDN8x4ZEXVP5VFAABVn2QHdyTfPR0=
     file: bomberworld-${TRAVIS_BUILD_NUMBER}.zip
     skip_cleanup: true
     on:
+        repo: 1r3n33/bomberworld
         all_branches: true
