@@ -8,3 +8,11 @@ before_script:
     - export DEVKIT65XX=$DEVKITSNES/devkitsnes
 script:
     - make
+before deploy:
+    - cd bin
+    - zip bomberworld-${TRAVIS_BUILD_NUMBER}.zip *
+deploy:
+    provider: releases
+    api_key: ${GITHUB_OAUTH_TOKEN}"
+    file: bomberworld-${TRAVIS_BUILD_NUMBER}.zip
+    skip_cleanup: true
