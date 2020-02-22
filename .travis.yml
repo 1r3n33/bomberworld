@@ -23,5 +23,11 @@ deploy:
     file: bomberworld-${TRAVIS_BUILD_NUMBER}.zip
     skip_cleanup: true
     on:
+        tags: false
         repo: 1r3n33/bomberworld
         all_branches: true
+
+branches:
+    except:
+        # Do not treat tag pushes as commits to avoid looping
+        - /^*-v[0-9]/
