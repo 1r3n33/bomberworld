@@ -23,14 +23,6 @@ void init_tilemap(tilemap_builder_t builder)
     reset_tilemap();
 
     builder(tilemap);
-
-    bgInitMapSet(
-        0,
-        (u8*)tilemap,
-        32*32*2,
-        SC_32x32,
-        VRAM_ADDR_BG0_MAP
-    );
 }
 
 u16 * get_tilemap()

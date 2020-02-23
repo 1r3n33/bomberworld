@@ -54,6 +54,8 @@ void init_city_level_state(u8 level)
 
 void init_city_level_gfx()
 {
+    REG_HDMAEN = 0;
+
     // Init backgrounds
     bgInitTileSet(
         0,
@@ -150,6 +152,14 @@ void build_city_level_tilemap(u16 tilemap[32][32])
     }
 
     city_level_tilemap = (u16*)tilemap;
+
+    bgInitMapSet(
+        0,
+        (u8*)tilemap,
+        32*32*2,
+        SC_32x32,
+        VRAM_ADDR_BG0_MAP
+    );
 }
 
 void update_city_level_gfx(u8 frame)

@@ -49,9 +49,17 @@ bkg_egypt.pic: bkg_egypt.bmp
 	$(GFXCONV) -gs8 -m -pc4 -pe0 -pr -fbmp -n $<
 
 # Sea level (mode 0 BGs)
-# BG0 used for the ship tiles.
+# BG0 used for the front sea waves.
+# This image will generate 2 4-colors palettes
+bkg_sea.pic: bkg_sea.bmp
+	$(GFXCONV) -gs8 -m -pc4 -pe0 -pr -fbmp -n $<
+# BG1 used for the ship tiles.
 # This image will generate 4 4-colors palettes
 bkg_ship.pic: bkg_ship.bmp
+	$(GFXCONV) -gs8 -m -pc4 -pe0 -pr -fbmp -n $<
+# BG2 used for the back sea waves.
+# This image will generate 2 4-colors palettes
+bkg_sea_back.pic: bkg_sea_back.bmp
 	$(GFXCONV) -gs8 -m -pc4 -pe0 -pr -fbmp -n $<
 
 # Titlescreen (BG0 for mode 1)
@@ -76,5 +84,7 @@ gfx:	spr_game.pic		\
 		til_pyramid.pic		\
 		bkg_egypt.pic		\
 		bkg_ship.pic		\
+		bkg_sea.pic			\
+		bkg_sea_back.pic	\
 		bkg_titlescreen.pic	\
 		bkg_sky_16.pic

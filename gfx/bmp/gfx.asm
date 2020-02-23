@@ -103,17 +103,45 @@ bkg_egypt_map_begin:
 .incbin "bkg_egypt.map"
 bkg_egypt_map_end:
 
+.ends
+
+.section ".rodata2" superfree
+
 ; Sea level
 bkg_sea_til_begin:
-.incbin "bkg_ship.pic"
+.incbin "bkg_sea.pic"
 bkg_sea_til_end:
 
 bkg_sea_pal_begin:
-.incbin "bkg_ship.pal"
+.incbin "bkg_sea.pal"
 bkg_sea_pal_end:
 
 bkg_sea_map_begin:
-.incbin "bkg_ship.map"
+.incbin "bkg_sea.map"
 bkg_sea_map_end:
+
+bkg_ship_til_begin:
+.incbin "bkg_ship.pic"
+bkg_ship_til_end:
+
+bkg_ship_pal_begin:
+.incbin "bkg_ship.pal"
+bkg_ship_pal_end:
+
+bkg_ship_map_begin:
+.incbin "bkg_ship.map"
+bkg_ship_map_end:
+
+bkg_sea_back_til_begin:
+.incbin "bkg_sea_back.pic"
+bkg_sea_back_til_end:
+
+bkg_sea_back_pal_begin:
+.incbin "bkg_sea_back.pal"
+bkg_sea_back_pal_end:
+
+bkg_sea_back_map_begin:
+.incbin "bkg_sea_back.map"
+bkg_sea_back_map_end:
 
 .ends
