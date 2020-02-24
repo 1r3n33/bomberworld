@@ -148,6 +148,7 @@ u8 check_sea_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
         u16 tile = sea_level_tilemap[y*32+x];
         if (tile > 0)
         {
+            sea_block_count--;
             sea_level_tilemap[y*32+x] = 0;
             bgInitMapSet(
                 1,
@@ -176,5 +177,5 @@ u8 check_sea_level_pilot_collision(u8 x, u8 y)
 
 u8 check_sea_level_done()
 {
-    return sea_block_count == 0;
+    return sea_block_count < 16;
 }
