@@ -75,7 +75,7 @@ void init_vfx_bkg_waves()
 
     VFX_BKG_WAVES_REG_DMAP  = 2; // Mode 2: REG_BG2HOFS is a double-write register.
     VFX_BKG_WAVES_REG_BBAD  = 0x0F; // REG_BG2HOFS (8-bit low)
-    VFX_BKG_WAVES_REG_A1TLH = hdma_buffer.data; // Table address.
+    VFX_BKG_WAVES_REG_A1TLH = (u16)(hdma_buffer.data); // Table address.
     VFX_BKG_WAVES_REG_A1B   = 0x7E; // Table address is in .bss section.
 
     REG_HDMAEN = VFX_BKG_WAVES_ENABLE_HDMA;
@@ -91,5 +91,5 @@ void update_vfx_bkg_waves(u8 frame)
 
     u8 offset = vfx_bkg_waves_offset * VFX_BKG_WAVES_UNIT_SIZE; // Compute the hdma_buffer offset.
 
-    VFX_BKG_WAVES_REG_A1TLH = hdma_buffer.data+offset; // Table address.
+    VFX_BKG_WAVES_REG_A1TLH = (u16)(hdma_buffer.data+offset); // Table address.
 }
