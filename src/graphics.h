@@ -13,15 +13,10 @@ void init_graphics();
 #define VRAM_ADDR_SPR        0x6000
 
 // OAM OBJ id
-#define OBJ_PILOT_0 0
-#define OBJ_PILOT_1 4
-#define OBJ_PILOT_2 8
-#define OBJ_PILOT_3 12
-
-#define OBJ_BOMB_0  16
-#define OBJ_BOMB_1  20
-#define OBJ_BOMB_2  24
-#define OBJ_BOMB_3  28
+#define OBJ_PILOT_0 0   //
+#define OBJ_BOMB_0  4   // Draw bomb_0 behind pilot_0
+#define OBJ_PILOT_1 8   // Draw pilot_1 behind bomb_0
+#define OBJ_BOMB_1  12  // Draw bomb_1 behind pilot_1
 
 #define OBJ_TEXT    256
 
