@@ -20,8 +20,15 @@ struct cursor_t
 
 struct cursor_t cursors[2];
 
-void do_nothing()
+void editor_tilemap_builder(u16 tilemap[32][32])
 {
+    bgInitMapSet(
+        0,
+        (u8*)editor_tilemap,
+        32*32*2,
+        SC_32x32,
+        VRAM_ADDR_BG0_MAP
+    );
 }
 
 u16 * get_editor_tilemap()
@@ -128,7 +135,7 @@ u8 run_editor()
         OBJ_SIZE8
     );
 
-    init_tilemap(do_nothing);
+    init_tilemap(editor_tilemap_builder);
 
     init_cursor(0);
     init_cursor(1);
