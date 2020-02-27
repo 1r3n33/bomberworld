@@ -3,6 +3,7 @@
 #include "bomb.h"
 #include "collision.h"
 #include "editor.h"
+#include "game.h"
 #include "graphics.h"
 #include "pilot.h"
 #include "text.h"
@@ -90,8 +91,8 @@ void level_manager_init()
     level_manager.levels[i].bomb_collider           = check_city_level_bomb_collision;
     level_manager.levels[i].pilot_collider          = check_city_level_pilot_collision;
     i++;
-
 #endif
+
     level_manager.levels[i].level                   = 1;
     level_manager.levels[i].sub_level               = 0;
     level_manager.levels[i].speed                   = 8;
@@ -177,17 +178,15 @@ u8 game_loop()
 
         if (pad0 & KEY_START)
         {
-            game_mode = 0;
             return 0;
         }
         if (pad1 & KEY_START)
         {
-            game_mode = 1;
             return 0;
         }
 
         move_pilot(0, speed);
-        move_pilot(1, (game_mode == 0) ? 0 : speed);
+        move_pilot(1, (game_mode & GAME_MODE_FLAG_2P) ? speed : 0);
 
         update_bomb(get_bomb(0), 0, pad0, get_pilot(0));
         update_bomb(get_bomb(1), 1, pad1, get_pilot(1));
@@ -226,7 +225,7 @@ u8 game_loop()
     }
 }
 
-// Run the game. mode 1P (0) or 2P (1)
+// Run the game.
 u8 run_game(u8 mode)
 {
     game_mode = mode;

@@ -1,5 +1,6 @@
 #include <snes.h>
 #include "editor.h"
+#include "game.h"
 #include "graphics.h"
 #include "tilemap.h"
 
@@ -198,6 +199,7 @@ u8 run_editor()
 
     setScreenOn();
 
+    u8 game_mode = GAME_MODE_FLAG_EDITOR_MAP;
     u8 frame_count = 0;
     while (1)
     {
@@ -229,10 +231,12 @@ u8 run_editor()
 
             if (pad0 & KEY_START)
             {
+                game_mode |= GAME_MODE_FLAG_1P;
                 break;
             }
             if (pad1 & KEY_START)
             {
+                game_mode |= GAME_MODE_FLAG_2P;
                 break;
             }
         }
@@ -242,5 +246,5 @@ u8 run_editor()
     }
 
     setFadeEffect(FADE_OUT);
-    return 1;
+    return game_mode;
 }

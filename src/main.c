@@ -13,15 +13,16 @@ int main()
 
         if (selection == TITLESCREEN_SELECTION_1P)
         {
-            run_game(0);
+            run_game(GAME_MODE_FLAG_1P);
         }
         else if (selection == TITLESCREEN_SELECTION_2P)
         {
-            run_game(1);
+            run_game(GAME_MODE_FLAG_2P);
         }
         else if (selection == TITLESCREEN_SELECTION_EDIT)
         {
-            run_editor();
+            u8 game_mode = run_editor();
+            run_game(game_mode);
         }
     }
 
