@@ -122,8 +122,7 @@ void update_cursor(u8 id, u16 pad)
     }
 
     // Update display
-    oamSet(cursors[id].spr, 0xFF, 0xFF, 3, 0, 0, cursors[id].state, 0);
-    oamSetXY(cursors[id].spr, cursors[id].x, cursors[id].y);
+    oamSet(cursors[id].spr, cursors[id].x, cursors[id].y, 3, 0, 0, cursors[id].state, 0);
 }
 
 void add_block(u8 id)
@@ -156,6 +155,15 @@ void remove_block(u8 id)
 
     u8 x = cursors[id].x/8;
     u8 y = cursors[id].y/8;
+
+    // Even if the cursor is valid, we may not be able to remove...
+    u16 above = editor_tilemap[y-1][x];
+    if (above)
+    {
+        // Keep the valid state but draw as invalid.
+        oamSet(cursors[id].spr, cursors[id].x, cursors[id].y, 3, 0, 0, SPR_EDITOR_CURSOR_INVALID, 0);
+        return;
+    }
 
     editor_tilemap[y][x] = 0;
 
