@@ -21,7 +21,7 @@ u16 egypt_block_count = 0;
 u8 egypt_min_building_size = 2;
 u8 egypt_max_building_size = 8;
 
-u16 * egypt_level_tilemap = 0;
+u16 egypt_level_tilemap[32][32];
 
 void init_egypt_level_state(u8 level)
 {
@@ -79,49 +79,53 @@ void init_egypt_level_gfx()
     init_vfx_bkg_waves();
 }
 
-void build_egypt_level_tilemap(u16 tilemap[32][32])
+void build_egypt_level_tilemap()
 {
-    u8 i, j, height;
-
+    u8 i, j;
+    for (j=0; j<32; j++)
+    {
+        for (i=0; i<32; i++)
+        {
+            egypt_level_tilemap[j][i] = 0;
+        }
+    }
     egypt_block_count = 0;
 
-    height = 0;
+    u8 height = 0;
     for (i=2; i<16; i++)
     {
         for (j=0; j<height; j++)
         {
             if (j < 10)
             {
-                tilemap[26-j][i] = TIL_PYRAMID_BLOCK_NORMAL | TIL_PYRAMID_PALETTE_1_FLAG;
-                tilemap[26-j][31-i] = TIL_PYRAMID_BLOCK_NORMAL | TIL_PYRAMID_PALETTE_1_FLAG | TIL_PYRAMID_MIRROR_X_FLAG;
+                egypt_level_tilemap[26-j][i] = TIL_PYRAMID_BLOCK_NORMAL | TIL_PYRAMID_PALETTE_1_FLAG;
+                egypt_level_tilemap[26-j][31-i] = TIL_PYRAMID_BLOCK_NORMAL | TIL_PYRAMID_PALETTE_1_FLAG | TIL_PYRAMID_MIRROR_X_FLAG;
             }
             else
             {
-                tilemap[26-j][i] = TIL_PYRAMID_BLOCK_GOLD;
-                tilemap[26-j][31-i] = TIL_PYRAMID_BLOCK_GOLD | TIL_PYRAMID_MIRROR_X_FLAG;
+                egypt_level_tilemap[26-j][i] = TIL_PYRAMID_BLOCK_GOLD;
+                egypt_level_tilemap[26-j][31-i] = TIL_PYRAMID_BLOCK_GOLD | TIL_PYRAMID_MIRROR_X_FLAG;
             }
         }
 
         if (j < 10)
         {
-            tilemap[26-j][i] = TIL_PYRAMID_SIDE_NORMAL | TIL_PYRAMID_PALETTE_1_FLAG;
-            tilemap[26-j][31-i] = TIL_PYRAMID_SIDE_NORMAL | TIL_PYRAMID_PALETTE_1_FLAG | TIL_PYRAMID_MIRROR_X_FLAG;
+            egypt_level_tilemap[26-j][i] = TIL_PYRAMID_SIDE_NORMAL | TIL_PYRAMID_PALETTE_1_FLAG;
+            egypt_level_tilemap[26-j][31-i] = TIL_PYRAMID_SIDE_NORMAL | TIL_PYRAMID_PALETTE_1_FLAG | TIL_PYRAMID_MIRROR_X_FLAG;
         }
         else
         {
-            tilemap[26-j][i] = TIL_PYRAMID_SIDE_GOLD;
-            tilemap[26-j][31-i] = TIL_PYRAMID_SIDE_GOLD | TIL_PYRAMID_MIRROR_X_FLAG;
+            egypt_level_tilemap[26-j][i] = TIL_PYRAMID_SIDE_GOLD;
+            egypt_level_tilemap[26-j][31-i] = TIL_PYRAMID_SIDE_GOLD | TIL_PYRAMID_MIRROR_X_FLAG;
         }
 
         egypt_block_count += (2*(height+1));
         height++;
     }
 
-    egypt_level_tilemap = (u16*)tilemap;
-
     bgInitMapSet(
         0,
-        (u8*)tilemap,
+        (u8*)egypt_level_tilemap,
         32*32*2,
         SC_32x32,
         VRAM_ADDR_BG0_MAP
@@ -143,7 +147,7 @@ u8 check_egypt_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
     u8 y = map_max_y;
     for (; x<=map_max_x; x++)
     {
-        u8 tile = egypt_level_tilemap[(y*32)+x];
+        u8 tile = egypt_level_tilemap[y][x];
         u8 tile_id = tile & TIL_PYRAMID_ID_MASK;
 
         if (tile_id > 0 && tile_id < TIL_PYRAMID_BROKEN_FIRST_ID)
@@ -153,7 +157,7 @@ u8 check_egypt_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
             {
             case TIL_PYRAMID_SIDE_GOLD:
             case TIL_PYRAMID_BLOCK_GOLD:
-                egypt_level_tilemap[(y*32)+x] += 2; // offset by 2 in the tilemap gets the corresponding cracked tile
+                egypt_level_tilemap[y][x] += 2; // offset by 2 in the tilemap gets the corresponding cracked tile
                 bgInitMapSet(
                     0,
                     (u8*)egypt_level_tilemap,
@@ -165,8 +169,8 @@ u8 check_egypt_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
 
             case TIL_PYRAMID_SIDE_GOLD_CRACK:
             case TIL_PYRAMID_BLOCK_GOLD_CRACK:
-                egypt_level_tilemap[(y*32)+x] -= 4; // offset by -4 in the tilemap gets the corresponding brick tile
-                egypt_level_tilemap[(y*32)+x] |= TIL_PYRAMID_PALETTE_1_FLAG;
+                egypt_level_tilemap[y][x] -= 4; // offset by -4 in the tilemap gets the corresponding brick tile
+                egypt_level_tilemap[y][x] |= TIL_PYRAMID_PALETTE_1_FLAG;
                 bgInitMapSet(
                     0,
                     (u8*)egypt_level_tilemap,
@@ -183,28 +187,28 @@ u8 check_egypt_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
             egypt_block_count--;
 
             // Change the look of the surrounding tiles
-            u16 tile_left  = egypt_level_tilemap[(y*32)+(x-1)];
-            u16 tile_right = egypt_level_tilemap[(y*32)+(x+1)];
-            u16 tile_up    = egypt_level_tilemap[((y-1)*32)+x];
+            u16 tile_left  = egypt_level_tilemap[y][x-1];
+            u16 tile_right = egypt_level_tilemap[y][x+1];
+            u16 tile_up    = egypt_level_tilemap[y-1][x];
 
             u8 tile_left_solid = (tile_left > 0 && (tile_left&TIL_PYRAMID_ID_MASK) < TIL_PYRAMID_BROKEN_FIRST_ID) ? 1 : 0;
             u8 tile_right_solid = (tile_right > 0 && (tile_right&TIL_PYRAMID_ID_MASK) < TIL_PYRAMID_BROKEN_FIRST_ID) ? 1 : 0;
 
             if (tile_left_solid == 0 && tile_right_solid == 0)
             {
-                egypt_level_tilemap[(y*32)+x] = TIL_PYRAMID_BROKEN_010 | TIL_PYRAMID_PALETTE_1_FLAG;
+                egypt_level_tilemap[y][x] = TIL_PYRAMID_BROKEN_010 | TIL_PYRAMID_PALETTE_1_FLAG;
             }
             else if (tile_left_solid == 1 && tile_right_solid == 1)
             {
-                egypt_level_tilemap[(y*32)+x] = TIL_PYRAMID_BROKEN_111 | TIL_PYRAMID_PALETTE_1_FLAG;
+                egypt_level_tilemap[y][x] = TIL_PYRAMID_BROKEN_111 | TIL_PYRAMID_PALETTE_1_FLAG;
             }
             else if (tile_left_solid == 0 && tile_right_solid == 1)
             {
-                egypt_level_tilemap[(y*32)+x] = TIL_PYRAMID_BROKEN_011 | TIL_PYRAMID_PALETTE_1_FLAG;
+                egypt_level_tilemap[y][x] = TIL_PYRAMID_BROKEN_011 | TIL_PYRAMID_PALETTE_1_FLAG;
             }
             else if (tile_left_solid == 1 && tile_right_solid == 0)
             {
-                egypt_level_tilemap[(y*32)+x] = TIL_PYRAMID_BROKEN_011 | TIL_PYRAMID_PALETTE_1_FLAG | TIL_PYRAMID_MIRROR_X_FLAG;
+                egypt_level_tilemap[y][x] = TIL_PYRAMID_BROKEN_011 | TIL_PYRAMID_PALETTE_1_FLAG | TIL_PYRAMID_MIRROR_X_FLAG;
             }
 
             u8 tile_left_broken = ((tile_left&TIL_PYRAMID_ID_MASK) >= TIL_PYRAMID_BROKEN_FIRST_ID) ? 1 : 0;
@@ -214,19 +218,19 @@ u8 check_egypt_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
             {
                 if (tile_left == (TIL_PYRAMID_BROKEN_011 | TIL_PYRAMID_PALETTE_1_FLAG))
                 {
-                    egypt_level_tilemap[(y*32)+(x-1)] = TIL_PYRAMID_BROKEN_010 | TIL_PYRAMID_PALETTE_1_FLAG;
+                    egypt_level_tilemap[y][x-1] = TIL_PYRAMID_BROKEN_010 | TIL_PYRAMID_PALETTE_1_FLAG;
                 }
                 else if (tile_left == (TIL_PYRAMID_BROKEN_001 | TIL_PYRAMID_PALETTE_1_FLAG))
                 {
-                    egypt_level_tilemap[(y*32)+(x-1)] = TIL_PYRAMID_BLANK;
+                    egypt_level_tilemap[y][x-1] = TIL_PYRAMID_BLANK;
                 }
                 else if (tile_left == (TIL_PYRAMID_BROKEN_111 | TIL_PYRAMID_PALETTE_1_FLAG))
                 {
-                    egypt_level_tilemap[(y*32)+(x-1)] = TIL_PYRAMID_BROKEN_011 | TIL_PYRAMID_PALETTE_1_FLAG | TIL_PYRAMID_MIRROR_X_FLAG;
+                    egypt_level_tilemap[y][x-1] = TIL_PYRAMID_BROKEN_011 | TIL_PYRAMID_PALETTE_1_FLAG | TIL_PYRAMID_MIRROR_X_FLAG;
                 }
                 else if (tile_left == (TIL_PYRAMID_BROKEN_101 | TIL_PYRAMID_PALETTE_1_FLAG))
                 {
-                    egypt_level_tilemap[(y*32)+(x-1)] = TIL_PYRAMID_BROKEN_001 | TIL_PYRAMID_PALETTE_1_FLAG | TIL_PYRAMID_MIRROR_X_FLAG;
+                    egypt_level_tilemap[y][x-1] = TIL_PYRAMID_BROKEN_001 | TIL_PYRAMID_PALETTE_1_FLAG | TIL_PYRAMID_MIRROR_X_FLAG;
                 }
             }
 
@@ -234,19 +238,19 @@ u8 check_egypt_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
             {
                 if (tile_right == (TIL_PYRAMID_BROKEN_011 | TIL_PYRAMID_PALETTE_1_FLAG | TIL_PYRAMID_MIRROR_X_FLAG))
                 {
-                    egypt_level_tilemap[(y*32)+(x+1)] = TIL_PYRAMID_BROKEN_010 | TIL_PYRAMID_PALETTE_1_FLAG;
+                    egypt_level_tilemap[y][x+1] = TIL_PYRAMID_BROKEN_010 | TIL_PYRAMID_PALETTE_1_FLAG;
                 }
                 else if (tile_right == (TIL_PYRAMID_BROKEN_001 | TIL_PYRAMID_PALETTE_1_FLAG | TIL_PYRAMID_MIRROR_X_FLAG))
                 {
-                    egypt_level_tilemap[(y*32)+(x+1)] = TIL_PYRAMID_BLANK;
+                    egypt_level_tilemap[y][x+1] = TIL_PYRAMID_BLANK;
                 }
                 else if (tile_right == (TIL_PYRAMID_BROKEN_111 | TIL_PYRAMID_PALETTE_1_FLAG))
                 {
-                    egypt_level_tilemap[(y*32)+(x+1)] = TIL_PYRAMID_BROKEN_011 | TIL_PYRAMID_PALETTE_1_FLAG;
+                    egypt_level_tilemap[y][x+1] = TIL_PYRAMID_BROKEN_011 | TIL_PYRAMID_PALETTE_1_FLAG;
                 }
                 else if (tile_right == (TIL_PYRAMID_BROKEN_101 | TIL_PYRAMID_PALETTE_1_FLAG))
                 {
-                    egypt_level_tilemap[(y*32)+(x+1)] = TIL_PYRAMID_BROKEN_001 | TIL_PYRAMID_PALETTE_1_FLAG;
+                    egypt_level_tilemap[y][x+1] = TIL_PYRAMID_BROKEN_001 | TIL_PYRAMID_PALETTE_1_FLAG;
                 }
             }
 
@@ -255,19 +259,19 @@ u8 check_egypt_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
             {
                 if (tile_up == (TIL_PYRAMID_BROKEN_011 | TIL_PYRAMID_PALETTE_1_FLAG))
                 {
-                    egypt_level_tilemap[((y-1)*32)+x] = TIL_PYRAMID_BROKEN_001 | TIL_PYRAMID_PALETTE_1_FLAG;
+                    egypt_level_tilemap[y-1][x] = TIL_PYRAMID_BROKEN_001 | TIL_PYRAMID_PALETTE_1_FLAG;
                 }
                 else if (tile_up == (TIL_PYRAMID_BROKEN_011 | TIL_PYRAMID_PALETTE_1_FLAG | TIL_PYRAMID_MIRROR_X_FLAG))
                 {
-                    egypt_level_tilemap[((y-1)*32)+x] = TIL_PYRAMID_BROKEN_001 | TIL_PYRAMID_PALETTE_1_FLAG | TIL_PYRAMID_MIRROR_X_FLAG;
+                    egypt_level_tilemap[y-1][x] = TIL_PYRAMID_BROKEN_001 | TIL_PYRAMID_PALETTE_1_FLAG | TIL_PYRAMID_MIRROR_X_FLAG;
                 }
                 else if (tile_up == (TIL_PYRAMID_BROKEN_111 | TIL_PYRAMID_PALETTE_1_FLAG))
                 {
-                    egypt_level_tilemap[((y-1)*32)+x] = TIL_PYRAMID_BROKEN_101 | TIL_PYRAMID_PALETTE_1_FLAG;
+                    egypt_level_tilemap[y-1][x] = TIL_PYRAMID_BROKEN_101 | TIL_PYRAMID_PALETTE_1_FLAG;
                 }
                 else if (tile_up == (TIL_PYRAMID_BROKEN_010 | TIL_PYRAMID_PALETTE_1_FLAG))
                 {
-                    egypt_level_tilemap[((y-1)*32)+x] = TIL_PYRAMID_BLANK;
+                    egypt_level_tilemap[y-1][x] = TIL_PYRAMID_BLANK;
                 }
             }
 
@@ -292,7 +296,7 @@ u8 check_egypt_level_pilot_collision(u8 x, u8 y)
     u8 map_x = x / 8;
     u8 map_y = y / 8;
 
-    u8 tile = egypt_level_tilemap[(map_y*32)+map_x];
+    u8 tile = egypt_level_tilemap[map_y][map_x];
     u8 tile_id = tile & 0xF;
     u8 tile_mirror_x = (tile & 0x4000) ? 1 : 0;
 

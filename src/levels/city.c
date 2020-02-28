@@ -24,7 +24,7 @@ u16 city_block_count = 0;
 u8 city_min_building_size = 2;
 u8 city_max_building_size = 8;
 
-u16 * city_level_tilemap = 0;
+u16 city_level_tilemap[32][32];
 
 void init_city_level_state(u8 level)
 {
@@ -117,45 +117,48 @@ void init_city_level_gfx()
     bgSetScroll(3, city_bg3_scroll_x >> 4, 0xFF);
 }
 
-void build_city_level_tilemap(u16 tilemap[32][32])
+void build_city_level_tilemap()
 {
     u8 i, j;
-    u8 rnd;
-
+    for (j=0; j<32; j++)
+    {
+        for (i=0; i<32; i++)
+        {
+            city_level_tilemap[j][i] = 0;
+        }
+    }
     city_block_count = 0;
 
     for (i=0; i<32; i+=4)
     {
-        rnd = (rand()%(city_max_building_size-city_min_building_size))+city_min_building_size;
+        u8 rnd = (rand()%(city_max_building_size-city_min_building_size))+city_min_building_size;
 
         for (j=0; j<rnd; j++)
         {
             if (j == 0)
             {
-                tilemap[26-j][i+1] = TIL_BUILDING_FLOOR_SIDE_DOOR;
-                tilemap[26-j][i+2] = TIL_BUILDING_FLOOR_SIDE_DOOR | 0x4000;
+                city_level_tilemap[26-j][i+1] = TIL_BUILDING_FLOOR_SIDE_DOOR;
+                city_level_tilemap[26-j][i+2] = TIL_BUILDING_FLOOR_SIDE_DOOR | 0x4000;
                 city_block_count += 2;
             }
             else if (j == (rnd-1))
             {
-                tilemap[26-j][i+1] = TIL_BUILDING_CEILING_SIDE_WINDOW_0;
-                tilemap[26-j][i+2] = TIL_BUILDING_CEILING_SIDE_WINDOW_0 | 0x4000;
+                city_level_tilemap[26-j][i+1] = TIL_BUILDING_CEILING_SIDE_WINDOW_0;
+                city_level_tilemap[26-j][i+2] = TIL_BUILDING_CEILING_SIDE_WINDOW_0 | 0x4000;
                 city_block_count += 2;
             }
             else
             {
-                tilemap[26-j][i+1] = TIL_BUILDING_BODY_SIDE_WINDOW_0;
-                tilemap[26-j][i+2] = TIL_BUILDING_BODY_SIDE_WINDOW_0 | 0x4000;
+                city_level_tilemap[26-j][i+1] = TIL_BUILDING_BODY_SIDE_WINDOW_0;
+                city_level_tilemap[26-j][i+2] = TIL_BUILDING_BODY_SIDE_WINDOW_0 | 0x4000;
                 city_block_count += 2;
             }
         }
     }
 
-    city_level_tilemap = (u16*)tilemap;
-
     bgInitMapSet(
         0,
-        (u8*)tilemap,
+        (u8*)city_level_tilemap,
         32*32*2,
         SC_32x32,
         VRAM_ADDR_BG0_MAP
@@ -178,35 +181,35 @@ u8 check_city_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
     u8 y = map_max_y;
     for (; x<=map_max_x; x++)
     {
-        u8 tile = city_level_tilemap[(y*32)+x]&0xFF;
+        u8 tile = city_level_tilemap[y][x]&0xFF;
         // Check collision against solid building block
         if (tile != 0 && tile < TIL_BUILDING_24)
         {
             city_block_count--;
 
             // Change the look of the surrounding tiles
-            u16 tile_left  = city_level_tilemap[(y*32)+(x-1)];
-            u16 tile_right = city_level_tilemap[(y*32)+(x+1)];
-            u16 tile_up    = city_level_tilemap[((y-1)*32)+x];
+            u16 tile_left  = city_level_tilemap[y][x-1];
+            u16 tile_right = city_level_tilemap[y][x+1];
+            u16 tile_up    = city_level_tilemap[y-1][x];
 
             u8 tile_left_solid = (tile_left != 0 && (tile_left&0xFF) < TIL_BUILDING_24) ? 1 : 0;
             u8 tile_right_solid = (tile_right != 0 && (tile_right&0xFF) < TIL_BUILDING_24) ? 1 : 0;
 
             if (tile_left_solid == 0 && tile_right_solid == 0)
             {
-                city_level_tilemap[(y*32)+x] = TIL_BUILDING_CEILING_TOWER_BROKEN;
+                city_level_tilemap[y][x] = TIL_BUILDING_CEILING_TOWER_BROKEN;
             }
             else if (tile_left_solid == 1 && tile_right_solid == 1)
             {
-                city_level_tilemap[(y*32)+x] = TIL_BUILDING_BODY_CENTER_BROKEN_1;
+                city_level_tilemap[y][x] = TIL_BUILDING_BODY_CENTER_BROKEN_1;
             }
             else if (tile_left_solid == 0 && tile_right_solid == 1)
             {
-                city_level_tilemap[(y*32)+x] = TIL_BUILDING_CEILING_SIDE_BROKEN;
+                city_level_tilemap[y][x] = TIL_BUILDING_CEILING_SIDE_BROKEN;
             }
             else if (tile_left_solid == 1 && tile_right_solid == 0)
             {
-                city_level_tilemap[(y*32)+x] = TIL_BUILDING_CEILING_SIDE_BROKEN | 0x4000;
+                city_level_tilemap[y][x] = TIL_BUILDING_CEILING_SIDE_BROKEN | 0x4000;
             }
 
             u8 tile_left_broken = ((tile_left&0xFF) > TIL_BUILDING_27) ? 1 : 0;
@@ -216,15 +219,15 @@ u8 check_city_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
             {
                 if (tile_left == TIL_BUILDING_CEILING_SIDE_BROKEN)
                 {
-                    city_level_tilemap[(y*32)+(x-1)] = TIL_BUILDING_CEILING_TOWER_BROKEN;
+                    city_level_tilemap[y][x-1] = TIL_BUILDING_CEILING_TOWER_BROKEN;
                 }
                 else if (tile_left == TIL_BUILDING_BODY_SIDE_BROKEN)
                 {
-                    city_level_tilemap[(y*32)+(x-1)] = 0;
+                    city_level_tilemap[y][x-1] = 0;
                 }
                 else if (tile_left == TIL_BUILDING_BODY_CENTER_BROKEN_1)
                 {
-                    city_level_tilemap[(y*32)+(x-1)] = TIL_BUILDING_CEILING_SIDE_BROKEN | 0x4000;
+                    city_level_tilemap[y][x-1] = TIL_BUILDING_CEILING_SIDE_BROKEN | 0x4000;
                 }
             }
 
@@ -232,15 +235,15 @@ u8 check_city_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
             {
                 if (tile_right == (TIL_BUILDING_CEILING_SIDE_BROKEN | 0x4000))
                 {
-                    city_level_tilemap[(y*32)+(x+1)] = TIL_BUILDING_CEILING_TOWER_BROKEN;
+                    city_level_tilemap[y][x+1] = TIL_BUILDING_CEILING_TOWER_BROKEN;
                 }
                 else if (tile_right == (TIL_BUILDING_BODY_SIDE_BROKEN | 0x4000))
                 {
-                    city_level_tilemap[(y*32)+(x+1)] = 0;
+                    city_level_tilemap[y][x+1] = 0;
                 }
                 else if (tile_right == TIL_BUILDING_BODY_CENTER_BROKEN_1)
                 {
-                    city_level_tilemap[(y*32)+(x+1)] = TIL_BUILDING_CEILING_SIDE_BROKEN;
+                    city_level_tilemap[y][x+1] = TIL_BUILDING_CEILING_SIDE_BROKEN;
                 }
             }
 
@@ -249,19 +252,19 @@ u8 check_city_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
             {
                 if (tile_up == TIL_BUILDING_CEILING_SIDE_BROKEN)
                 {
-                    city_level_tilemap[((y-1)*32)+x] = TIL_BUILDING_BODY_SIDE_BROKEN;
+                    city_level_tilemap[y-1][x] = TIL_BUILDING_BODY_SIDE_BROKEN;
                 }
                 else if (tile_up == (TIL_BUILDING_CEILING_SIDE_BROKEN | 0x4000))
                 {
-                    city_level_tilemap[((y-1)*32)+x] = TIL_BUILDING_BODY_SIDE_BROKEN | 0x4000;
+                    city_level_tilemap[y-1][x] = TIL_BUILDING_BODY_SIDE_BROKEN | 0x4000;
                 }
                 else if (tile_up == TIL_BUILDING_BODY_CENTER_BROKEN_1)
                 {
-                    city_level_tilemap[((y-1)*32)+x] = TIL_BUILDING_BODY_CENTER_BROKEN_0;
+                    city_level_tilemap[y-1][x] = TIL_BUILDING_BODY_CENTER_BROKEN_0;
                 }
                 else if (tile_up == TIL_BUILDING_CEILING_TOWER_BROKEN)
                 {
-                    city_level_tilemap[((y-1)*32)+x] = 0;
+                    city_level_tilemap[y-1][x] = 0;
                 }
             }
 
@@ -286,7 +289,7 @@ u8 check_city_level_pilot_collision(u8 x, u8 y)
     u8 map_x = x / 8;
     u8 map_y = y / 8;
 
-    u8 tile = city_level_tilemap[(map_y*32)+map_x]&0xFF;
+    u8 tile = city_level_tilemap[map_y][map_x]&0xFF;
     // Check collision against solid building block
     if (tile != 0 && (tile&0x0FFF) < TIL_BUILDING_24)
     {

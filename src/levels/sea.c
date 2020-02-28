@@ -17,7 +17,7 @@ extern char bkg_sea_back_map_begin, bkg_sea_back_map_end;
 
 u16 sea_block_count = 0;
 
-u16 * sea_level_tilemap = 0;
+u16 sea_level_tilemap[32][32];
 
 u8 ship_scroll_x = 0;
 u8 ship_scroll_y = 0;
@@ -98,7 +98,7 @@ void build_sea_level_tilemap(u16 tilemap[32][32])
         for (i=0; i<32; i++)
         {
             u16 tile = ((u16*)&bkg_ship_map_begin)[j*32+i];
-            tilemap[j][i] = tile;
+            sea_level_tilemap[j][i] = tile;
 
             if (tile > 0)
             {
@@ -107,11 +107,9 @@ void build_sea_level_tilemap(u16 tilemap[32][32])
         }
     }
 
-    sea_level_tilemap = (u16*)tilemap;
-
     bgInitMapSet(
         1,
-        (u8*)tilemap,
+        (u8*)sea_level_tilemap,
         32*32*2,
         SC_32x32,
         VRAM_ADDR_BG1_MAP
@@ -149,7 +147,7 @@ u8 check_sea_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
         if (tile > 0)
         {
             sea_block_count--;
-            sea_level_tilemap[y*32+x] = 0;
+            sea_level_tilemap[y][x] = 0;
             bgInitMapSet(
                 1,
                 (u8*)sea_level_tilemap,
@@ -170,7 +168,7 @@ u8 check_sea_level_pilot_collision(u8 x, u8 y)
     u8 map_x = (x+ship_scroll_x) / 8;
     u8 map_y = (y+ship_scroll_y) / 8;
 
-    u8 tile = sea_level_tilemap[(map_y*32)+map_x];
+    u8 tile = sea_level_tilemap[map_y][map_x];
 
     return tile;
 }

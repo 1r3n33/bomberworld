@@ -27,7 +27,7 @@ void init_egypt_level_state(u8 level);
 
 void init_egypt_level_gfx();
 
-void build_egypt_level_tilemap(u16 tilemap[32][32]);
+void build_egypt_level_tilemap();
 
 void update_egypt_level_gfx(u8 frame);
 

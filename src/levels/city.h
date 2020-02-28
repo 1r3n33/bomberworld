@@ -43,7 +43,7 @@ void init_city_level_state(u8 level);
 
 void init_city_level_gfx();
 
-void build_city_level_tilemap(u16 tilemap[32][32]);
+void build_city_level_tilemap();
 
 void update_city_level_gfx(u8 frame);
 

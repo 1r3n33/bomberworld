@@ -7,7 +7,7 @@ void init_sea_level_state(u8 level);
 
 void init_sea_level_gfx();
 
-void build_sea_level_tilemap(u16 tilemap[32][32]);
+void build_sea_level_tilemap();
 
 void update_sea_level_gfx(u8 frame);
 
