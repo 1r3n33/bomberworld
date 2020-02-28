@@ -176,7 +176,7 @@ void build_city_level_editor_tilemap(u16 * tilemap)
         {
             u16 tile = tilemap[(j*32)+i];
             city_level_tilemap[j][i] = tile;
-            
+
             if (tile != 0 && tile < TIL_BUILDING_24)
             {
                 city_block_count++;
@@ -257,6 +257,10 @@ u8 check_city_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
                 {
                     city_level_tilemap[y][x-1] = TIL_BUILDING_CEILING_SIDE_BROKEN | 0x4000;
                 }
+                else if (tile_left == TIL_BUILDING_BODY_CENTER_BROKEN_0)
+                {
+                    city_level_tilemap[y][x-1] = TIL_BUILDING_BODY_SIDE_BROKEN | 0x4000;
+                }
             }
 
             if (tile_right_broken)
@@ -272,6 +276,10 @@ u8 check_city_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
                 else if (tile_right == TIL_BUILDING_BODY_CENTER_BROKEN_1)
                 {
                     city_level_tilemap[y][x+1] = TIL_BUILDING_CEILING_SIDE_BROKEN;
+                }
+                else if (tile_right == TIL_BUILDING_BODY_CENTER_BROKEN_0)
+                {
+                    city_level_tilemap[y][x+1] = TIL_BUILDING_BODY_SIDE_BROKEN;
                 }
             }
 
