@@ -116,6 +116,32 @@ void build_sea_level_tilemap(u16 tilemap[32][32])
     );
 }
 
+void build_sea_level_editor_tilemap(u16 * tilemap)
+{
+    u16 i,j;
+    for (j=0; j<32; j++)
+    {
+        for (i=0; i<32; i++)
+        {
+            u16 tile = tilemap[j*32+i];
+            sea_level_tilemap[j][i] = tile;
+
+            if (tile > 0)
+            {
+                sea_block_count++;
+            }
+        }
+    }
+
+    bgInitMapSet(
+        1,
+        (u8*)sea_level_tilemap,
+        32*32*2,
+        SC_32x32,
+        VRAM_ADDR_BG1_MAP
+    );    
+}
+
 void update_sea_level_gfx(u8 frame)
 {
     if ((frame&7)==7) // Every 7 frames

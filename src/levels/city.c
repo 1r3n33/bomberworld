@@ -165,6 +165,34 @@ void build_city_level_tilemap()
     );
 }
 
+void build_city_level_editor_tilemap(u16 * tilemap)
+{
+    city_block_count = 0;
+
+    u8 i, j;
+    for (j=0; j<32; j++)
+    {
+        for (i=0; i<32; i++)
+        {
+            u16 tile = tilemap[(j*32)+i];
+            city_level_tilemap[j][i] = tile;
+            
+            if (tile != 0 && tile < TIL_BUILDING_24)
+            {
+                city_block_count++;
+            }
+        }
+    }
+
+    bgInitMapSet(
+        0,
+        (u8*)city_level_tilemap,
+        32*32*2,
+        SC_32x32,
+        VRAM_ADDR_BG0_MAP
+    );
+}
+
 void update_city_level_gfx(u8 frame)
 {
     city_bg2_scroll_x += 4;

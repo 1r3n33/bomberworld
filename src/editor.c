@@ -2,7 +2,6 @@
 #include "editor.h"
 #include "game.h"
 #include "graphics.h"
-#include "tilemap.h"
 
 #include "levels/city.h"
 
@@ -30,8 +29,17 @@ struct cursor_t
 
 struct cursor_t cursors[2];
 
-void editor_tilemap_builder(u16 tilemap[32][32])
+void editor_tilemap_builder()
 {
+    u8 i, j;
+    for (j=0; j<32; j++)
+    {
+        for (i=0; i<32; i++)
+        {
+            editor_tilemap[j][i] = 0;
+        }
+    }
+
     bgInitMapSet(
         0,
         (u8*)editor_tilemap,
@@ -192,7 +200,7 @@ u8 run_editor()
         OBJ_SIZE8
     );
 
-    init_tilemap(editor_tilemap_builder);
+    editor_tilemap_builder();
 
     init_cursor(0);
     init_cursor(1);

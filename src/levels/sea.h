@@ -9,6 +9,8 @@ void init_sea_level_gfx();
 
 void build_sea_level_tilemap();
 
+void build_sea_level_editor_tilemap(u16 * tilemap);
+
 void update_sea_level_gfx(u8 frame);
 
 u8 check_sea_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right);

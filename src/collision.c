@@ -3,7 +3,6 @@
 #include "collision.h"
 #include "graphics.h"
 #include "pilot.h"
-#include "tilemap.h"
 
 u8 bomb_tilemap_collision(u8 bomb_id, tilemap_box_collider_t collider)
 {

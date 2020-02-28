@@ -29,6 +29,8 @@ void init_egypt_level_gfx();
 
 void build_egypt_level_tilemap();
 
+void build_egypt_level_editor_tilemap(u16 * tilemap);
+
 void update_egypt_level_gfx(u8 frame);
 
 u8 check_egypt_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right);

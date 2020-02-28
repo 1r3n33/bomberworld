@@ -7,7 +7,6 @@
 #include "graphics.h"
 #include "pilot.h"
 #include "text.h"
-#include "tilemap.h"
 #include "titlescreen.h"
 
 #include "levels/city.h"
@@ -22,6 +21,8 @@ typedef void (*state_initializer_t)(u8);
 typedef u8   (*state_end_level_checker_t)(void);
 typedef void (*graphics_initializer_t)(void);
 typedef void (*graphics_updater_t)(u8);
+typedef void (*tilemap_builder_t)(void);
+typedef void (*editor_tilemap_builder_t)(u16*);
 
 struct level_t
 {
@@ -34,6 +35,7 @@ struct level_t
     graphics_initializer_t    gfx_initializer;
     graphics_updater_t        gfx_updater;
     tilemap_builder_t         tilemap_builder;
+    editor_tilemap_builder_t  editor_tilemap_builder;
     tilemap_box_collider_t    bomb_collider;
     tilemap_point_collider_t  pilot_collider;
 };
@@ -51,71 +53,90 @@ struct level_manager_t level_manager;
 
 struct level_t current_level;
 
+u8 game_mode = 0;
+
 void level_manager_init()
 {
     u8 i = 0;
 
-    level_manager.levels[i].level                   = 0;
-    level_manager.levels[i].sub_level               = 0;
-    level_manager.levels[i].speed                   = 8;
-    level_manager.levels[i].state_initializer       = init_city_level_state;
-    level_manager.levels[i].state_end_level_checker = check_city_level_done;
-    level_manager.levels[i].gfx_initializer         = init_city_level_gfx;
-    level_manager.levels[i].gfx_updater             = update_city_level_gfx;
-    level_manager.levels[i].tilemap_builder         = build_city_level_tilemap;
-    level_manager.levels[i].bomb_collider           = check_city_level_bomb_collision;
-    level_manager.levels[i].pilot_collider          = check_city_level_pilot_collision;
-    i++;
+    if (game_mode & GAME_MODE_FLAG_EDITOR_MAP)
+    {
+        level_manager.levels[i].level                   = 0;
+        level_manager.levels[i].sub_level               = 0;
+        level_manager.levels[i].speed                   = 8;
+        level_manager.levels[i].state_initializer       = init_city_level_state;
+        level_manager.levels[i].state_end_level_checker = check_city_level_done;
+        level_manager.levels[i].gfx_initializer         = init_city_level_gfx;
+        level_manager.levels[i].gfx_updater             = update_city_level_gfx;
+        level_manager.levels[i].editor_tilemap_builder  = build_city_level_editor_tilemap;
+        level_manager.levels[i].bomb_collider           = check_city_level_bomb_collision;
+        level_manager.levels[i].pilot_collider          = check_city_level_pilot_collision;
+        i++;
+    }
+    else
+    {
+        level_manager.levels[i].level                   = 0;
+        level_manager.levels[i].sub_level               = 0;
+        level_manager.levels[i].speed                   = 8;
+        level_manager.levels[i].state_initializer       = init_city_level_state;
+        level_manager.levels[i].state_end_level_checker = check_city_level_done;
+        level_manager.levels[i].gfx_initializer         = init_city_level_gfx;
+        level_manager.levels[i].gfx_updater             = update_city_level_gfx;
+        level_manager.levels[i].tilemap_builder         = build_city_level_tilemap;
+        level_manager.levels[i].bomb_collider           = check_city_level_bomb_collision;
+        level_manager.levels[i].pilot_collider          = check_city_level_pilot_collision;
+        i++;
 
-#if 0
-    level_manager.levels[i].level                   = 0;
-    level_manager.levels[i].sub_level               = 1;
-    level_manager.levels[i].speed                   = 12;
-    level_manager.levels[i].state_initializer       = init_city_level_state;
-    level_manager.levels[i].state_end_level_checker = check_city_level_done;
-    level_manager.levels[i].gfx_initializer         = init_city_level_gfx;
-    level_manager.levels[i].gfx_updater             = update_city_level_gfx;
-    level_manager.levels[i].tilemap_builder         = build_city_level_tilemap;
-    level_manager.levels[i].bomb_collider           = check_city_level_bomb_collision;
-    level_manager.levels[i].pilot_collider          = check_city_level_pilot_collision;
-    i++;
+    #if 0
+        level_manager.levels[i].level                   = 0;
+        level_manager.levels[i].sub_level               = 1;
+        level_manager.levels[i].speed                   = 12;
+        level_manager.levels[i].state_initializer       = init_city_level_state;
+        level_manager.levels[i].state_end_level_checker = check_city_level_done;
+        level_manager.levels[i].gfx_initializer         = init_city_level_gfx;
+        level_manager.levels[i].gfx_updater             = update_city_level_gfx;
+        level_manager.levels[i].tilemap_builder         = build_city_level_tilemap;
+        level_manager.levels[i].bomb_collider           = check_city_level_bomb_collision;
+        level_manager.levels[i].pilot_collider          = check_city_level_pilot_collision;
+        i++;
 
-    level_manager.levels[i].level                   = 0;
-    level_manager.levels[i].sub_level               = 2;
-    level_manager.levels[i].speed                   = 16;
-    level_manager.levels[i].state_initializer       = init_city_level_state;
-    level_manager.levels[i].state_end_level_checker = check_city_level_done;
-    level_manager.levels[i].gfx_initializer         = init_city_level_gfx;
-    level_manager.levels[i].gfx_updater             = update_city_level_gfx;
-    level_manager.levels[i].tilemap_builder         = build_city_level_tilemap;
-    level_manager.levels[i].bomb_collider           = check_city_level_bomb_collision;
-    level_manager.levels[i].pilot_collider          = check_city_level_pilot_collision;
-    i++;
-#endif
+        level_manager.levels[i].level                   = 0;
+        level_manager.levels[i].sub_level               = 2;
+        level_manager.levels[i].speed                   = 16;
+        level_manager.levels[i].state_initializer       = init_city_level_state;
+        level_manager.levels[i].state_end_level_checker = check_city_level_done;
+        level_manager.levels[i].gfx_initializer         = init_city_level_gfx;
+        level_manager.levels[i].gfx_updater             = update_city_level_gfx;
+        level_manager.levels[i].tilemap_builder         = build_city_level_tilemap;
+        level_manager.levels[i].bomb_collider           = check_city_level_bomb_collision;
+        level_manager.levels[i].pilot_collider          = check_city_level_pilot_collision;
+        i++;
+    #endif
 
-    level_manager.levels[i].level                   = 1;
-    level_manager.levels[i].sub_level               = 0;
-    level_manager.levels[i].speed                   = 8;
-    level_manager.levels[i].state_initializer       = init_egypt_level_state;
-    level_manager.levels[i].state_end_level_checker = check_egypt_level_done;
-    level_manager.levels[i].gfx_initializer         = init_egypt_level_gfx;
-    level_manager.levels[i].gfx_updater             = update_egypt_level_gfx;
-    level_manager.levels[i].tilemap_builder         = build_egypt_level_tilemap;
-    level_manager.levels[i].bomb_collider           = check_egypt_level_bomb_collision;
-    level_manager.levels[i].pilot_collider          = check_egypt_level_pilot_collision;
-    i++;
+        level_manager.levels[i].level                   = 1;
+        level_manager.levels[i].sub_level               = 0;
+        level_manager.levels[i].speed                   = 8;
+        level_manager.levels[i].state_initializer       = init_egypt_level_state;
+        level_manager.levels[i].state_end_level_checker = check_egypt_level_done;
+        level_manager.levels[i].gfx_initializer         = init_egypt_level_gfx;
+        level_manager.levels[i].gfx_updater             = update_egypt_level_gfx;
+        level_manager.levels[i].tilemap_builder         = build_egypt_level_tilemap;
+        level_manager.levels[i].bomb_collider           = check_egypt_level_bomb_collision;
+        level_manager.levels[i].pilot_collider          = check_egypt_level_pilot_collision;
+        i++;
 
-    level_manager.levels[i].level                   = 2;
-    level_manager.levels[i].sub_level               = 0;
-    level_manager.levels[i].speed                   = 8;
-    level_manager.levels[i].state_initializer       = init_sea_level_state;
-    level_manager.levels[i].state_end_level_checker = check_sea_level_done;
-    level_manager.levels[i].gfx_initializer         = init_sea_level_gfx;
-    level_manager.levels[i].gfx_updater             = update_sea_level_gfx;
-    level_manager.levels[i].tilemap_builder         = build_sea_level_tilemap;
-    level_manager.levels[i].bomb_collider           = check_sea_level_bomb_collision;
-    level_manager.levels[i].pilot_collider          = check_sea_level_pilot_collision;
-    i++;
+        level_manager.levels[i].level                   = 2;
+        level_manager.levels[i].sub_level               = 0;
+        level_manager.levels[i].speed                   = 8;
+        level_manager.levels[i].state_initializer       = init_sea_level_state;
+        level_manager.levels[i].state_end_level_checker = check_sea_level_done;
+        level_manager.levels[i].gfx_initializer         = init_sea_level_gfx;
+        level_manager.levels[i].gfx_updater             = update_sea_level_gfx;
+        level_manager.levels[i].tilemap_builder         = build_sea_level_tilemap;
+        level_manager.levels[i].bomb_collider           = check_sea_level_bomb_collision;
+        level_manager.levels[i].pilot_collider          = check_sea_level_pilot_collision;
+        i++;
+    }
 
     level_manager.level_count = i;
 
@@ -135,9 +156,6 @@ u8 level_manager_next()
     current_level = level_manager.levels[level_manager.current];
     return 1;
 }
-
-// Game mode: 1 player (0) or 2 players (1)
-u8 game_mode = 0;
 
 void update_bomb(struct bomb_t * bomb, u8 id, u16 pad, struct pilot_t * pilot)
 {
@@ -247,7 +265,15 @@ u8 run_game(u8 mode)
         init_bomb(1);
 
         current_level.state_initializer(current_level.sub_level);
-        init_tilemap(current_level.tilemap_builder);
+
+        if (game_mode & GAME_MODE_FLAG_EDITOR_MAP)
+        {
+            current_level.editor_tilemap_builder(get_editor_tilemap());
+        }
+        else
+        {
+            current_level.tilemap_builder();
+        }
 
         reset_text();
 
