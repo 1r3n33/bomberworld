@@ -61,46 +61,48 @@ void init_cursor(u8 id)
     cursors[id].y     = SAFE_FRAME_BOTTOM;
     cursors[id].state = SPR_EDITOR_CURSOR_VALID;
 
-    oamSet(cursors[id].spr, 0xFF, 0xFF, 3, 0, 0, cursors[id].state, 0);
+    oamSet(cursors[id].spr, cursors[id].x, cursors[id].y, 3, 0, 0, cursors[id].state, 0);
     oamSetEx(cursors[id].spr, OBJ_SMALL, OBJ_SHOW);
 }
 
-void update_cursor(u8 id, u16 pad)
+u8 update_cursor(u8 id, u16 pad)
 {
+    u8 move = 0;
+
     // Update position
     if (pad & KEY_UP)
     {
-        cursors[id].y -= 8;
-        if (cursors[id].y < SAFE_FRAME_TOP)
+        if (cursors[id].y > SAFE_FRAME_TOP)
         {
-            cursors[id].y = SAFE_FRAME_TOP;
+            cursors[id].y -= 8;
+            move = 1;
         }
     }
 
     if (pad & KEY_DOWN)
     {
-        cursors[id].y += 8;
-        if (cursors[id].y > SAFE_FRAME_BOTTOM)
+        if (cursors[id].y < SAFE_FRAME_BOTTOM)
         {
-            cursors[id].y = SAFE_FRAME_BOTTOM;
+            cursors[id].y += 8;
+            move = 1;
         }
     }
 
     if (pad & KEY_LEFT)
     {
-        cursors[id].x -= 8;
-        if (cursors[id].x < SAFE_FRAME_LEFT)
+        if (cursors[id].x > SAFE_FRAME_LEFT)
         {
-            cursors[id].x = SAFE_FRAME_LEFT;
+            cursors[id].x -= 8;
+            move = 1;
         }
     }
 
     if (pad & KEY_RIGHT)
     {
-        cursors[id].x += 8;
-        if (cursors[id].x > SAFE_FRAME_RIGHT)
+        if (cursors[id].x < SAFE_FRAME_RIGHT)
         {
-            cursors[id].x = SAFE_FRAME_RIGHT;
+            cursors[id].x += 8;
+            move = 1;
         }
     }
 
@@ -132,6 +134,8 @@ void update_cursor(u8 id, u16 pad)
 
     // Update display
     oamSet(cursors[id].spr, cursors[id].x, cursors[id].y, 3, 0, 0, cursors[id].state, 0);
+
+    return move;
 }
 
 void add_block_to_tilemap(u8 x, u8 y)
@@ -356,17 +360,18 @@ u8 run_editor()
     setScreenOn();
 
     u8 game_mode = GAME_MODE_FLAG_EDITOR_MAP;
-    u8 frame_count = 0;
+
+    u8 input_throttles[2] = { 0, 0 }; // prevent taking inputs into consideration for a number of frames
     while (1)
     {
-        if ((frame_count & 3)==0) // input rate limiter. a superior version can be found in the titlescreen.
+        u16 pad0 = padsCurrent(0);
+        if (pad0 && (input_throttles[0] == 0))
         {
-            u16 pad0 = padsCurrent(0);
-            u16 pad1 = padsCurrent(1);
-
-            update_cursor(0, pad0);
-            update_cursor(1, pad1);
-
+            u8 move = update_cursor(0, pad0);
+            if (move)
+            {
+                input_throttles[0] = 8;
+            }
             if (pad0 & KEY_A)
             {
                 add_block(0);
@@ -375,7 +380,32 @@ u8 run_editor()
             {
                 remove_block(0);
             }
+            if (pad0 & KEY_START)
+            {
+                game_mode |= GAME_MODE_FLAG_1P;
+                break;
+            }
+        }
+        else
+        {
+            if (pad0 == 0)
+            {
+                input_throttles[0] = 0;
+            }
+            else
+            {
+                input_throttles[0]--;
+            }
+        }
 
+        u16 pad1 = padsCurrent(1);
+        if (pad1 && (input_throttles[1] == 0))
+        {
+            u8 move = update_cursor(1, pad1);
+            if (move)
+            {
+                input_throttles[1] = 8;
+            }
             if (pad1 & KEY_A)
             {
                 add_block(1);
@@ -384,21 +414,25 @@ u8 run_editor()
             {
                 remove_block(1);
             }
-
-            if (pad0 & KEY_START)
-            {
-                game_mode |= GAME_MODE_FLAG_1P;
-                break;
-            }
             if (pad1 & KEY_START)
             {
                 game_mode |= GAME_MODE_FLAG_2P;
                 break;
             }
         }
+        else
+        {
+            if (pad1 == 0)
+            {
+                input_throttles[1] = 0;
+            }
+            else
+            {
+                input_throttles[1]--;
+            }
+        }
 
         WaitForVBlank();
-        frame_count++;
     }
 
     setFadeEffect(FADE_OUT);
