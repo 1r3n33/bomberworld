@@ -134,6 +134,85 @@ void update_cursor(u8 id, u16 pad)
     oamSet(cursors[id].spr, cursors[id].x, cursors[id].y, 3, 0, 0, cursors[id].state, 0);
 }
 
+void add_block_to_tilemap(u8 x, u8 y)
+{
+    u16 current = editor_tilemap[y][x];
+    if (current)
+    {
+        return;
+    }
+
+    u16 left = editor_tilemap[y][x-1];
+    u16 right = editor_tilemap[y][x+1];
+    u16 bottom = editor_tilemap[y+1][x];
+
+    switch (left)
+    {
+    case TIL_BUILDING_CEILING_TOWER_WINDOW_0:
+        editor_tilemap[y][x-1] = TIL_BUILDING_CEILING_SIDE_WINDOW_0;
+        break;
+
+    case TIL_BUILDING_CEILING_SIDE_WINDOW_0 | 0x4000:
+        editor_tilemap[y][x-1] = TIL_BUILDING_CEILING_CENTER_WINDOW_0;
+        break;
+
+    case TIL_BUILDING_BODY_SIDE_WINDOW_0 | 0x4000:
+        editor_tilemap[y][x-1] = TIL_BUILDING_BODY_CENTER_WINDOW_0;
+        break;
+    }
+
+    switch (right)
+    {
+    case TIL_BUILDING_CEILING_TOWER_WINDOW_0:
+        editor_tilemap[y][x+1] = TIL_BUILDING_CEILING_SIDE_WINDOW_0 | 0x4000;
+        break;
+
+    case TIL_BUILDING_CEILING_SIDE_WINDOW_0:
+        editor_tilemap[y][x+1] = TIL_BUILDING_CEILING_CENTER_WINDOW_0;
+        break;
+
+    case TIL_BUILDING_BODY_SIDE_WINDOW_0:
+        editor_tilemap[y][x+1] = TIL_BUILDING_BODY_CENTER_WINDOW_0;
+        break;
+    }
+
+    switch (bottom)
+    {
+    case TIL_BUILDING_CEILING_TOWER_WINDOW_0:
+        editor_tilemap[y+1][x] = TIL_BUILDING_BODY_CENTER_WINDOW_0;
+        break;
+
+    case TIL_BUILDING_CEILING_CENTER_WINDOW_0:
+        editor_tilemap[y+1][x] = TIL_BUILDING_BODY_CENTER_WINDOW_0;
+        break;
+
+    case TIL_BUILDING_CEILING_SIDE_WINDOW_0:
+        editor_tilemap[y+1][x] = TIL_BUILDING_BODY_SIDE_WINDOW_0;
+        break;
+
+    case TIL_BUILDING_CEILING_SIDE_WINDOW_0 | 0x4000:
+        editor_tilemap[y+1][x] = TIL_BUILDING_BODY_SIDE_WINDOW_0 | 0x4000;
+        break;
+    }
+
+    if (!left && !right)
+    {
+        editor_tilemap[y][x] = TIL_BUILDING_CEILING_TOWER_WINDOW_0;
+    }
+    else if (left && !right)
+    {
+        editor_tilemap[y][x] = TIL_BUILDING_CEILING_SIDE_WINDOW_0 | 0x4000;
+    }
+    else if (!left && right)
+    {
+        editor_tilemap[y][x] = TIL_BUILDING_CEILING_SIDE_WINDOW_0;
+    }
+    else if (left && right)
+    {
+        editor_tilemap[y][x] = TIL_BUILDING_CEILING_CENTER_WINDOW_0;
+    }
+}
+
 void add_block(u8 id)
 {
     if (cursors[id].state == SPR_EDITOR_CURSOR_INVALID)
@@ -144,7 +223,7 @@ void add_block(u8 id)
     u8 x = cursors[id].x/8;
     u8 y = cursors[id].y/8;
 
-    editor_tilemap[y][x] = TIL_BUILDING_BODY_CENTER_WINDOW_0;
+    add_block_to_tilemap(x, y);
 
     bgInitMapSet(
         0,

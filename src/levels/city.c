@@ -177,7 +177,7 @@ void build_city_level_editor_tilemap(u16 * tilemap)
             u16 tile = tilemap[(j*32)+i];
             city_level_tilemap[j][i] = tile;
 
-            if (tile != 0 && tile < TIL_BUILDING_24)
+            if (tile != 0)
             {
                 city_block_count++;
             }
