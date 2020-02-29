@@ -234,6 +234,74 @@ void add_block(u8 id)
     );
 }
 
+void remove_block_from_tilemap(u8 x, u8 y)
+{
+    u16 current = editor_tilemap[y][x];
+    if (current == 0)
+    {
+        return;
+    }
+
+    editor_tilemap[y][x] = 0;
+
+    u16 left = editor_tilemap[y][x-1];
+    u16 right = editor_tilemap[y][x+1];
+    u16 bottom = editor_tilemap[y+1][x];
+
+    switch (left)
+    {
+    case TIL_BUILDING_CEILING_CENTER_WINDOW_0:
+        editor_tilemap[y][x-1] = TIL_BUILDING_CEILING_SIDE_WINDOW_0 | 0x4000;
+        break;
+
+    case TIL_BUILDING_BODY_CENTER_WINDOW_0:
+        editor_tilemap[y][x-1] = TIL_BUILDING_BODY_SIDE_WINDOW_0 | 0x4000;
+        break;
+
+    case TIL_BUILDING_CEILING_SIDE_WINDOW_0:
+        editor_tilemap[y][x-1] = TIL_BUILDING_CEILING_TOWER_WINDOW_0;
+        break;
+
+    case TIL_BUILDING_BODY_SIDE_WINDOW_0:
+        editor_tilemap[y][x-1] = TIL_BUILDING_BODY_CENTER_WINDOW_0;
+        break;
+    }
+
+    switch (right)
+    {
+    case TIL_BUILDING_CEILING_CENTER_WINDOW_0:
+        editor_tilemap[y][x+1] = TIL_BUILDING_CEILING_SIDE_WINDOW_0;
+        break;
+
+    case TIL_BUILDING_BODY_CENTER_WINDOW_0:
+        editor_tilemap[y][x+1] = TIL_BUILDING_BODY_SIDE_WINDOW_0;
+        break;
+
+    case TIL_BUILDING_CEILING_SIDE_WINDOW_0 | 0x4000:
+        editor_tilemap[y][x+1] = TIL_BUILDING_CEILING_TOWER_WINDOW_0;
+        break;
+
+    case TIL_BUILDING_BODY_SIDE_WINDOW_0 | 0x4000:
+        editor_tilemap[y][x+1] = TIL_BUILDING_BODY_CENTER_WINDOW_0;
+        break;
+    }
+
+    switch (bottom)
+    {
+    case TIL_BUILDING_BODY_CENTER_WINDOW_0:
+        editor_tilemap[y+1][x] = TIL_BUILDING_CEILING_CENTER_WINDOW_0;
+        break;
+
+    case TIL_BUILDING_BODY_SIDE_WINDOW_0:
+        editor_tilemap[y+1][x] = TIL_BUILDING_CEILING_SIDE_WINDOW_0;
+        break;
+
+    case TIL_BUILDING_BODY_SIDE_WINDOW_0 | 0x4000:
+        editor_tilemap[y+1][x] = TIL_BUILDING_CEILING_SIDE_WINDOW_0 | 0x4000;
+        break;
+    }
+}
+
 void remove_block(u8 id)
 {
     if (cursors[id].state == SPR_EDITOR_CURSOR_INVALID)
@@ -245,15 +313,16 @@ void remove_block(u8 id)
     u8 y = cursors[id].y/8;
 
     // Even if the cursor is valid, we may not be able to remove...
+    u16 current = editor_tilemap[y][x];
     u16 above = editor_tilemap[y-1][x];
-    if (above)
+    if (!current || above)
     {
         // Keep the valid state but draw as invalid.
         oamSet(cursors[id].spr, cursors[id].x, cursors[id].y, 3, 0, 0, SPR_EDITOR_CURSOR_INVALID, 0);
         return;
     }
 
-    editor_tilemap[y][x] = 0;
+    remove_block_from_tilemap(x, y);
 
     bgInitMapSet(
         0,
