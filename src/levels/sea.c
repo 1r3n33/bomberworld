@@ -169,7 +169,7 @@ u8 check_sea_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
     u8 y = map_max_y;
     for (; x<=map_max_x; x++)
     {
-        u16 tile = sea_level_tilemap[y*32+x];
+        u16 tile = sea_level_tilemap[y][x];
         if (tile > 0)
         {
             sea_block_count--;
