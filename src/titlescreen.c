@@ -82,9 +82,9 @@ void init_titlescreen()
 
     // Set text for menu
     reset_text();
-    set_text("1 player",   (SCREEN_WIDTH/2)-32, (SCREEN_HEIGHT/2)+(0*16));
-    set_text("2 players",  (SCREEN_WIDTH/2)-32, (SCREEN_HEIGHT/2)+(1*16));
-    set_text("Map Editor", (SCREEN_WIDTH/2)-32, (SCREEN_HEIGHT/2)+(2*16));
+    set_text(OBJ_TEXT,    "1 player",   (SCREEN_WIDTH/2)-32, (SCREEN_HEIGHT/2)+(0*16));
+    set_text(OBJ_TEXT+32, "2 players",  (SCREEN_WIDTH/2)-32, (SCREEN_HEIGHT/2)+(1*16));
+    set_text(OBJ_TEXT+68, "Map Editor", (SCREEN_WIDTH/2)-32, (SCREEN_HEIGHT/2)+(2*16));
 
     // Use pilot as menu cursor
     init_pilot(0);

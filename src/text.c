@@ -3,11 +3,9 @@
 #include "graphics.h"
 #include "text.h"
 
-u16 text_char_id = OBJ_TEXT;
-
 void reset_text()
 {
-    text_char_id = OBJ_TEXT;
+    u16 text_char_id = OBJ_TEXT;
 
     u16 i=0;
     for (i=0; i<64; i++)
@@ -17,17 +15,17 @@ void reset_text()
     }
 }
 
-void set_text(char * text, u8 x, u8 y)
+void set_text(u16 id, u8 * text, u8 x, u8 y)
 {
     u8 len = strlen(text);
 
     u8 i=0;
     for (i=0; i<len; i++)
     {
-        oamSet(text_char_id, x+(i*8), y, 3, 0, 0, SPR_ASCIITABLE+(text[i]-32), 1);
-        oamSetEx(text_char_id, OBJ_SMALL, OBJ_SHOW);
+        oamSet(id, x+(i*8), y, 3, 0, 0, SPR_ASCIITABLE+(text[i]-32), 1);
+        oamSetEx(id, OBJ_SMALL, OBJ_SHOW);
 
-        text_char_id += 4;
+        id += 4;
     }
 }
 
