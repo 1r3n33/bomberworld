@@ -12,11 +12,17 @@
 
 #define GAMEPLAY_SCORE_INCREMENT 5
 
-u16 players_score[2];
+u16 player_scores[2];
 
 struct level_t * current_level;
 
 u8 game_mode = 0;
+
+void display_scores()
+{
+    set_text_number(OBJ_TEXT, player_scores[0], 0, 0);
+    set_text_number(OBJ_TEXT+32, player_scores[1], SCREEN_WIDTH-64, 0);
+}
 
 void update_bomb(struct bomb_t * bomb, u8 id, u16 pad, struct pilot_t * pilot)
 {
@@ -26,7 +32,8 @@ void update_bomb(struct bomb_t * bomb, u8 id, u16 pad, struct pilot_t * pilot)
         u8 collision = bomb_tilemap_collision(id, current_level->bomb_collider);
         if (collision > 0)
         {
-            players_score[id] += GAMEPLAY_SCORE_INCREMENT;
+            player_scores[id] += GAMEPLAY_SCORE_INCREMENT;
+            display_scores();
         }
     }
     else
@@ -77,9 +84,6 @@ u8 game_loop()
 
         current_level->gfx_updater(frame);
 
-        set_text_number(OBJ_TEXT, players_score[0], 0, 0);
-        set_text_number(OBJ_TEXT+32, players_score[1], SCREEN_WIDTH-64, 0);
-
         if (current_level->state_end_level_checker())
         {
             return 1;
@@ -113,8 +117,8 @@ u8 run_game(u8 mode)
 
     init_graphics();
 
-    players_score[0] = 0;
-    players_score[1] = 0;
+    player_scores[0] = 0;
+    player_scores[1] = 0;
 
     while (1)
     {
@@ -137,6 +141,7 @@ u8 run_game(u8 mode)
         }
 
         reset_text();
+        display_scores();
 
         setFadeEffect(FADE_IN);
         u8 res = game_loop();
