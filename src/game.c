@@ -57,7 +57,7 @@ void display_lives()
 {
     u8 player_enabled[] = {
         (player_lives[0] != 0xFF),
-        (player_lives[1] != 0xFF) && (game_mode & GAME_MODE_FLAG_2P),
+        (player_lives[1] != 0xFF),
     };
 
     u8 hearts[] = { 0, 0, 0 };
@@ -87,15 +87,21 @@ void display_lives()
     set_text(OBJ_TEXT+72, hearts, SCREEN_WIDTH-88, 0);
 }
 
-// Game loop returns 0 for reset, 1 for completed level, 2 for game over
-u8 game_loop()
+// Internal gameplay loop returns 0 for reset, 1 for completed level, 2 for game over
+u8 loop()
 {
     u8 frame = 0;
     u16 pad0, pad1;
 
+    u8 player_enabled[] = {
+        (player_lives[0] != 0xFF),
+        (player_lives[1] != 0xFF),
+    };
+
     u8 speed = current_level->speed;
 
-    while(1) {
+    while(1)
+    {
         WaitForVBlank();
 
         pad0 = padsCurrent(0);
@@ -110,8 +116,8 @@ u8 game_loop()
             return 0;
         }
 
-        move_pilot(0, speed);
-        move_pilot(1, (game_mode & GAME_MODE_FLAG_2P) ? speed : 0);
+        move_pilot(0, player_enabled[0] ? speed : 0);
+        move_pilot(1, player_enabled[1] ? speed : 0);
 
         update_bomb(get_bomb(0), 0, pad0, get_pilot(0));
         update_bomb(get_bomb(1), 1, pad1, get_pilot(1));
@@ -130,16 +136,19 @@ u8 game_loop()
 
         if (bp_collision == 1)
         {
+            player_lives[1]--;
             return 2;
         }
 
         if (p0_collision == 1)
         {
+            player_lives[0]--;
             return 2;
         }
 
         if (p1_collision == 1)
         {
+            player_lives[1]--;
             return 2;
         }
 
@@ -160,16 +169,12 @@ u8 run_game(u8 mode)
     player_scores[1] = 0;
 
     player_lives[0] = 1;
-    player_lives[1] = 1;
+    player_lives[1] = (game_mode & GAME_MODE_FLAG_2P) ? 1 : 0xFF;
 
-    while (1)
+    u8 game_loop = 1;
+    while (game_loop)
     {
         current_level->gfx_initializer();
-
-        init_pilot(0);
-        init_pilot(1);
-        init_bomb(0);
-        init_bomb(1);
 
         current_level->state_initializer(current_level->sub_level);
 
@@ -183,26 +188,47 @@ u8 run_game(u8 mode)
         }
 
         reset_text();
-        display_scores();
-        display_lives();
 
-        setFadeEffect(FADE_IN);
-        u8 res = game_loop();
-        setFadeEffect(FADE_OUT);
-
-        switch (res)
+        u8 level_loop = 1;
+        while (level_loop)
         {
-        case 1:
+            init_pilot(0);
+            init_pilot(1);
+            init_bomb(0);
+            init_bomb(1);
+
+            display_scores();
+            display_lives();
+
+            setFadeEffect(FADE_IN);
+            u8 res = loop();
+            setFadeEffect(FADE_OUT);
+
+            switch (res)
             {
+            case 0:
+                level_loop = 0;
+                game_loop = 0;
+                break;
+
+            case 1:
                 current_level = next_level();
+                level_loop = 0;
+
                 if (current_level == 0)
                 {
-                    return 0;
+                    game_loop = 0;
                 }
+                break;
+
+            case 2:
+                if (player_lives[0] == 0xFF && player_lives[1] == 0xFF)
+                {
+                    level_loop = 0;
+                    game_loop = 0;
+                }
+                break;
             }
-            break;
-        default:
-            return 0;
         }
     }
 
