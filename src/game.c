@@ -5,164 +5,25 @@
 #include "editor.h"
 #include "game.h"
 #include "graphics.h"
+#include "level_manager.h"
 #include "pilot.h"
 #include "text.h"
 #include "titlescreen.h"
-
-#include "levels/city.h"
-#include "levels/egypt.h"
-#include "levels/sea.h"
 
 #define GAMEPLAY_SCORE_INCREMENT 5
 
 u16 players_score[2];
 
-typedef void (*state_initializer_t)(u8);
-typedef u8   (*state_end_level_checker_t)(void);
-typedef void (*graphics_initializer_t)(void);
-typedef void (*graphics_updater_t)(u8);
-typedef void (*tilemap_builder_t)(void);
-typedef void (*editor_tilemap_builder_t)(u16*);
-
-struct level_t
-{
-    u8                        level;
-    u8                        sub_level;
-    u8                        speed;
-    u8                        pad_0;
-    state_initializer_t       state_initializer;
-    state_end_level_checker_t state_end_level_checker;
-    graphics_initializer_t    gfx_initializer;
-    graphics_updater_t        gfx_updater;
-    tilemap_builder_t         tilemap_builder;
-    editor_tilemap_builder_t  editor_tilemap_builder;
-    tilemap_box_collider_t    bomb_collider;
-    tilemap_point_collider_t  pilot_collider;
-};
-
-struct level_manager_t
-{
-    struct level_t levels[8];
-    u8             level_count;
-    u8             current;
-    u8             pad_0;
-    u8             pad_1;
-};
-
-struct level_manager_t level_manager;
-
-struct level_t current_level;
+struct level_t * current_level;
 
 u8 game_mode = 0;
-
-void level_manager_init()
-{
-    u8 i = 0;
-
-    if (game_mode & GAME_MODE_FLAG_EDITOR_MAP)
-    {
-        level_manager.levels[i].level                   = 0;
-        level_manager.levels[i].sub_level               = 0;
-        level_manager.levels[i].speed                   = 8;
-        level_manager.levels[i].state_initializer       = init_city_level_state;
-        level_manager.levels[i].state_end_level_checker = check_city_level_done;
-        level_manager.levels[i].gfx_initializer         = init_city_level_gfx;
-        level_manager.levels[i].gfx_updater             = update_city_level_gfx;
-        level_manager.levels[i].editor_tilemap_builder  = build_city_level_editor_tilemap;
-        level_manager.levels[i].bomb_collider           = check_city_level_bomb_collision;
-        level_manager.levels[i].pilot_collider          = check_city_level_pilot_collision;
-        i++;
-    }
-    else
-    {
-        level_manager.levels[i].level                   = 0;
-        level_manager.levels[i].sub_level               = 0;
-        level_manager.levels[i].speed                   = 8;
-        level_manager.levels[i].state_initializer       = init_city_level_state;
-        level_manager.levels[i].state_end_level_checker = check_city_level_done;
-        level_manager.levels[i].gfx_initializer         = init_city_level_gfx;
-        level_manager.levels[i].gfx_updater             = update_city_level_gfx;
-        level_manager.levels[i].tilemap_builder         = build_city_level_tilemap;
-        level_manager.levels[i].bomb_collider           = check_city_level_bomb_collision;
-        level_manager.levels[i].pilot_collider          = check_city_level_pilot_collision;
-        i++;
-
-    #if 0
-        level_manager.levels[i].level                   = 0;
-        level_manager.levels[i].sub_level               = 1;
-        level_manager.levels[i].speed                   = 12;
-        level_manager.levels[i].state_initializer       = init_city_level_state;
-        level_manager.levels[i].state_end_level_checker = check_city_level_done;
-        level_manager.levels[i].gfx_initializer         = init_city_level_gfx;
-        level_manager.levels[i].gfx_updater             = update_city_level_gfx;
-        level_manager.levels[i].tilemap_builder         = build_city_level_tilemap;
-        level_manager.levels[i].bomb_collider           = check_city_level_bomb_collision;
-        level_manager.levels[i].pilot_collider          = check_city_level_pilot_collision;
-        i++;
-
-        level_manager.levels[i].level                   = 0;
-        level_manager.levels[i].sub_level               = 2;
-        level_manager.levels[i].speed                   = 16;
-        level_manager.levels[i].state_initializer       = init_city_level_state;
-        level_manager.levels[i].state_end_level_checker = check_city_level_done;
-        level_manager.levels[i].gfx_initializer         = init_city_level_gfx;
-        level_manager.levels[i].gfx_updater             = update_city_level_gfx;
-        level_manager.levels[i].tilemap_builder         = build_city_level_tilemap;
-        level_manager.levels[i].bomb_collider           = check_city_level_bomb_collision;
-        level_manager.levels[i].pilot_collider          = check_city_level_pilot_collision;
-        i++;
-    #endif
-
-        level_manager.levels[i].level                   = 1;
-        level_manager.levels[i].sub_level               = 0;
-        level_manager.levels[i].speed                   = 8;
-        level_manager.levels[i].state_initializer       = init_egypt_level_state;
-        level_manager.levels[i].state_end_level_checker = check_egypt_level_done;
-        level_manager.levels[i].gfx_initializer         = init_egypt_level_gfx;
-        level_manager.levels[i].gfx_updater             = update_egypt_level_gfx;
-        level_manager.levels[i].tilemap_builder         = build_egypt_level_tilemap;
-        level_manager.levels[i].bomb_collider           = check_egypt_level_bomb_collision;
-        level_manager.levels[i].pilot_collider          = check_egypt_level_pilot_collision;
-        i++;
-
-        level_manager.levels[i].level                   = 2;
-        level_manager.levels[i].sub_level               = 0;
-        level_manager.levels[i].speed                   = 8;
-        level_manager.levels[i].state_initializer       = init_sea_level_state;
-        level_manager.levels[i].state_end_level_checker = check_sea_level_done;
-        level_manager.levels[i].gfx_initializer         = init_sea_level_gfx;
-        level_manager.levels[i].gfx_updater             = update_sea_level_gfx;
-        level_manager.levels[i].tilemap_builder         = build_sea_level_tilemap;
-        level_manager.levels[i].bomb_collider           = check_sea_level_bomb_collision;
-        level_manager.levels[i].pilot_collider          = check_sea_level_pilot_collision;
-        i++;
-    }
-
-    level_manager.level_count = i;
-
-    level_manager.current = 0;
-
-    current_level = level_manager.levels[level_manager.current];
-}
-
-u8 level_manager_next()
-{
-    level_manager.current++;
-    if (level_manager.current >= level_manager.level_count)
-    {
-        return 0;
-    }
-
-    current_level = level_manager.levels[level_manager.current];
-    return 1;
-}
 
 void update_bomb(struct bomb_t * bomb, u8 id, u16 pad, struct pilot_t * pilot)
 {
     if (bomb->dropped)
     {
         move_bomb(id);
-        u8 collision = bomb_tilemap_collision(id, current_level.bomb_collider);
+        u8 collision = bomb_tilemap_collision(id, current_level->bomb_collider);
         if (collision > 0)
         {
             players_score[id] += GAMEPLAY_SCORE_INCREMENT;
@@ -186,7 +47,7 @@ u8 game_loop()
     u8 frame = 0;
     u16 pad0, pad1;
 
-    u8 speed = current_level.speed;
+    u8 speed = current_level->speed;
 
     while(1) {
         WaitForVBlank();
@@ -211,15 +72,15 @@ u8 game_loop()
 
         u8 bp_collision = bomb_pilot_collision(get_bomb(0), get_pilot(1));
 
-        u8 p0_collision = pilot_tilemap_collision(0, current_level.pilot_collider);
-        u8 p1_collision = pilot_tilemap_collision(1, current_level.pilot_collider);
+        u8 p0_collision = pilot_tilemap_collision(0, current_level->pilot_collider);
+        u8 p1_collision = pilot_tilemap_collision(1, current_level->pilot_collider);
 
-        current_level.gfx_updater(frame);
+        current_level->gfx_updater(frame);
 
         set_text_number(OBJ_TEXT, players_score[0], 0, 0);
         set_text_number(OBJ_TEXT+32, players_score[1], SCREEN_WIDTH-64, 0);
 
-        if (current_level.state_end_level_checker())
+        if (current_level->state_end_level_checker())
         {
             return 1;
         }
@@ -248,7 +109,7 @@ u8 run_game(u8 mode)
 {
     game_mode = mode;
 
-    level_manager_init();
+    current_level = level_manager_init(game_mode);
 
     init_graphics();
 
@@ -257,22 +118,22 @@ u8 run_game(u8 mode)
 
     while (1)
     {
-        current_level.gfx_initializer();
+        current_level->gfx_initializer();
 
         init_pilot(0);
         init_pilot(1);
         init_bomb(0);
         init_bomb(1);
 
-        current_level.state_initializer(current_level.sub_level);
+        current_level->state_initializer(current_level->sub_level);
 
         if (game_mode & GAME_MODE_FLAG_EDITOR_MAP)
         {
-            current_level.editor_tilemap_builder(get_editor_tilemap());
+            current_level->editor_tilemap_builder(get_editor_tilemap());
         }
         else
         {
-            current_level.tilemap_builder();
+            current_level->tilemap_builder();
         }
 
         reset_text();
@@ -285,8 +146,8 @@ u8 run_game(u8 mode)
         {
         case 1:
             {
-                u8 next = level_manager_next();
-                if (next == 0)
+                current_level = next_level();
+                if (current_level == 0)
                 {
                     return 0;
                 }
