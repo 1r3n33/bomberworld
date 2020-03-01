@@ -14,6 +14,8 @@
 
 u16 player_scores[2];
 
+u8 player_lives[2];
+
 struct level_t * current_level;
 
 u8 game_mode = 0;
@@ -46,6 +48,43 @@ void update_bomb(struct bomb_t * bomb, u8 id, u16 pad, struct pilot_t * pilot)
             drop_bomb(id, (pilot->x>>4)-512, pilot->y+8);
         }
     }
+}
+
+#define EMPTY_HEART (96+32)
+#define PLAIN_HEART (97+32)
+
+void display_lives()
+{
+    u8 player_enabled[] = {
+        (player_lives[0] != 0xFF),
+        (player_lives[1] != 0xFF) && (game_mode & GAME_MODE_FLAG_2P),
+    };
+
+    u8 hearts[] = { 0, 0, 0 };
+
+    if (player_enabled[0])
+    {
+        hearts[0] = player_lives[0] > 0 ? PLAIN_HEART : EMPTY_HEART;
+        hearts[1] = player_lives[0] > 1 ? PLAIN_HEART : EMPTY_HEART;
+    }
+    else
+    {
+        hearts[0] = ' ';
+        hearts[1] = ' ';
+    }
+    set_text(OBJ_TEXT+64, hearts, 72, 0);
+
+    if (player_enabled[1])
+    {
+        hearts[1] = player_lives[1] > 0 ? PLAIN_HEART : EMPTY_HEART;
+        hearts[0] = player_lives[1] > 1 ? PLAIN_HEART : EMPTY_HEART;
+    }
+    else
+    {
+        hearts[0] = ' ';
+        hearts[1] = ' ';
+    }
+    set_text(OBJ_TEXT+72, hearts, SCREEN_WIDTH-88, 0);
 }
 
 // Game loop returns 0 for reset, 1 for completed level, 2 for game over
@@ -120,6 +159,9 @@ u8 run_game(u8 mode)
     player_scores[0] = 0;
     player_scores[1] = 0;
 
+    player_lives[0] = 1;
+    player_lives[1] = 1;
+
     while (1)
     {
         current_level->gfx_initializer();
@@ -142,6 +184,7 @@ u8 run_game(u8 mode)
 
         reset_text();
         display_scores();
+        display_lives();
 
         setFadeEffect(FADE_IN);
         u8 res = game_loop();
