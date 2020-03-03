@@ -6,7 +6,9 @@
 #define GAMEPLAY_BOMB_DROP_SPEED    1
 #define GAMEPLAY_BOMB_GROUND_Y_POS  (224-12)
 
-struct bomb_t bombs[2];
+struct bomb_t bombs[4];
+
+u8 bomb_oam_ids[4] = { OBJ_P0_BOMB_0, OBJ_P0_BOMB_1, OBJ_P1_BOMB_0, OBJ_P1_BOMB_1 };
 
 struct bomb_t * get_bomb(u8 id)
 {
@@ -15,7 +17,7 @@ struct bomb_t * get_bomb(u8 id)
 
 void init_bomb(u8 id)
 {
-    bombs[id].spr = (id == 0) ? OBJ_BOMB_0 : OBJ_BOMB_1;
+    bombs[id].spr = bomb_oam_ids[id];
 
     bombs[id].x = 0xFF;
     bombs[id].y = 0xFF;
