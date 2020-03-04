@@ -157,6 +157,7 @@ u8 loop()
     while(1)
     {
         WaitForVBlank();
+        current_level->gfx_updater(frame);
 
         pad0 = padsCurrent(0);
         pad1 = padsCurrent(1);
@@ -180,8 +181,6 @@ u8 loop()
 
         u8 p0_collision = pilot_tilemap_collision(0, current_level->pilot_collider);
         u8 p1_collision = pilot_tilemap_collision(1, current_level->pilot_collider);
-
-        current_level->gfx_updater(frame);
 
         if (current_level->state_end_level_checker())
         {
