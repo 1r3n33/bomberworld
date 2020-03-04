@@ -177,7 +177,8 @@ u8 loop()
         update_bombs(0, pad0, get_pilot(0));
         update_bombs(1, pad1, get_pilot(1));
 
-        u8 bp_collision = bomb_pilot_collision(get_bomb(0), get_pilot(1));
+        u8 b0p1_collision = bomb_pilot_collision(get_bomb(0), get_pilot(1));
+        u8 b1p1_collision = bomb_pilot_collision(get_bomb(1), get_pilot(1));
 
         u8 p0_collision = pilot_tilemap_collision(0, current_level->pilot_collider);
         u8 p1_collision = pilot_tilemap_collision(1, current_level->pilot_collider);
@@ -187,7 +188,7 @@ u8 loop()
             return 1;
         }
 
-        if (bp_collision == 1)
+        if (b0p1_collision == 1 || b1p1_collision == 1)
         {
             player_lives[1]--;
             return 2;
