@@ -8,7 +8,8 @@ struct pilot_t
     u16 spr;
     u16 x;
     u16 y;
-    u16 pad;
+    u16 y_baseline;
+    u16 hovering_count;
 };
 
 // Pilot collision box (based on 16x16 sprite dimension)
@@ -23,7 +24,7 @@ struct pilot_t * get_pilot(u8 id);
 
 void init_pilot(u8 id);
 
-void move_pilot(u8 id, u8 speed);
+void move_pilot(u8 id, u8 speed, u8 second_player);
 
 void set_pilot_pos(u8 id, u16 x, u16 y);
 

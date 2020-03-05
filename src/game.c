@@ -171,8 +171,8 @@ u8 loop()
             return 0;
         }
 
-        move_pilot(0, player_enabled[0] ? speed : 0);
-        move_pilot(1, player_enabled[1] ? speed : 0);
+        move_pilot(0, player_enabled[0] ? speed : 0, player_enabled[1]);
+        move_pilot(1, player_enabled[1] ? speed : 0, player_enabled[0]);
 
         update_bombs(0, pad0, get_pilot(0));
         update_bombs(1, pad1, get_pilot(1));
