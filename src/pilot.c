@@ -84,7 +84,7 @@ void move_pilot(u8 id, u8 speed, u8 second_player)
 
     if (id == 0)
     {
-        if (x >= (512+256))
+        if (pilots[id].x >= ((512+256+16)<<4))
         {
             pilots[id].x = ((512-16) << 4);
             pilots[id].y_baseline += GAMEPLAY_PILOT_EOL_ALTITUDE_DROP;
@@ -94,7 +94,7 @@ void move_pilot(u8 id, u8 speed, u8 second_player)
     }
     else
     {
-        if (x <= (512-16))
+        if (pilots[id].x <= ((512-(16+16))<<4))
         {
             pilots[id].x = ((512+256) << 4);
             pilots[id].y_baseline += GAMEPLAY_PILOT_EOL_ALTITUDE_DROP;
