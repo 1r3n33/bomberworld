@@ -210,6 +210,25 @@ u8 loop()
     }
 }
 
+void gameover_loop()
+{
+    // Color math Div2
+    REG_CGWSEL = 0x00;
+    REG_CGADSUB = 0x7f;
+
+    set_text(OBJ_TEXT+80, "game over", (SCREEN_WIDTH/2)-36, (SCREEN_HEIGHT/2)-4);
+
+    while (1)
+    {
+        WaitForVBlank();
+        u16 pad = (padsCurrent(0) | padsCurrent(1));
+        if (pad & KEY_START)
+        {
+            break;
+        }                     
+    }
+}
+
 // Run the game.
 u8 run_game(u8 mode)
 {
@@ -266,6 +285,13 @@ u8 run_game(u8 mode)
 
             setFadeEffect(FADE_IN);
             u8 res = loop();
+
+            u8 gameover = (player_lives[0] == 0xFF && player_lives[1] == 0xFF);
+            if (gameover)
+            {
+                gameover_loop();
+            }
+            
             setFadeEffect(FADE_OUT);
 
             switch (res)
@@ -286,7 +312,7 @@ u8 run_game(u8 mode)
                 break;
 
             case 2:
-                if (player_lives[0] == 0xFF && player_lives[1] == 0xFF)
+                if (gameover)
                 {
                     level_loop = 0;
                     game_loop = 0;

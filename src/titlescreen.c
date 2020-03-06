@@ -89,6 +89,10 @@ void init_titlescreen()
     // Use pilot as menu cursor
     init_pilot(0);
 
+    // Reset color math
+    REG_CGWSEL = 0x00;
+    REG_CGADSUB = 0x00;
+    
     setScreenOn();
 }
 
