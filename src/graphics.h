@@ -20,6 +20,11 @@ void init_graphics();
 #define OBJ_P1_BOMB_0   16  // Draw bomb behind pilot_1
 #define OBJ_P1_BOMB_1   20  // Draw bomb behind pilot_1
 
+#define OBJ_EXPLOSION_0 24
+#define OBJ_EXPLOSION_1 28
+#define OBJ_EXPLOSION_2 32
+#define OBJ_EXPLOSION_3 36
+
 #define OBJ_TEXT    256
 
 // 16x16 sprite id (spr_game.bmp)
@@ -31,6 +36,7 @@ void init_graphics();
 #define SPR_EXPLOSION_FRAME_0   10
 #define SPR_EXPLOSION_FRAME_1   12
 #define SPR_EXPLOSION_FRAME_2   14
+#define SPR_EXPLOSION_FRAME_3   32
 
 #define SPR_ASCIITABLE          256
 

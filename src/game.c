@@ -3,6 +3,7 @@
 #include "bomb.h"
 #include "collision.h"
 #include "editor.h"
+#include "explosion.h"
 #include "game.h"
 #include "graphics.h"
 #include "level_manager.h"
@@ -80,6 +81,7 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
             if (!bomb->dropped)
             {
                 player_bombs[player_id] |= BOMB_0;
+                init_explosion(bomb_ids[0], bomb->x, bomb->y);
             }
         }
     }
@@ -99,6 +101,7 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
             if (!bomb->dropped)
             {
                 player_bombs[player_id] |= BOMB_1;
+                init_explosion(bomb_ids[1], bomb->x, bomb->y);
             }
         }
     }
@@ -174,6 +177,11 @@ u8 loop()
         move_pilot(0, player_enabled[0] ? speed : 0, player_enabled[1]);
         move_pilot(1, player_enabled[1] ? speed : 0, player_enabled[0]);
 
+        update_explosion(0);
+        update_explosion(1);
+        update_explosion(2);
+        update_explosion(3);
+
         update_bombs(0, pad0, get_pilot(0));
         update_bombs(1, pad1, get_pilot(1));
 
@@ -234,7 +242,7 @@ void gameover_loop()
         if (pad & KEY_START)
         {
             break;
-        }                     
+        }
     }
 }
 
@@ -300,7 +308,7 @@ u8 run_game(u8 mode)
             {
                 gameover_loop();
             }
-            
+
             setFadeEffect(FADE_OUT);
 
             switch (res)
