@@ -339,6 +339,8 @@ void remove_block(u8 id)
 
 u8 run_editor()
 {
+    oamClear(0, 0);
+
     init_graphics();
     init_city_level_gfx();
 
