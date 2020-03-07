@@ -4,7 +4,7 @@
 
 #define GAMEPLAY_BOMB_POWER         2 // the number of building blocks the bomb can destroy
 #define GAMEPLAY_BOMB_DROP_SPEED    1
-#define GAMEPLAY_BOMB_GROUND_Y_POS  (224-12)
+#define GAMEPLAY_BOMB_GROUND_Y_POS  (224-16)
 
 struct bomb_t bombs[4];
 

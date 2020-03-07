@@ -15,4 +15,6 @@ void init_explosion(u8 id, u8 x, u8 y);
 
 void update_explosion(u8 id);
 
+void disable_explosion(u8 id);
+
 #endif // EXPLOSION_H

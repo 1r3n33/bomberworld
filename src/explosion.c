@@ -44,3 +44,9 @@ void update_explosion(u8 id)
         oamSetEx(explosion_oam_ids[id], OBJ_LARGE, OBJ_HIDE);
     }
 }
+
+void disable_explosion(u8 id)
+{
+    explosions[id].frame = 0;
+    oamSetEx(explosion_oam_ids[id], OBJ_LARGE, OBJ_HIDE);
+}

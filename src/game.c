@@ -71,14 +71,19 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
         if (bomb->dropped)
         {
             move_bomb(bomb_ids[0]);
-            u8 collision = bomb_tilemap_collision(bomb_ids[0], current_level->bomb_collider);
-            if (collision > 0)
+            if (bomb->dropped)
             {
-                player_scores[player_id] += GAMEPLAY_SCORE_INCREMENT;
-                display_score(player_id);
+                u8 collision = bomb_tilemap_collision(bomb_ids[0], current_level->bomb_collider);
+                if (collision > 0)
+                {
+                    player_scores[player_id] += GAMEPLAY_SCORE_INCREMENT;
+                    display_score(player_id);
+
+                    player_bombs[player_id] |= BOMB_0;
+                    init_explosion(bomb_ids[0], bomb->x, bomb->y+4);
+                }
             }
-            // Give back the bomb if disabled. (collision on the tilemap or on the ground)
-            if (!bomb->dropped)
+            else // bomb hit the ground
             {
                 player_bombs[player_id] |= BOMB_0;
                 init_explosion(bomb_ids[0], bomb->x, bomb->y);
@@ -91,14 +96,19 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
         if (bomb->dropped)
         {
             move_bomb(bomb_ids[1]);
-            u8 collision = bomb_tilemap_collision(bomb_ids[1], current_level->bomb_collider);
-            if (collision > 0)
+            if (bomb->dropped)
             {
-                player_scores[player_id] += GAMEPLAY_SCORE_INCREMENT;
-                display_score(player_id);
+                u8 collision = bomb_tilemap_collision(bomb_ids[1], current_level->bomb_collider);
+                if (collision > 0)
+                {
+                    player_scores[player_id] += GAMEPLAY_SCORE_INCREMENT;
+                    display_score(player_id);
+
+                    player_bombs[player_id] |= BOMB_1;
+                    init_explosion(bomb_ids[1], bomb->x, bomb->y+4);
+                }
             }
-            // Give back the bomb if disabled. (collision on the tilemap or on the ground)
-            if (!bomb->dropped)
+            else // bomb hit the ground
             {
                 player_bombs[player_id] |= BOMB_1;
                 init_explosion(bomb_ids[1], bomb->x, bomb->y);
@@ -295,6 +305,11 @@ u8 run_game(u8 mode)
 
             player_bomb_throttles[0] = 0;
             player_bomb_throttles[1] = 0;
+
+            disable_explosion(0);
+            disable_explosion(1);
+            disable_explosion(2);
+            disable_explosion(3);
 
             display_score(0);
             display_score(1);
