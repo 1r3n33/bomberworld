@@ -30,4 +30,6 @@ void set_pilot_pos(u8 id, u16 x, u16 y);
 
 u8 is_pilot_entirely_on_screen(u8 id, u8 off_left, u8 off_right);
 
+void animate_pilot(u8 id);
+
 #endif // PILOT_H

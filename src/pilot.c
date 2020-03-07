@@ -104,6 +104,7 @@ void move_pilot(u8 id, u8 speed, u8 second_player)
     }
 
     oamSetXY(pilots[id].spr, pilots[id].x>>4, pilots[id].y);
+    animate_pilot(id);
 }
 
 void set_pilot_pos(u8 id, u16 x, u16 y)
@@ -123,4 +124,12 @@ u8 is_pilot_entirely_on_screen(u8 id, u8 off_left, u8 off_right)
     right = x + off_right;
 
     return (left >= 512) && (right < 512+256);
+}
+
+void animate_pilot(u8 id)
+{
+    u8 current_frame = oamMemory[pilots[id].spr+2];
+    u8 next_frame = current_frame^2; // animation frames are either 0 and 2 (pilot 0) or 4 and 6 (pilot 1).
+
+    oamSetGfxOffset(pilots[id].spr, next_frame);
 }

@@ -92,7 +92,7 @@ void init_titlescreen()
     // Reset color math
     REG_CGWSEL = 0x00;
     REG_CGADSUB = 0x00;
-    
+
     setScreenOn();
 }
 
@@ -150,7 +150,8 @@ u8 run_titlescreen()
         // Move cursor according to the selection.
         set_pilot_pos(0, (SCREEN_WIDTH/2)-64, (SCREEN_HEIGHT/2)+(selection*16)-4);
 
-        // Animate background.
+        // Animate.
+        animate_pilot(0);
         bgSetScroll(1, bkg_scroll>>1, 160);
         bkg_scroll += 1;
 
