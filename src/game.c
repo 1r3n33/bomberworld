@@ -177,6 +177,9 @@ u8 loop()
         update_bombs(0, pad0, get_pilot(0));
         update_bombs(1, pad1, get_pilot(1));
 
+        u8 b2p0_collision = bomb_pilot_collision(get_bomb(2), get_pilot(0));
+        u8 b3p0_collision = bomb_pilot_collision(get_bomb(3), get_pilot(0));
+
         u8 b0p1_collision = bomb_pilot_collision(get_bomb(0), get_pilot(1));
         u8 b1p1_collision = bomb_pilot_collision(get_bomb(1), get_pilot(1));
 
@@ -186,6 +189,12 @@ u8 loop()
         if (current_level->state_end_level_checker())
         {
             return 1;
+        }
+
+        if (b2p0_collision == 1 || b3p0_collision == 1)
+        {
+            player_lives[0]--;
+            return 2;
         }
 
         if (b0p1_collision == 1 || b1p1_collision == 1)
