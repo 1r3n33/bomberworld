@@ -3,6 +3,9 @@
 
 #include <snes.h>
 
+#define PILOT_0_EXPLOSION_ID 4
+#define PILOT_1_EXPLOSION_ID 5
+
 struct explosion_t
 {
     u8 x;
@@ -13,7 +16,7 @@ struct explosion_t
 
 void init_explosion(u8 id, u8 x, u8 y);
 
-void update_explosion(u8 id);
+u8 update_explosion(u8 id);
 
 void disable_explosion(u8 id);
 

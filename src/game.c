@@ -167,6 +167,9 @@ u8 loop()
 
     u8 speed = current_level->speed;
 
+    struct pilot_t * p0 = get_pilot(0);
+    struct pilot_t * p1 = get_pilot(1);
+
     while(1)
     {
         WaitForVBlank();
@@ -192,14 +195,14 @@ u8 loop()
         update_explosion(2);
         update_explosion(3);
 
-        update_bombs(0, pad0, get_pilot(0));
-        update_bombs(1, pad1, get_pilot(1));
+        update_bombs(0, pad0, p0);
+        update_bombs(1, pad1, p1);
 
-        u8 b2p0_collision = bomb_pilot_collision(get_bomb(2), get_pilot(0));
-        u8 b3p0_collision = bomb_pilot_collision(get_bomb(3), get_pilot(0));
+        u8 b2p0_collision = bomb_pilot_collision(get_bomb(2), p0);
+        u8 b3p0_collision = bomb_pilot_collision(get_bomb(3), p0);
 
-        u8 b0p1_collision = bomb_pilot_collision(get_bomb(0), get_pilot(1));
-        u8 b1p1_collision = bomb_pilot_collision(get_bomb(1), get_pilot(1));
+        u8 b0p1_collision = bomb_pilot_collision(get_bomb(0), p1);
+        u8 b1p1_collision = bomb_pilot_collision(get_bomb(1), p1);
 
         u8 p0_collision = pilot_tilemap_collision(0, current_level->pilot_collider);
         u8 p1_collision = pilot_tilemap_collision(1, current_level->pilot_collider);
@@ -209,32 +212,38 @@ u8 loop()
             return 1;
         }
 
-        if (b2p0_collision == 1 || b3p0_collision == 1)
+        if (b2p0_collision | b3p0_collision | p0_collision)
         {
             player_lives[0]--;
+            init_explosion(PILOT_0_EXPLOSION_ID, (p0->x>>4)-512, p0->y);
             return 2;
         }
 
-        if (b0p1_collision == 1 || b1p1_collision == 1)
+        if (b0p1_collision | b1p1_collision | p1_collision)
         {
             player_lives[1]--;
-            return 2;
-        }
-
-        if (p0_collision == 1)
-        {
-            player_lives[0]--;
-            return 2;
-        }
-
-        if (p1_collision == 1)
-        {
-            player_lives[1]--;
+            init_explosion(PILOT_1_EXPLOSION_ID, (p1->x>>4)-512, p1->y);
             return 2;
         }
 
         frame++;
     }
+}
+
+void terminate_explosion_animation_loop()
+{
+    u8 res = 0;
+    do
+    {
+        WaitForVBlank();
+        res = update_explosion(0);
+        res |= update_explosion(1);
+        res |= update_explosion(2);
+        res |= update_explosion(3);
+        res |= update_explosion(4);
+        res |= update_explosion(5);
+    }
+    while (res);
 }
 
 void gameover_loop()
@@ -317,6 +326,8 @@ u8 run_game(u8 mode)
 
             setFadeEffect(FADE_IN);
             u8 res = loop();
+
+            terminate_explosion_animation_loop();
 
             u8 gameover = (player_lives[0] == 0xFF && player_lives[1] == 0xFF);
             if (gameover)

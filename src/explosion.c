@@ -1,14 +1,16 @@
 #include "explosion.h"
 #include "graphics.h"
 
-struct explosion_t explosions[4];
+struct explosion_t explosions[6];
 
 u8 explosion_oam_ids[] =
 {
-    OBJ_EXPLOSION_0,
-    OBJ_EXPLOSION_1,
-    OBJ_EXPLOSION_2,
-    OBJ_EXPLOSION_3,
+    OBJ_BOMB_EXPLOSION_0,
+    OBJ_BOMB_EXPLOSION_1,
+    OBJ_BOMB_EXPLOSION_2,
+    OBJ_BOMB_EXPLOSION_3,
+    OBJ_PILOT_EXPLOSION_0,
+    OBJ_PILOT_EXPLOSION_1,
 };
 
 u8 explosion_gfx_frames[] =
@@ -32,16 +34,18 @@ void init_explosion(u8 id, u8 x, u8 y)
     oamSetEx(explosion_oam_ids[id], OBJ_LARGE, OBJ_SHOW);
 }
 
-void update_explosion(u8 id)
+u8 update_explosion(u8 id)
 {
     if (explosions[id].frame)
     {
         explosions[id].frame--;
         oamSetGfxOffset(explosion_oam_ids[id], explosion_gfx_frames[explosions[id].frame]);
+        return 1;
     }
     else
     {
         oamSetEx(explosion_oam_ids[id], OBJ_LARGE, OBJ_HIDE);
+        return 0;
     }
 }
 

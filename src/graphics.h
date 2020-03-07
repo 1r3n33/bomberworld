@@ -13,18 +13,20 @@ void init_graphics();
 #define VRAM_ADDR_SPR        0x6000
 
 // OAM OBJ id
-#define OBJ_EXPLOSION_0 0   // Draw explosions in front of bombs and pilots
-#define OBJ_EXPLOSION_1 4   //
-#define OBJ_EXPLOSION_2 8   //
-#define OBJ_EXPLOSION_3 12  //
+#define OBJ_BOMB_EXPLOSION_0 0   // Draw explosions in front of bombs and pilots
+#define OBJ_BOMB_EXPLOSION_1 4   //
+#define OBJ_BOMB_EXPLOSION_2 8   //
+#define OBJ_BOMB_EXPLOSION_3 12  //
 
-#define OBJ_PILOT_0     16  //
-#define OBJ_P0_BOMB_0   20  // Draw bomb behind pilot_0
-#define OBJ_P0_BOMB_1   24  // Draw bomb behind pilot_0
-#define OBJ_PILOT_1     28  // Draw pilot_1 behind pilot_0 bombs
-#define OBJ_P1_BOMB_0   32  // Draw bomb behind pilot_1
-#define OBJ_P1_BOMB_1   36  // Draw bomb behind pilot_1
+#define OBJ_PILOT_EXPLOSION_0   16 //
+#define OBJ_PILOT_EXPLOSION_1   20 //
 
+#define OBJ_PILOT_0     24  //
+#define OBJ_P0_BOMB_0   28  // Draw bomb behind pilot_0
+#define OBJ_P0_BOMB_1   32  // Draw bomb behind pilot_0
+#define OBJ_PILOT_1     36  // Draw pilot_1 behind pilot_0 bombs
+#define OBJ_P1_BOMB_0   40  // Draw bomb behind pilot_1
+#define OBJ_P1_BOMB_1   44  // Draw bomb behind pilot_1
 
 #define OBJ_TEXT    256
 
