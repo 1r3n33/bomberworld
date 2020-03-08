@@ -25,8 +25,9 @@ CFLAGS	+=	$(INCLUDE)
 LIBDIRS	:=	$(PVSNESLIB)
 
 GFXDIR := ./gfx/bmp/
+SNDDIR := ./snd/wav/
 SRCDIR := ./src/
-OBJDIR := $(SRCDIR) $(shell ls -d $(SRCDIR)/*/) $(GFXDIR)
+OBJDIR := $(SRCDIR) $(shell ls -d $(SRCDIR)/*/) $(GFXDIR) $(SNDDIR)
 BINDIR := ./bin/
 
 export OUTPUT:=	$(BINDIR)/$(TARGET)
@@ -43,6 +44,7 @@ GTITLE 		:= -ht"$(TARGET)"
 #---------------------------------------------------------------------------------
 all:
 	$(MAKE) -C $(GFXDIR)
+	$(MAKE) -C $(SNDDIR)
 	$(MAKE) -C $(SRCDIR)
 	mkdir -p $(BINDIR)
 	$(MAKE) $(OUTPUT).sfc
@@ -50,6 +52,7 @@ all:
 
 clean:
 	$(MAKE) clean -C $(GFXDIR)
+	$(MAKE) clean -C $(SNDDIR)
 	$(MAKE) clean -C $(SRCDIR)
 	rm -f $(OUTPUT).sfc $(OUTPUT).sym
 

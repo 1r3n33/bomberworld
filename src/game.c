@@ -26,6 +26,9 @@ struct level_t * current_level;
 
 u8 game_mode = 0;
 
+extern char soundbrr,soundbrrend;
+brrsamples sfx_exp_short_soft1;
+
 void display_score(u8 id)
 {
     if (id == 0)
@@ -81,12 +84,14 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
 
                     player_bombs[player_id] |= BOMB_0;
                     init_explosion(bomb_ids[0], bomb->x, bomb->y+4);
+                    spcPlaySound(0);
                 }
             }
             else // bomb hit the ground
             {
                 player_bombs[player_id] |= BOMB_0;
                 init_explosion(bomb_ids[0], bomb->x, bomb->y);
+                spcPlaySound(0);
             }
         }
     }
@@ -106,12 +111,14 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
 
                     player_bombs[player_id] |= BOMB_1;
                     init_explosion(bomb_ids[1], bomb->x, bomb->y+4);
+                    spcPlaySound(0);
                 }
             }
             else // bomb hit the ground
             {
                 player_bombs[player_id] |= BOMB_1;
                 init_explosion(bomb_ids[1], bomb->x, bomb->y);
+                spcPlaySound(0);
             }
         }
     }
@@ -172,7 +179,9 @@ u8 loop()
 
     while(1)
     {
+        spcProcess();
         WaitForVBlank();
+
         current_level->gfx_updater(frame);
 
         pad0 = padsCurrent(0);
@@ -273,6 +282,8 @@ u8 run_game(u8 mode)
     current_level = level_manager_init(game_mode);
 
     init_graphics();
+
+    spcSetSoundEntry(15, 8, 4, &soundbrrend-&soundbrr, &soundbrr, &sfx_exp_short_soft1);
 
     player_scores[0] = 0;
     player_scores[1] = 0;

@@ -5,7 +5,12 @@
 
 int main()
 {
+    spcBoot();
     consoleInit();
+
+    // Allocate 12K of sound ram (48 256-byte blocks).
+    // Must be sized to hold the largest sound.
+    spcAllocateSoundRegion(48);
 
     while(1)
     {

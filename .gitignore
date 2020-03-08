@@ -6,6 +6,8 @@
 *.pal
 *.pic
 
+*.brr
+
 *.obj
 
 # IDE files
