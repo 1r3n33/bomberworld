@@ -12,7 +12,7 @@ u16 editor_tilemap[32][32];
 
 // Keep cursor inside the safe frame
 #define SAFE_FRAME_TOP    (9*8)
-#define SAFE_FRAME_BOTTOM (25*8)
+#define SAFE_FRAME_BOTTOM (26*8)
 #define SAFE_FRAME_LEFT   (1*8)
 #define SAFE_FRAME_RIGHT  (30*8)
 
