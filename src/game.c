@@ -130,7 +130,7 @@ u8 run_game(u8 mode)
             display_lives();
 
             setFadeEffect(FADE_IN);
-            u8 res = gameplay_loop();
+            u8 res = current_level->loop();
 
             terminate_explosion_animation_loop();
 

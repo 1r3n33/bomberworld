@@ -76,7 +76,7 @@ bkg_sea_back.pic: bkg_sea_back.bmp
 # Larry's airship (Mode 1)
 # This image will generate 1 16-colors palette
 airship_bg0.gfx: bkg_airship.bmp
-	$(GFXCONV) -gs8 -m -pc16 -po16 -pe1 -pr -fbmp -n $<
+	$(GFXCONV) -gs8 -m -mp -pc16 -po16 -pe1 -pr -fbmp -n $<
 	mv bkg_airship.pic airship_bg0.til
 	mv bkg_airship.pal airship_bg0.pal
 	mv bkg_airship.map airship_bg0.map

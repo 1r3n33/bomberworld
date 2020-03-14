@@ -10,6 +10,7 @@ typedef void (*graphics_initializer_t)(void);
 typedef void (*graphics_updater_t)(u8);
 typedef void (*tilemap_builder_t)(void);
 typedef void (*editor_tilemap_builder_t)(u16*);
+typedef u8   (*loop_t)(void);
 
 struct level_t
 {
@@ -25,6 +26,7 @@ struct level_t
     editor_tilemap_builder_t  editor_tilemap_builder;
     tilemap_box_collider_t    bomb_collider;
     tilemap_point_collider_t  pilot_collider;
+    loop_t                    loop;
 };
 
 struct level_manager_t
