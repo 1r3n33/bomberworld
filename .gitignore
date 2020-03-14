@@ -5,6 +5,8 @@
 *.map
 *.pal
 *.pic
+*.til
+*.gfx
 
 *.brr
 

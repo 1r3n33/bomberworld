@@ -3,16 +3,16 @@
 #include "graphics.h"
 
 // backgrounds
-extern char bkg_city0_til_begin, bkg_city0_til_end;
-extern char bkg_city0_pal_begin, bkg_city0_pal_end;
-extern char bkg_city0_map_begin, bkg_city0_map_end;
+extern char city_bg0_til_begin, city_bg0_til_end;
+extern char city_bg0_pal_begin, city_bg0_pal_end;
 
-extern char bkg_sky_4_til_begin, bkg_sky_4_til_end;
-extern char bkg_sky_4_pal_begin, bkg_sky_4_pal_end;
-extern char bkg_sky_4_map_begin, bkg_sky_4_map_end;
+extern char city_bg1_til_begin, city_bg1_til_end;
+extern char city_bg1_pal_begin, city_bg1_pal_end;
+extern char city_bg1_map_begin, city_bg1_map_end;
 
-extern char bkg_buildings_til_begin, bkg_buildings_til_end;
-extern char bkg_buildings_pal_begin, bkg_buildings_pal_end;
+extern char city_bg2_til_begin, city_bg2_til_end;
+extern char city_bg2_pal_begin, city_bg2_pal_end;
+extern char city_bg2_map_begin, city_bg2_map_end;
 
 u16 city_bg0_scroll_x = 0;
 u16 city_bg1_scroll_x = 0;
@@ -59,45 +59,45 @@ void init_city_level_gfx()
     // Init backgrounds
     bgInitTileSet(
         0,
-        &bkg_buildings_til_begin,
-        &bkg_buildings_pal_begin,
+        &city_bg0_til_begin,
+        &city_bg0_pal_begin,
         0,
-        (&bkg_buildings_til_end - &bkg_buildings_til_begin),
-        (&bkg_buildings_pal_end - &bkg_buildings_pal_begin),
+        (&city_bg0_til_end - &city_bg0_til_begin),
+        (&city_bg0_pal_end - &city_bg0_pal_begin),
         BG_4COLORS0,
         VRAM_ADDR_BG0_GFX
     );
     bgInitTileSet(
         1,
-        &bkg_city0_til_begin,
-        &bkg_city0_pal_begin,
+        &city_bg1_til_begin,
+        &city_bg1_pal_begin,
         0,
-        (&bkg_city0_til_end - &bkg_city0_til_begin),
-        (&bkg_city0_pal_end - &bkg_city0_pal_begin),
+        (&city_bg1_til_end - &city_bg1_til_begin),
+        (&city_bg1_pal_end - &city_bg1_pal_begin),
         BG_4COLORS0,
         VRAM_ADDR_BG1_GFX
     );
     bgInitMapSet(
         1,
-        &bkg_city0_map_begin,
-        (&bkg_city0_map_end - &bkg_city0_map_begin),
+        &city_bg1_map_begin,
+        (&city_bg1_map_end - &city_bg1_map_begin),
         SC_32x32,
         VRAM_ADDR_BG1_MAP
     );
     bgInitTileSet(
         2,
-        &bkg_sky_4_til_begin,
-        &bkg_sky_4_pal_begin,
+        &city_bg2_til_begin,
+        &city_bg2_pal_begin,
         0,
-        (&bkg_sky_4_til_end - &bkg_sky_4_til_begin),
-        (&bkg_sky_4_pal_end - &bkg_sky_4_pal_begin),
+        (&city_bg2_til_end - &city_bg2_til_begin),
+        (&city_bg2_pal_end - &city_bg2_pal_begin),
         BG_4COLORS0,
         VRAM_ADDR_BG2_GFX
     );
     bgInitMapSet(
         2,
-        &bkg_sky_4_map_begin,
-        (&bkg_sky_4_map_end - &bkg_sky_4_map_begin),
+        &city_bg2_map_begin,
+        (&city_bg2_map_end - &city_bg2_map_begin),
         SC_32x32,
         VRAM_ADDR_BG2_MAP
     );

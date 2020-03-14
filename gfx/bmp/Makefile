@@ -12,7 +12,7 @@ include $(DEVKIT65XX)/snes_rules
 all: gfx gfx.obj
 
 clean:
-	rm -f gfx.obj *.pic *.pal *.map
+	rm -f gfx.obj *.pic *.pal *.map *.til *.gfx
 
 #---------------------------------------------------------------------------------
 # Game sprites (plane, bomb)
@@ -29,14 +29,25 @@ spr_fonts.pic: spr_fonts.bmp
 
 # City level (mode 0 BGs)
 # BG0 used for the building tiles. The tilemap is generated programmaticaly
-bkg_buildings.pic: bkg_buildings.bmp
+city_bg0.gfx: bkg_buildings.bmp
 	$(GFXCONV) -gs8 -m -mR! -pc4 -po4 -pe0 -fbmp -n $<
+	mv bkg_buildings.pic city_bg0.pic
+	mv bkg_buildings.pal city_bg0.pal
+	touch $@
 # BG1 used for static background
-bkg_city0.pic: bkg_city0.bmp
+city_bg1.gfx: bkg_city0.bmp
 	$(GFXCONV) -gs8 -m -pc4 -po4 -pe0 -pr -fbmp -n $<
+	mv bkg_city0.pic city_bg1.pic
+	mv bkg_city0.pal city_bg1.pal
+	mv bkg_city0.map city_bg1.map
+	touch $@
 # BG2 used for scrolling background
-bkg_sky_4.pic: bkg_sky_4.bmp
+city_bg2.gfx: bkg_sky_4.bmp
 	$(GFXCONV) -gs8 -m -pc4 -po4 -pe0 -pr -fbmp -n $<
+	mv bkg_sky_4.pic city_bg2.pic
+	mv bkg_sky_4.pal city_bg2.pal
+	mv bkg_sky_4.map city_bg2.map
+	touch $@
 
 # Egypt level (mode 0 BGs)
 # BG0 used for the pyramid tiles. The tilemap is generated programmaticaly
@@ -62,6 +73,30 @@ bkg_ship.pic: bkg_ship.bmp
 bkg_sea_back.pic: bkg_sea_back.bmp
 	$(GFXCONV) -gs8 -m -pc4 -pe0 -pr -fbmp -n $<
 
+# Larry's airship (Mode 1)
+# This image will generate 1 16-colors palette
+airship_bg0.gfx: bkg_airship.bmp
+	$(GFXCONV) -gs8 -m -pc16 -po16 -pe1 -pr -fbmp -n $<
+	mv bkg_airship.pic airship_bg0.til
+	mv bkg_airship.pal airship_bg0.pal
+	mv bkg_airship.map airship_bg0.map
+	touch $@
+# This image will generate 1 16-colors palette
+airship_bg1.gfx: bkg_city0.bmp
+	$(GFXCONV) -gs8 -m -pc16 -po16 -pe2 -pr -fbmp -n $<
+	mv bkg_city0.pic airship_bg1.til
+	mv bkg_city0.pal airship_bg1.pal
+	mv bkg_city0.map airship_bg1.map
+	touch $@
+# This image will generate 1 4-colors palette
+# TODO: this is exactely the same setup as in the city level
+airship_bg2.gfx: bkg_sky_4.bmp
+	$(GFXCONV) -gs8 -m -pc4 -po4 -pe0 -pr -fbmp -n $<
+	mv bkg_sky_4.pic airship_bg2.til
+	mv bkg_sky_4.pal airship_bg2.pal
+	mv bkg_sky_4.map airship_bg2.map
+	touch $@
+
 # Titlescreen (BG0 for mode 1)
 # 16-colors for the top title part
 # 16-colors for the subtitle part
@@ -78,13 +113,16 @@ bkg_sky_16.pic: bkg_sky_16.bmp
 gfx:	spr_game.pic		\
 		spr_editor.pic		\
 		spr_fonts.pic		\
-		bkg_buildings.pic	\
-		bkg_city0.pic		\
-		bkg_sky_4.pic		\
+		city_bg0.gfx		\
+		city_bg1.gfx		\
+		city_bg2.gfx		\
 		til_pyramid.pic		\
 		bkg_egypt.pic		\
 		bkg_ship.pic		\
 		bkg_sea.pic			\
 		bkg_sea_back.pic	\
+		airship_bg0.gfx		\
+		airship_bg1.gfx		\
+		airship_bg2.gfx		\
 		bkg_titlescreen.pic	\
 		bkg_sky_16.pic
