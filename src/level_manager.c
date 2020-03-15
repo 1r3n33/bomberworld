@@ -7,6 +7,7 @@
 #include "levels/city.h"
 #include "levels/egypt.h"
 #include "levels/sea.h"
+#include "levels/shop.h"
 
 void do_nothing_state_initializer(u8 _) {}
 u8   do_nothing_end_level_checker() {}
@@ -57,6 +58,12 @@ struct level_t * level_manager_init(u8 game_mode)
         level_manager.levels[i].state_initializer       = init_airship_cutscene_state;
         level_manager.levels[i].tilemap_builder         = do_nothing_tilemap_builder;
         level_manager.levels[i].loop                    = airship_cutscene_loop;
+        i++;
+
+        level_manager.levels[i].gfx_initializer         = init_shop_gfx;
+        level_manager.levels[i].state_initializer       = init_shop_state;
+        level_manager.levels[i].tilemap_builder         = do_nothing_tilemap_builder;
+        level_manager.levels[i].loop                    = shop_loop;
         i++;
 
 #if 0
