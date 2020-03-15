@@ -183,3 +183,28 @@ airship_bg2_map_begin:
 airship_bg2_map_end:
 
 .ends
+
+.section ".rodata3" superfree
+
+; Larry's shop
+shop_bg0_til_begin:
+.incbin "shop_bg0.til"
+shop_bg0_til_end:
+
+shop_bg0_pal_begin:
+.incbin "shop_bg0.pal"
+shop_bg0_pal_end:
+
+shop_bg1_til_begin:
+.incbin "shop_bg1.til"
+shop_bg1_til_end:
+
+shop_bg1_pal_begin:
+.incbin "shop_bg1.pal"
+shop_bg1_pal_end:
+
+shop_bg1_map_begin:
+.incbin "shop_bg1.map"
+shop_bg1_map_end:
+
+.ends

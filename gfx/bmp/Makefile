@@ -97,6 +97,21 @@ airship_bg2.gfx: bkg_sky_4.bmp
 	mv bkg_sky_4.map airship_bg2.map
 	touch $@
 
+# Larry's shop (Mode 1)
+# This image will generate 1 16-colors palette
+shop_bg0.gfx: til_shop.bmp
+	$(GFXCONV) -gs8 -pc16 -po16 -pe0 -pr -fbmp -n $<
+	mv til_shop.pic shop_bg0.til
+	mv til_shop.pal shop_bg0.pal
+	touch $@
+# This image will generate 1 16-colors palette
+shop_bg1.gfx: bkg_larry.bmp
+	$(GFXCONV) -gs8 -m -pc16 -po16 -pe1 -pr -fbmp -n $<
+	mv bkg_larry.pic shop_bg1.til
+	mv bkg_larry.pal shop_bg1.pal
+	mv bkg_larry.map shop_bg1.map
+	touch $@
+
 # Titlescreen (BG0 for mode 1)
 # 16-colors for the top title part
 # 16-colors for the subtitle part
@@ -124,5 +139,7 @@ gfx:	spr_game.pic		\
 		airship_bg0.gfx		\
 		airship_bg1.gfx		\
 		airship_bg2.gfx		\
+		shop_bg0.gfx		\
+		shop_bg1.gfx		\
 		bkg_titlescreen.pic	\
 		bkg_sky_16.pic
