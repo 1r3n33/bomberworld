@@ -8,6 +8,13 @@
 #define SHOP_MEGA_BOMB_FLAG       0x08
 #define SHOP_UFO_FLAG             0x10
 
+#define SHOP_GFX_BLANK                  0
+#define SHOP_GFX_CURSOR_CORNER          1
+#define SHOP_GFX_CURSOR_VERTICAL        2
+#define SHOP_GFX_CURSOR_HORIZONTAL      3
+#define SHOP_GFX_INTERROGATION_MARK_4X4 4
+#define SHOP_GFX_GREEN_CHECK_MARK_4X4   20
+
 extern char shop_bg0_til_begin, shop_bg0_til_end;
 extern char shop_bg0_pal_begin, shop_bg0_pal_end;
 
@@ -18,7 +25,8 @@ extern char shop_bg1_map_begin, shop_bg1_map_end;
 u16 shop_bg0_map[32][32];
 
 u8 shop_current_selection;
-u8 shop_items_mask;
+u8 shop_available_items_mask;
+u8 shop_selected_items_mask;
 u8 shop_input_throttle;
 
 void init_shop_gfx()
@@ -69,7 +77,8 @@ void init_shop_gfx()
 void init_shop_state(u8 level)
 {
     shop_current_selection = 0;
-    shop_items_mask = SHOP_SIMPLE_BOMB_FLAG | SHOP_EXTRA_LIFE_FLAG | SHOP_POWER_PROPELANT_FLAG;
+    shop_available_items_mask = SHOP_SIMPLE_BOMB_FLAG | SHOP_EXTRA_LIFE_FLAG | SHOP_POWER_PROPELANT_FLAG;
+    shop_selected_items_mask = 0;
     shop_input_throttle = 0;
 
     // Set items
@@ -85,24 +94,24 @@ void init_shop_state(u8 level)
     for (i=0; i<5; i++)
     {
         u8 flag = 1<<i;
-        if ((shop_items_mask & flag) == 0)
+        if ((shop_available_items_mask & flag) == 0)
         {
-            shop_bg0_map[16][(i*6)+2] = 4;
-            shop_bg0_map[16][(i*6)+3] = 5;
-            shop_bg0_map[16][(i*6)+4] = 6;
-            shop_bg0_map[16][(i*6)+5] = 7;
-            shop_bg0_map[17][(i*6)+2] = 8;
-            shop_bg0_map[17][(i*6)+3] = 9;
-            shop_bg0_map[17][(i*6)+4] = 10;
-            shop_bg0_map[17][(i*6)+5] = 11;
-            shop_bg0_map[18][(i*6)+2] = 12;
-            shop_bg0_map[18][(i*6)+3] = 13;
-            shop_bg0_map[18][(i*6)+4] = 14;
-            shop_bg0_map[18][(i*6)+5] = 15;
-            shop_bg0_map[19][(i*6)+2] = 16;
-            shop_bg0_map[19][(i*6)+3] = 17;
-            shop_bg0_map[19][(i*6)+4] = 18;
-            shop_bg0_map[19][(i*6)+5] = 19;
+            shop_bg0_map[16][(i*6)+2] = SHOP_GFX_INTERROGATION_MARK_4X4+0;
+            shop_bg0_map[16][(i*6)+3] = SHOP_GFX_INTERROGATION_MARK_4X4+1;
+            shop_bg0_map[16][(i*6)+4] = SHOP_GFX_INTERROGATION_MARK_4X4+2;
+            shop_bg0_map[16][(i*6)+5] = SHOP_GFX_INTERROGATION_MARK_4X4+3;
+            shop_bg0_map[17][(i*6)+2] = SHOP_GFX_INTERROGATION_MARK_4X4+4;
+            shop_bg0_map[17][(i*6)+3] = SHOP_GFX_INTERROGATION_MARK_4X4+5;
+            shop_bg0_map[17][(i*6)+4] = SHOP_GFX_INTERROGATION_MARK_4X4+6;
+            shop_bg0_map[17][(i*6)+5] = SHOP_GFX_INTERROGATION_MARK_4X4+7;
+            shop_bg0_map[18][(i*6)+2] = SHOP_GFX_INTERROGATION_MARK_4X4+8;
+            shop_bg0_map[18][(i*6)+3] = SHOP_GFX_INTERROGATION_MARK_4X4+9;
+            shop_bg0_map[18][(i*6)+4] = SHOP_GFX_INTERROGATION_MARK_4X4+10;
+            shop_bg0_map[18][(i*6)+5] = SHOP_GFX_INTERROGATION_MARK_4X4+11;
+            shop_bg0_map[19][(i*6)+2] = SHOP_GFX_INTERROGATION_MARK_4X4+12;
+            shop_bg0_map[19][(i*6)+3] = SHOP_GFX_INTERROGATION_MARK_4X4+13;
+            shop_bg0_map[19][(i*6)+4] = SHOP_GFX_INTERROGATION_MARK_4X4+14;
+            shop_bg0_map[19][(i*6)+5] = SHOP_GFX_INTERROGATION_MARK_4X4+15;
         }
     }
 
@@ -157,9 +166,38 @@ u8 shop_selection()
             }
         }
 
-        if (pad0 & (KEY_A | KEY_START))
+        if (pad0 & KEY_A)
         {
-            return 1;
+            if (shop_current_selection == 0xFF)
+            {
+                return 1;
+            }
+            else
+            {
+                u8 flag = 1 << shop_current_selection;
+                flag = flag & shop_available_items_mask;
+                flag = flag & ~shop_selected_items_mask;
+                if (flag)
+                {
+                    shop_selected_items_mask |= flag;
+                    shop_bg0_map[16][(shop_current_selection*6)+2] = SHOP_GFX_GREEN_CHECK_MARK_4X4+0;
+                    shop_bg0_map[16][(shop_current_selection*6)+3] = SHOP_GFX_GREEN_CHECK_MARK_4X4+1;
+                    shop_bg0_map[16][(shop_current_selection*6)+4] = SHOP_GFX_GREEN_CHECK_MARK_4X4+2;
+                    shop_bg0_map[16][(shop_current_selection*6)+5] = SHOP_GFX_GREEN_CHECK_MARK_4X4+3;
+                    shop_bg0_map[17][(shop_current_selection*6)+2] = SHOP_GFX_GREEN_CHECK_MARK_4X4+4;
+                    shop_bg0_map[17][(shop_current_selection*6)+3] = SHOP_GFX_GREEN_CHECK_MARK_4X4+5;
+                    shop_bg0_map[17][(shop_current_selection*6)+4] = SHOP_GFX_GREEN_CHECK_MARK_4X4+6;
+                    shop_bg0_map[17][(shop_current_selection*6)+5] = SHOP_GFX_GREEN_CHECK_MARK_4X4+7;
+                    shop_bg0_map[18][(shop_current_selection*6)+2] = SHOP_GFX_GREEN_CHECK_MARK_4X4+8;
+                    shop_bg0_map[18][(shop_current_selection*6)+3] = SHOP_GFX_GREEN_CHECK_MARK_4X4+9;
+                    shop_bg0_map[18][(shop_current_selection*6)+4] = SHOP_GFX_GREEN_CHECK_MARK_4X4+10;
+                    shop_bg0_map[18][(shop_current_selection*6)+5] = SHOP_GFX_GREEN_CHECK_MARK_4X4+11;
+                    shop_bg0_map[19][(shop_current_selection*6)+2] = SHOP_GFX_GREEN_CHECK_MARK_4X4+12;
+                    shop_bg0_map[19][(shop_current_selection*6)+3] = SHOP_GFX_GREEN_CHECK_MARK_4X4+13;
+                    shop_bg0_map[19][(shop_current_selection*6)+4] = SHOP_GFX_GREEN_CHECK_MARK_4X4+14;
+                    shop_bg0_map[19][(shop_current_selection*6)+5] = SHOP_GFX_GREEN_CHECK_MARK_4X4+15;
+                }
+            }
         }
     }
     else
@@ -181,49 +219,49 @@ void shop_clear_cursor()
 {
     if (shop_current_selection == 0xFF)
     {
-        shop_bg0_map[21][25] = 0;
-        shop_bg0_map[21][26] = 0;
-        shop_bg0_map[21][27] = 0;
-        shop_bg0_map[21][28] = 0;
-        shop_bg0_map[21][29] = 0;
-        shop_bg0_map[21][30] = 0;
-        shop_bg0_map[22][25] = 0;
-        shop_bg0_map[22][30] = 0;
-        shop_bg0_map[23][25] = 0;
-        shop_bg0_map[23][30] = 0;
-        shop_bg0_map[24][25] = 0;
-        shop_bg0_map[24][30] = 0;
-        shop_bg0_map[25][25] = 0;
-        shop_bg0_map[25][30] = 0;
-        shop_bg0_map[26][25] = 0;
-        shop_bg0_map[26][26] = 0;
-        shop_bg0_map[26][27] = 0;
-        shop_bg0_map[26][28] = 0;
-        shop_bg0_map[26][29] = 0;
-        shop_bg0_map[26][30] = 0;
+        shop_bg0_map[21][25] = SHOP_GFX_BLANK;
+        shop_bg0_map[21][26] = SHOP_GFX_BLANK;
+        shop_bg0_map[21][27] = SHOP_GFX_BLANK;
+        shop_bg0_map[21][28] = SHOP_GFX_BLANK;
+        shop_bg0_map[21][29] = SHOP_GFX_BLANK;
+        shop_bg0_map[21][30] = SHOP_GFX_BLANK;
+        shop_bg0_map[22][25] = SHOP_GFX_BLANK;
+        shop_bg0_map[22][30] = SHOP_GFX_BLANK;
+        shop_bg0_map[23][25] = SHOP_GFX_BLANK;
+        shop_bg0_map[23][30] = SHOP_GFX_BLANK;
+        shop_bg0_map[24][25] = SHOP_GFX_BLANK;
+        shop_bg0_map[24][30] = SHOP_GFX_BLANK;
+        shop_bg0_map[25][25] = SHOP_GFX_BLANK;
+        shop_bg0_map[25][30] = SHOP_GFX_BLANK;
+        shop_bg0_map[26][25] = SHOP_GFX_BLANK;
+        shop_bg0_map[26][26] = SHOP_GFX_BLANK;
+        shop_bg0_map[26][27] = SHOP_GFX_BLANK;
+        shop_bg0_map[26][28] = SHOP_GFX_BLANK;
+        shop_bg0_map[26][29] = SHOP_GFX_BLANK;
+        shop_bg0_map[26][30] = SHOP_GFX_BLANK;
     }
     else
     {
-        shop_bg0_map[15][(shop_current_selection*6)+1] = 0;
-        shop_bg0_map[15][(shop_current_selection*6)+2] = 0;
-        shop_bg0_map[15][(shop_current_selection*6)+3] = 0;
-        shop_bg0_map[15][(shop_current_selection*6)+4] = 0;
-        shop_bg0_map[15][(shop_current_selection*6)+5] = 0;
-        shop_bg0_map[15][(shop_current_selection*6)+6] = 0;
-        shop_bg0_map[16][(shop_current_selection*6)+1] = 0;
-        shop_bg0_map[16][(shop_current_selection*6)+6] = 0;
-        shop_bg0_map[17][(shop_current_selection*6)+1] = 0;
-        shop_bg0_map[17][(shop_current_selection*6)+6] = 0;
-        shop_bg0_map[18][(shop_current_selection*6)+1] = 0;
-        shop_bg0_map[18][(shop_current_selection*6)+6] = 0;
-        shop_bg0_map[19][(shop_current_selection*6)+1] = 0;
-        shop_bg0_map[19][(shop_current_selection*6)+6] = 0;
-        shop_bg0_map[20][(shop_current_selection*6)+1] = 0;
-        shop_bg0_map[20][(shop_current_selection*6)+2] = 0;
-        shop_bg0_map[20][(shop_current_selection*6)+3] = 0;
-        shop_bg0_map[20][(shop_current_selection*6)+4] = 0;
-        shop_bg0_map[20][(shop_current_selection*6)+5] = 0;
-        shop_bg0_map[20][(shop_current_selection*6)+6] = 0;
+        shop_bg0_map[15][(shop_current_selection*6)+1] = SHOP_GFX_BLANK;
+        shop_bg0_map[15][(shop_current_selection*6)+2] = SHOP_GFX_BLANK;
+        shop_bg0_map[15][(shop_current_selection*6)+3] = SHOP_GFX_BLANK;
+        shop_bg0_map[15][(shop_current_selection*6)+4] = SHOP_GFX_BLANK;
+        shop_bg0_map[15][(shop_current_selection*6)+5] = SHOP_GFX_BLANK;
+        shop_bg0_map[15][(shop_current_selection*6)+6] = SHOP_GFX_BLANK;
+        shop_bg0_map[16][(shop_current_selection*6)+1] = SHOP_GFX_BLANK;
+        shop_bg0_map[16][(shop_current_selection*6)+6] = SHOP_GFX_BLANK;
+        shop_bg0_map[17][(shop_current_selection*6)+1] = SHOP_GFX_BLANK;
+        shop_bg0_map[17][(shop_current_selection*6)+6] = SHOP_GFX_BLANK;
+        shop_bg0_map[18][(shop_current_selection*6)+1] = SHOP_GFX_BLANK;
+        shop_bg0_map[18][(shop_current_selection*6)+6] = SHOP_GFX_BLANK;
+        shop_bg0_map[19][(shop_current_selection*6)+1] = SHOP_GFX_BLANK;
+        shop_bg0_map[19][(shop_current_selection*6)+6] = SHOP_GFX_BLANK;
+        shop_bg0_map[20][(shop_current_selection*6)+1] = SHOP_GFX_BLANK;
+        shop_bg0_map[20][(shop_current_selection*6)+2] = SHOP_GFX_BLANK;
+        shop_bg0_map[20][(shop_current_selection*6)+3] = SHOP_GFX_BLANK;
+        shop_bg0_map[20][(shop_current_selection*6)+4] = SHOP_GFX_BLANK;
+        shop_bg0_map[20][(shop_current_selection*6)+5] = SHOP_GFX_BLANK;
+        shop_bg0_map[20][(shop_current_selection*6)+6] = SHOP_GFX_BLANK;
     }
 }
 
@@ -231,49 +269,49 @@ void shop_set_cursor()
 {
     if (shop_current_selection == 0xFF)
     {
-        shop_bg0_map[21][25] = 1;
-        shop_bg0_map[21][26] = 3;
-        shop_bg0_map[21][27] = 3;
-        shop_bg0_map[21][28] = 3;
-        shop_bg0_map[21][29] = 3;
-        shop_bg0_map[21][30] = 1 | 0x4000;
-        shop_bg0_map[22][25] = 2;
-        shop_bg0_map[22][30] = 2 | 0x4000;
-        shop_bg0_map[23][25] = 2;
-        shop_bg0_map[23][30] = 2 | 0x4000;
-        shop_bg0_map[24][25] = 2;
-        shop_bg0_map[24][30] = 2 | 0x4000;
-        shop_bg0_map[25][25] = 2;
-        shop_bg0_map[25][30] = 2 | 0x4000;
-        shop_bg0_map[26][25] = 1 | 0x8000;
-        shop_bg0_map[26][26] = 3 | 0x8000;
-        shop_bg0_map[26][27] = 3 | 0x8000;
-        shop_bg0_map[26][28] = 3 | 0x8000;
-        shop_bg0_map[26][29] = 3 | 0x8000;
-        shop_bg0_map[26][30] = 1 | 0x4000 | 0x8000;
+        shop_bg0_map[21][25] = SHOP_GFX_CURSOR_CORNER;
+        shop_bg0_map[21][26] = SHOP_GFX_CURSOR_HORIZONTAL;
+        shop_bg0_map[21][27] = SHOP_GFX_CURSOR_HORIZONTAL;
+        shop_bg0_map[21][28] = SHOP_GFX_CURSOR_HORIZONTAL;
+        shop_bg0_map[21][29] = SHOP_GFX_CURSOR_HORIZONTAL;
+        shop_bg0_map[21][30] = SHOP_GFX_CURSOR_CORNER | 0x4000;
+        shop_bg0_map[22][25] = SHOP_GFX_CURSOR_VERTICAL;
+        shop_bg0_map[22][30] = SHOP_GFX_CURSOR_VERTICAL | 0x4000;
+        shop_bg0_map[23][25] = SHOP_GFX_CURSOR_VERTICAL;
+        shop_bg0_map[23][30] = SHOP_GFX_CURSOR_VERTICAL | 0x4000;
+        shop_bg0_map[24][25] = SHOP_GFX_CURSOR_VERTICAL;
+        shop_bg0_map[24][30] = SHOP_GFX_CURSOR_VERTICAL | 0x4000;
+        shop_bg0_map[25][25] = SHOP_GFX_CURSOR_VERTICAL;
+        shop_bg0_map[25][30] = SHOP_GFX_CURSOR_VERTICAL | 0x4000;
+        shop_bg0_map[26][25] = SHOP_GFX_CURSOR_CORNER | 0x8000;
+        shop_bg0_map[26][26] = SHOP_GFX_CURSOR_HORIZONTAL | 0x8000;
+        shop_bg0_map[26][27] = SHOP_GFX_CURSOR_HORIZONTAL | 0x8000;
+        shop_bg0_map[26][28] = SHOP_GFX_CURSOR_HORIZONTAL | 0x8000;
+        shop_bg0_map[26][29] = SHOP_GFX_CURSOR_HORIZONTAL | 0x8000;
+        shop_bg0_map[26][30] = SHOP_GFX_CURSOR_CORNER | 0x4000 | 0x8000;
     }
     else
     {
-        shop_bg0_map[15][(shop_current_selection*6)+1] = 1;
-        shop_bg0_map[15][(shop_current_selection*6)+2] = 3;
-        shop_bg0_map[15][(shop_current_selection*6)+3] = 3;
-        shop_bg0_map[15][(shop_current_selection*6)+4] = 3;
-        shop_bg0_map[15][(shop_current_selection*6)+5] = 3;
-        shop_bg0_map[15][(shop_current_selection*6)+6] = 1 | 0x4000;
-        shop_bg0_map[16][(shop_current_selection*6)+1] = 2;
-        shop_bg0_map[16][(shop_current_selection*6)+6] = 2 | 0x4000;
-        shop_bg0_map[17][(shop_current_selection*6)+1] = 2;
-        shop_bg0_map[17][(shop_current_selection*6)+6] = 2 | 0x4000;
-        shop_bg0_map[18][(shop_current_selection*6)+1] = 2;
-        shop_bg0_map[18][(shop_current_selection*6)+6] = 2 | 0x4000;
-        shop_bg0_map[19][(shop_current_selection*6)+1] = 2;
-        shop_bg0_map[19][(shop_current_selection*6)+6] = 2 | 0x4000;
-        shop_bg0_map[20][(shop_current_selection*6)+1] = 1 | 0x8000;
-        shop_bg0_map[20][(shop_current_selection*6)+2] = 3 | 0x8000;
-        shop_bg0_map[20][(shop_current_selection*6)+3] = 3 | 0x8000;
-        shop_bg0_map[20][(shop_current_selection*6)+4] = 3 | 0x8000;
-        shop_bg0_map[20][(shop_current_selection*6)+5] = 3 | 0x8000;
-        shop_bg0_map[20][(shop_current_selection*6)+6] = 1 | 0x4000 | 0x8000;
+        shop_bg0_map[15][(shop_current_selection*6)+1] = SHOP_GFX_CURSOR_CORNER;
+        shop_bg0_map[15][(shop_current_selection*6)+2] = SHOP_GFX_CURSOR_HORIZONTAL;
+        shop_bg0_map[15][(shop_current_selection*6)+3] = SHOP_GFX_CURSOR_HORIZONTAL;
+        shop_bg0_map[15][(shop_current_selection*6)+4] = SHOP_GFX_CURSOR_HORIZONTAL;
+        shop_bg0_map[15][(shop_current_selection*6)+5] = SHOP_GFX_CURSOR_HORIZONTAL;
+        shop_bg0_map[15][(shop_current_selection*6)+6] = SHOP_GFX_CURSOR_CORNER | 0x4000;
+        shop_bg0_map[16][(shop_current_selection*6)+1] = SHOP_GFX_CURSOR_VERTICAL;
+        shop_bg0_map[16][(shop_current_selection*6)+6] = SHOP_GFX_CURSOR_VERTICAL | 0x4000;
+        shop_bg0_map[17][(shop_current_selection*6)+1] = SHOP_GFX_CURSOR_VERTICAL;
+        shop_bg0_map[17][(shop_current_selection*6)+6] = SHOP_GFX_CURSOR_VERTICAL | 0x4000;
+        shop_bg0_map[18][(shop_current_selection*6)+1] = SHOP_GFX_CURSOR_VERTICAL;
+        shop_bg0_map[18][(shop_current_selection*6)+6] = SHOP_GFX_CURSOR_VERTICAL | 0x4000;
+        shop_bg0_map[19][(shop_current_selection*6)+1] = SHOP_GFX_CURSOR_VERTICAL;
+        shop_bg0_map[19][(shop_current_selection*6)+6] = SHOP_GFX_CURSOR_VERTICAL | 0x4000;
+        shop_bg0_map[20][(shop_current_selection*6)+1] = SHOP_GFX_CURSOR_CORNER | 0x8000;
+        shop_bg0_map[20][(shop_current_selection*6)+2] = SHOP_GFX_CURSOR_HORIZONTAL | 0x8000;
+        shop_bg0_map[20][(shop_current_selection*6)+3] = SHOP_GFX_CURSOR_HORIZONTAL | 0x8000;
+        shop_bg0_map[20][(shop_current_selection*6)+4] = SHOP_GFX_CURSOR_HORIZONTAL | 0x8000;
+        shop_bg0_map[20][(shop_current_selection*6)+5] = SHOP_GFX_CURSOR_HORIZONTAL | 0x8000;
+        shop_bg0_map[20][(shop_current_selection*6)+6] = SHOP_GFX_CURSOR_CORNER | 0x4000 | 0x8000;
     }
 }
 
