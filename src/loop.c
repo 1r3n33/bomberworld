@@ -8,19 +8,17 @@
 
 #define GAMEPLAY_SCORE_INCREMENT 5
 
+// Bomb flags
 #define BOMB_0 0x01
 #define BOMB_1 0x02
 
-// Borrowed from game.c
-// TODO: Clean. Access a gamestate object.
-extern u16 player_scores[2];
-extern u8 player_lives[2];
-extern u8 player_bombs[2]; // Bits represents available bombs.
-extern u8 player_bomb_throttles[2]; // Prevent dropping next bomb too fast.
-extern struct level_t * current_level;
+u8  player_bombs[2];            // Bits represents available bombs.
+u8  player_bomb_throttles[2];   // Prevent dropping next bomb too fast.
 
 void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
 {
+    struct level_t * current_level = get_current_level();
+
     // Bomb ids of the current player.
     u8 bomb_ids[] = { (player_id*2), (player_id*2)+1 };
 
@@ -57,7 +55,7 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
                 u8 collision = bomb_tilemap_collision(bomb_ids[0], current_level->bomb_collider);
                 if (collision > 0)
                 {
-                    player_scores[player_id] += GAMEPLAY_SCORE_INCREMENT;
+                    add_player_score(player_id, GAMEPLAY_SCORE_INCREMENT);
                     display_score(player_id);
 
                     player_bombs[player_id] |= BOMB_0;
@@ -84,7 +82,7 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
                 u8 collision = bomb_tilemap_collision(bomb_ids[1], current_level->bomb_collider);
                 if (collision > 0)
                 {
-                    player_scores[player_id] += GAMEPLAY_SCORE_INCREMENT;
+                    add_player_score(player_id, GAMEPLAY_SCORE_INCREMENT);
                     display_score(player_id);
 
                     player_bombs[player_id] |= BOMB_1;
@@ -108,11 +106,18 @@ u8 gameplay_loop()
     u8 frame = 0;
     u16 pad0, pad1;
 
+    player_bombs[0] = BOMB_0 | BOMB_1;
+    player_bombs[1] = BOMB_0 | BOMB_1;
+
+    player_bomb_throttles[0] = 0;
+    player_bomb_throttles[1] = 0;
+
     u8 player_enabled[] = {
-        (player_lives[0] != 0xFF),
-        (player_lives[1] != 0xFF),
+        is_player_enabled(0),
+        is_player_enabled(1),
     };
 
+    struct level_t * current_level = get_current_level();
     u8 speed = current_level->speed;
 
     struct pilot_t * p0 = get_pilot(0);
@@ -164,14 +169,14 @@ u8 gameplay_loop()
 
         if (b2p0_collision | b3p0_collision | p0_collision)
         {
-            player_lives[0]--;
+            set_player_death(0);
             init_explosion(PILOT_0_EXPLOSION_ID, (p0->x>>4)-512, p0->y);
             return 2;
         }
 
         if (b0p1_collision | b1p1_collision | p1_collision)
         {
-            player_lives[1]--;
+            set_player_death(1);
             init_explosion(PILOT_1_EXPLOSION_ID, (p1->x>>4)-512, p1->y);
             return 2;
         }
@@ -185,7 +190,9 @@ void terminate_explosion_animation_loop()
     u8 res = 0;
     do
     {
+        spcProcess();
         WaitForVBlank();
+
         res = update_explosion(0);
         res |= update_explosion(1);
         res |= update_explosion(2);
@@ -206,7 +213,9 @@ void gameover_loop()
 
     while (1)
     {
+        spcProcess();
         WaitForVBlank();
+
         u16 pad = (padsCurrent(0) | padsCurrent(1));
         if (pad & KEY_START)
         {

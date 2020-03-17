@@ -17,10 +17,6 @@ struct bomb_t
 #define BOMB_COLLISION_OFFSET_LEFT      5	//
 #define BOMB_COLLISION_OFFSET_RIGHT     10	//
 
-// Bomb flags
-#define BOMB_0 0x01
-#define BOMB_1 0x02
-
 struct bomb_t * get_bomb(u8 id);
 
 void init_bomb(u8 id);
