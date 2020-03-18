@@ -5,6 +5,7 @@
 #include "level_manager.h"
 #include "loop.h"
 #include "pilot.h"
+#include "state.h"
 
 #define GAMEPLAY_SCORE_INCREMENT 5
 
@@ -55,7 +56,7 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
                 u8 collision = bomb_tilemap_collision(bomb_ids[0], current_level->bomb_collider);
                 if (collision > 0)
                 {
-                    add_player_score(player_id, GAMEPLAY_SCORE_INCREMENT);
+                    score_transaction(player_id, GAMEPLAY_SCORE_INCREMENT);
                     display_score(player_id);
 
                     player_bombs[player_id] |= BOMB_0;
@@ -82,7 +83,7 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
                 u8 collision = bomb_tilemap_collision(bomb_ids[1], current_level->bomb_collider);
                 if (collision > 0)
                 {
-                    add_player_score(player_id, GAMEPLAY_SCORE_INCREMENT);
+                    score_transaction(player_id, GAMEPLAY_SCORE_INCREMENT);
                     display_score(player_id);
 
                     player_bombs[player_id] |= BOMB_1;

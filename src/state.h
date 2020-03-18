@@ -17,7 +17,7 @@ struct level_t * get_current_level();
 
 struct level_t * get_next_level();
 
-void add_player_score(u8 id, s8 points);
+u8 score_transaction(u8 id, s16 points);
 
 u8 set_player_death(u8 id);
 

@@ -30,9 +30,18 @@ struct level_t * get_next_level()
     return state.current_level;
 }
 
-void add_player_score(u8 id, s8 points)
+u8 score_transaction(u8 id, s16 points)
 {
-    state.player_scores[id] += points;
+    s16 res = state.player_scores[id] + points;
+    if (res < 0)
+    {
+        return 0;
+    }
+    else
+    {
+        state.player_scores[id] = res;
+        return 1;
+    }
 }
 
 u8 set_player_death(u8 id)

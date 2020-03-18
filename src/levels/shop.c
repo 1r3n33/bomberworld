@@ -1,6 +1,7 @@
 #include <snes.h>
 #include "graphics.h"
 #include "shop.h"
+#include "state.h"
 
 #define SHOP_SIMPLE_BOMB_FLAG     0x01
 #define SHOP_EXTRA_LIFE_FLAG      0x02
@@ -28,6 +29,8 @@ u8 shop_current_selection;
 u8 shop_available_items_mask;
 u8 shop_selected_items_mask;
 u8 shop_input_throttle;
+
+u16 shop_prices[] = { 200, 200, 200, 200, 200 };
 
 void init_shop_gfx()
 {
@@ -177,7 +180,7 @@ u8 shop_selection()
                 u8 flag = 1 << shop_current_selection;
                 flag = flag & shop_available_items_mask;
                 flag = flag & ~shop_selected_items_mask;
-                if (flag)
+                if (flag && score_transaction(0, -shop_prices[shop_current_selection]))
                 {
                     shop_selected_items_mask |= flag;
                     shop_bg0_map[16][(shop_current_selection*6)+2] = SHOP_GFX_GREEN_CHECK_MARK_4X4+0;
@@ -196,6 +199,8 @@ u8 shop_selection()
                     shop_bg0_map[19][(shop_current_selection*6)+3] = SHOP_GFX_GREEN_CHECK_MARK_4X4+13;
                     shop_bg0_map[19][(shop_current_selection*6)+4] = SHOP_GFX_GREEN_CHECK_MARK_4X4+14;
                     shop_bg0_map[19][(shop_current_selection*6)+5] = SHOP_GFX_GREEN_CHECK_MARK_4X4+15;
+
+                    display_score(0);
                 }
             }
         }
