@@ -135,7 +135,7 @@ u8 shop_selection()
     {
         if (pad0 & KEY_LEFT)
         {
-            if (shop_current_selection > 0)
+            if (shop_current_selection > 0 && shop_current_selection != 0xFF)
             {
                 shop_current_selection--;
                 shop_input_throttle = 16;
