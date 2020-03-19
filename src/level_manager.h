@@ -38,7 +38,7 @@ struct level_manager_t
     u8             pad_1;
 };
 
-struct level_t * init_level_manager(u8 game_mode);
+struct level_t * level_manager_init(u8 game_mode);
 
 struct level_t * next_level();
 

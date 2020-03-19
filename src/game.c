@@ -1,8 +1,14 @@
 #include <snes.h>
+#include "bomb.h"
+#include "editor.h"
+#include "explosion.h"
 #include "game.h"
 #include "graphics.h"
 #include "level_manager.h"
+#include "loop.h"
+#include "pilot.h"
 #include "state.h"
+#include "text.h"
 
 extern char soundbrr,soundbrrend;
 brrsamples sfx_exp_short_soft1;

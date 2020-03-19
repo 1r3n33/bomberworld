@@ -6,6 +6,7 @@
 #include "loop.h"
 #include "pilot.h"
 #include "state.h"
+#include "text.h"
 
 #define GAMEPLAY_SCORE_INCREMENT 5
 
