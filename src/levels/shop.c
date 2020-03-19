@@ -200,7 +200,13 @@ u8 shop_selection()
                     shop_bg0_map[19][(shop_current_selection*6)+4] = SHOP_GFX_GREEN_CHECK_MARK_4X4+14;
                     shop_bg0_map[19][(shop_current_selection*6)+5] = SHOP_GFX_GREEN_CHECK_MARK_4X4+15;
 
+                    if (flag & SHOP_EXTRA_LIFE_FLAG)
+                    {
+                        max_out_player_life(0);
+                    }
+
                     display_score(0);
+                    display_lives();
                 }
             }
         }
