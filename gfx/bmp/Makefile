@@ -24,8 +24,11 @@ spr_editor.pic: spr_editor.bmp
 	$(GFXCONV) -gs8 -pc16 -po16 -fbmp -n $<
 
 # Fonts sprites
-spr_fonts.pic: spr_fonts.bmp
+fonts.gfx: spr_fonts.bmp
 	$(GFXCONV) -gs8 -pc16 -po16 -fbmp -n $<
+	mv spr_fonts.pic fonts.pic
+	mv spr_fonts.pal fonts.pal
+	touch $@
 
 # City level (mode 0 BGs)
 # BG0 used for the building tiles. The tilemap is generated programmaticaly
@@ -127,7 +130,7 @@ bkg_sky_16.pic: bkg_sky_16.bmp
 
 gfx:	spr_game.pic		\
 		spr_editor.pic		\
-		spr_fonts.pic		\
+		fonts.gfx			\
 		city_bg0.gfx		\
 		city_bg1.gfx		\
 		city_bg2.gfx		\

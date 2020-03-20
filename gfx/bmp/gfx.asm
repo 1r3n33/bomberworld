@@ -18,13 +18,13 @@ spr_editor_pal_begin:
 .incbin "spr_editor.pal"
 spr_editor_pal_end:
 
-spr_fonts_til_begin:
-.incbin "spr_fonts.pic"
-spr_fonts_til_end:
+fonts_til_begin:
+.incbin "fonts.pic"
+fonts_til_end:
 
-spr_fonts_pal_begin:
-.incbin "spr_fonts.pal"
-spr_fonts_pal_end:
+fonts_pal_begin:
+.incbin "fonts.pal"
+fonts_pal_end:
 
 bkg_sky_16_til_begin:
 .incbin "bkg_sky_16.pic"

@@ -14,8 +14,8 @@ extern char bkg_sky_16_til_begin, bkg_sky_16_til_end;
 extern char bkg_sky_16_pal_begin, bkg_sky_16_pal_end;
 extern char bkg_sky_16_map_begin, bkg_sky_16_map_end;
 
-extern char spr_fonts_til_begin, spr_fonts_til_end;
-extern char spr_fonts_pal_begin, spr_fonts_pal_end;
+extern char fonts_til_begin, fonts_til_end;
+extern char fonts_pal_begin, fonts_pal_end;
 
 void init_titlescreen()
 {
@@ -69,12 +69,12 @@ void init_titlescreen()
     WaitForVBlank();
 
     // Sprites tiles
-    dmaCopyVram(&spr_game_til_begin,  VRAM_ADDR_SPR+0x0000, (&spr_game_til_end-&spr_game_til_begin));
-    dmaCopyVram(&spr_fonts_til_begin, VRAM_ADDR_SPR+0x1000, (&spr_fonts_til_end-&spr_fonts_til_begin));
+    dmaCopyVram(&spr_game_til_begin, VRAM_ADDR_SPR+0x0000, (&spr_game_til_end-&spr_game_til_begin));
+    dmaCopyVram(&fonts_til_begin, VRAM_ADDR_SPR+0x1000, (&fonts_til_end-&fonts_til_begin));
 
     // Sprites palettes
-    dmaCopyCGram(&spr_game_pal_begin,  128+(0*16), (&spr_game_pal_end-&spr_game_pal_begin));
-    dmaCopyCGram(&spr_fonts_pal_begin, 128+(1*16), (&spr_fonts_pal_end-&spr_fonts_pal_begin));
+    dmaCopyCGram(&spr_game_pal_begin, 128+(0*16), (&spr_game_pal_end-&spr_game_pal_begin));
+    dmaCopyCGram(&fonts_pal_begin, 128+(1*16), (&fonts_pal_end-&fonts_pal_begin));
 
     REG_OBSEL = (0<<5) | (VRAM_ADDR_SPR >> 13); // 0<<5 is for 8x8+16x16 mode
 
