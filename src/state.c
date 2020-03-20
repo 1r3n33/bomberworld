@@ -21,6 +21,12 @@ void init_game_state(u8 mode)
 
     state.player_max_lives[0] = 2;
     state.player_max_lives[1] = 2;
+
+    state.player_cur_bombs[0] = BOMB_0 | BOMB_1;
+    state.player_cur_bombs[1] = (mode & GAME_MODE_FLAG_2P) ? BOMB_0 | BOMB_1 : 0;
+
+    state.player_max_bombs[0] = 2;
+    state.player_max_bombs[1] = 2;
 }
 
 struct level_t * get_current_level()
@@ -67,6 +73,28 @@ u8 is_player_enabled(u8 id)
 u8 is_game_over()
 {
     return (state.player_cur_lives[0] == 0 && state.player_cur_lives[1] == 0);
+}
+
+u8 find_player_bomb(u8 id)
+{
+    if (state.player_max_bombs[id] == 1)
+    {
+        return (state.player_cur_bombs[id] & BOMB_0) ? BOMB_0 : 0xFF;
+    }
+    else
+    {
+        return (state.player_cur_bombs[id] & BOMB_0) ? BOMB_0 : (state.player_cur_bombs[id] & BOMB_1) ? BOMB_1 : 0xFF;
+    }
+}
+
+void use_player_bomb(u8 id, u8 bomb_flag)
+{
+    state.player_cur_bombs[id] &= ~bomb_flag;
+}
+
+void release_player_bomb(u8 id, u8 bomb_flag)
+{
+    state.player_cur_bombs[id] |= bomb_flag;
 }
 
 void display_score(u8 id)
@@ -128,4 +156,38 @@ void display_lives()
         hearts[0] = 0;
     }
     set_text(OBJ_TEXT+72, hearts, SCREEN_WIDTH-88, 0);
+}
+
+#define EMPTY_BOMB (98+32)
+#define PLAIN_BOMB (99+32)
+
+void display_bombs(u8 id)
+{
+    u8 bombs[] = { 0, 0, 0 };
+
+    if (state.player_cur_lives[id] != 0)
+    {
+        bombs[0] = state.player_cur_bombs[id] & BOMB_0 ? PLAIN_BOMB : EMPTY_BOMB;
+        if (state.player_max_bombs[id] > 1)
+        {
+            bombs[1] = state.player_cur_bombs[id] & BOMB_1 ? PLAIN_BOMB : EMPTY_BOMB;
+        }
+        else
+        {
+            bombs[1] = 0;
+        }
+    }
+    else
+    {
+        bombs[0] = 0;
+    }
+
+    if (id == 0)
+    {
+        set_text(OBJ_TEXT+80, bombs, 96, 0);
+    }
+    else
+    {
+        set_text(OBJ_TEXT+88, bombs, SCREEN_WIDTH-112, 0);
+    }
 }

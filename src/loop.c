@@ -10,11 +10,6 @@
 
 #define GAMEPLAY_SCORE_INCREMENT 5
 
-// Bomb flags
-#define BOMB_0 0x01
-#define BOMB_1 0x02
-
-u8  player_bombs[2];            // Bits represents available bombs.
 u8  player_bomb_throttles[2];   // Prevent dropping next bomb too fast.
 
 void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
@@ -24,18 +19,19 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
     // Bomb ids of the current player.
     u8 bomb_ids[] = { (player_id*2), (player_id*2)+1 };
 
+    u8 do_drop = (pad & KEY_A);
+    u8 can_drop = (player_bomb_throttles[player_id] == 0) && is_pilot_entirely_on_screen(player_id, BOMB_COLLISION_OFFSET_LEFT, BOMB_COLLISION_OFFSET_RIGHT);
+    u8 bomb = find_player_bomb(player_id);
+
     // Drop bomb from the pilot position.
     // Constraint the bomb drop position to be entirely on screen
-    if (player_bombs[player_id] != 0 &&
-        player_bomb_throttles[player_id] == 0 &&
-        pad == KEY_A &&
-        is_pilot_entirely_on_screen(player_id, BOMB_COLLISION_OFFSET_LEFT, BOMB_COLLISION_OFFSET_RIGHT))
+    if (do_drop && can_drop && (bomb != 0xFF))
     {
-        // Pick an available bomb.
-        u8 b = (player_bombs[player_id] & BOMB_0) ? BOMB_0 : BOMB_1;
-        player_bombs[player_id] &= ~b;
+        use_player_bomb(player_id, bomb);
+        display_bombs(player_id);
+
         // Take into account the pilot x pos is actually shifted by 512 to handle screen borders.
-        drop_bomb(bomb_ids[b-1], (pilot->x>>4)-512, pilot->y+8);
+        drop_bomb(bomb_ids[bomb-1], (pilot->x>>4)-512, pilot->y+8);
         player_bomb_throttles[player_id] = 16;
     }
     else
@@ -60,14 +56,18 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
                     score_transaction(player_id, GAMEPLAY_SCORE_INCREMENT);
                     display_score(player_id);
 
-                    player_bombs[player_id] |= BOMB_0;
+                    release_player_bomb(player_id, BOMB_0);
+                    display_bombs(player_id);
+
                     init_explosion(bomb_ids[0], bomb->x, bomb->y+4);
                     spcPlaySound(0);
                 }
             }
             else // bomb hit the ground
             {
-                player_bombs[player_id] |= BOMB_0;
+                release_player_bomb(player_id, BOMB_0);
+                display_bombs(player_id);
+
                 init_explosion(bomb_ids[0], bomb->x, bomb->y);
                 spcPlaySound(0);
             }
@@ -87,14 +87,18 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
                     score_transaction(player_id, GAMEPLAY_SCORE_INCREMENT);
                     display_score(player_id);
 
-                    player_bombs[player_id] |= BOMB_1;
+                    release_player_bomb(player_id, BOMB_1);
+                    display_bombs(player_id);
+
                     init_explosion(bomb_ids[1], bomb->x, bomb->y+4);
                     spcPlaySound(0);
                 }
             }
             else // bomb hit the ground
             {
-                player_bombs[player_id] |= BOMB_1;
+                release_player_bomb(player_id, BOMB_1);
+                display_bombs(player_id);
+
                 init_explosion(bomb_ids[1], bomb->x, bomb->y);
                 spcPlaySound(0);
             }
@@ -108,8 +112,8 @@ u8 gameplay_loop()
     u8 frame = 0;
     u16 pad0, pad1;
 
-    player_bombs[0] = BOMB_0 | BOMB_1;
-    player_bombs[1] = BOMB_0 | BOMB_1;
+    release_player_bomb(0, BOMB_0 | BOMB_1);
+    release_player_bomb(1, BOMB_0 | BOMB_1);
 
     player_bomb_throttles[0] = 0;
     player_bomb_throttles[1] = 0;

@@ -9,6 +9,8 @@ struct state_t
     u16 player_scores[2];
     u8  player_cur_lives[2];
     u8  player_max_lives[2];
+    u8  player_cur_bombs[2];
+    u8  player_max_bombs[2];
     struct level_t * current_level;
 };
 
@@ -28,7 +30,16 @@ u8 is_player_enabled(u8 id);
 
 u8 is_game_over();
 
-void display_score();
+u8 find_player_bomb(u8 id);
+
+void use_player_bomb(u8 id, u8 bomb_flag);
+
+void release_player_bomb(u8 id, u8 bomb_flag);
+
+void display_score(u8 id);
+
 void display_lives();
+
+void display_bombs(u8 id);
 
 #endif // STATE_H
