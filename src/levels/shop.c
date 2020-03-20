@@ -3,7 +3,7 @@
 #include "shop.h"
 #include "state.h"
 
-#define SHOP_SIMPLE_BOMB_FLAG     0x01
+#define SHOP_EXTRA_BOMB_FLAG      0x01
 #define SHOP_EXTRA_LIFE_FLAG      0x02
 #define SHOP_POWER_PROPELANT_FLAG 0x04
 #define SHOP_MEGA_BOMB_FLAG       0x08
@@ -80,7 +80,7 @@ void init_shop_gfx()
 void init_shop_state(u8 level)
 {
     shop_current_selection = 0;
-    shop_available_items_mask = SHOP_SIMPLE_BOMB_FLAG | SHOP_EXTRA_LIFE_FLAG | SHOP_POWER_PROPELANT_FLAG;
+    shop_available_items_mask = SHOP_EXTRA_BOMB_FLAG | SHOP_EXTRA_LIFE_FLAG | SHOP_POWER_PROPELANT_FLAG;
     shop_selected_items_mask = 0;
     shop_input_throttle = 0;
 
@@ -202,10 +202,16 @@ u8 shop_selection()
 
                     if (flag & SHOP_EXTRA_LIFE_FLAG)
                     {
-                        max_out_player_life(0);
+                        max_out_player_lives(0);
+                    }
+
+                    if (flag & SHOP_EXTRA_BOMB_FLAG)
+                    {
+                        max_out_player_bombs(0);
                     }
 
                     display_score(0);
+                    display_bombs(0);
                     display_lives();
                 }
             }

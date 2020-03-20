@@ -25,8 +25,8 @@ void init_game_state(u8 mode)
     state.player_cur_bombs[0] = BOMB_0 | BOMB_1;
     state.player_cur_bombs[1] = (mode & GAME_MODE_FLAG_2P) ? BOMB_0 | BOMB_1 : 0;
 
-    state.player_max_bombs[0] = 2;
-    state.player_max_bombs[1] = 2;
+    state.player_max_bombs[0] = 1;
+    state.player_max_bombs[1] = 1;
 }
 
 struct level_t * get_current_level()
@@ -54,7 +54,7 @@ u8 score_transaction(u8 id, s16 points)
     }
 }
 
-void max_out_player_life(u8 id)
+void max_out_player_lives(u8 id)
 {
     state.player_cur_lives[id] = 3;
     state.player_max_lives[id] = 3;
@@ -95,6 +95,12 @@ void use_player_bomb(u8 id, u8 bomb_flag)
 void release_player_bomb(u8 id, u8 bomb_flag)
 {
     state.player_cur_bombs[id] |= bomb_flag;
+}
+
+void max_out_player_bombs(u8 id)
+{
+    state.player_cur_bombs[id] = BOMB_0 | BOMB_1;
+    state.player_max_bombs[id] = 2;
 }
 
 void display_score(u8 id)
