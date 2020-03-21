@@ -55,12 +55,19 @@ city_bg2.gfx: bkg_sky_4.bmp
 # Egypt level (mode 0 BGs)
 # BG0 used for the pyramid tiles. The tilemap is generated programmaticaly
 # This image will generate 2 4-colors palettes
-til_pyramid.pic: til_pyramid.bmp
+egypt_bg0.gfx: til_pyramid.bmp
 	$(GFXCONV) -gs8 -m -mR! -pc4 -pe0 -pr -fbmp -n $<
+	mv til_pyramid.pic egypt_bg0.pic
+	mv til_pyramid.pal egypt_bg0.pal
+	touch $@
 # BG1 used for static background
 # This image will generate 5 4-colors palettes
-bkg_egypt.pic: bkg_egypt.bmp
+egypt_bg1.gfx: bkg_egypt.bmp
 	$(GFXCONV) -gs8 -m -pc4 -pe0 -pr -fbmp -n $<
+	mv bkg_egypt.pic egypt_bg1.pic
+	mv bkg_egypt.pal egypt_bg1.pal
+	mv bkg_egypt.map egypt_bg1.map
+	touch $@
 
 # Sea level (mode 0 BGs)
 # BG0 used for the front sea waves.
@@ -85,19 +92,26 @@ airship_bg0.gfx: bkg_airship.bmp
 	mv bkg_airship.map airship_bg0.map
 	touch $@
 # This image will generate 1 16-colors palette
-airship_bg1.gfx: bkg_city0.bmp
+airship_city_bg1.gfx: bkg_city0.bmp
 	$(GFXCONV) -gs8 -m -pc16 -po16 -pe2 -pr -fbmp -n $<
-	mv bkg_city0.pic airship_bg1.til
-	mv bkg_city0.pal airship_bg1.pal
-	mv bkg_city0.map airship_bg1.map
+	mv bkg_city0.pic airship_city_bg1.til
+	mv bkg_city0.pal airship_city_bg1.pal
+	mv bkg_city0.map airship_city_bg1.map
 	touch $@
 # This image will generate 1 4-colors palette
 # TODO: this is exactely the same setup as in the city level
-airship_bg2.gfx: bkg_sky_4.bmp
+airship_city_bg2.gfx: bkg_sky_4.bmp
 	$(GFXCONV) -gs8 -m -pc4 -po4 -pe0 -pr -fbmp -n $<
-	mv bkg_sky_4.pic airship_bg2.til
-	mv bkg_sky_4.pal airship_bg2.pal
-	mv bkg_sky_4.map airship_bg2.map
+	mv bkg_sky_4.pic airship_city_bg2.til
+	mv bkg_sky_4.pal airship_city_bg2.pal
+	mv bkg_sky_4.map airship_city_bg2.map
+	touch $@
+# This image will generate 1 16-colors palette
+airship_egypt_bg1.gfx: bkg_egypt.bmp
+	$(GFXCONV) -gs8 -m -pc16 -po16 -pe2 -pr -fbmp -n $<
+	mv bkg_egypt.pic airship_egypt_bg1.til
+	mv bkg_egypt.pal airship_egypt_bg1.pal
+	mv bkg_egypt.map airship_egypt_bg1.map
 	touch $@
 
 # Larry's shop (Mode 1)
@@ -128,21 +142,22 @@ bkg_titlescreen.pic: bkg_titlescreen.bmp
 bkg_sky_16.pic: bkg_sky_16.bmp
 	$(GFXCONV) -gs8 -m -pc16 -po16 -pe3 -pr -fbmp -n $<
 
-gfx:	spr_game.pic		\
-		spr_editor.pic		\
-		fonts.gfx			\
-		city_bg0.gfx		\
-		city_bg1.gfx		\
-		city_bg2.gfx		\
-		til_pyramid.pic		\
-		bkg_egypt.pic		\
-		bkg_ship.pic		\
-		bkg_sea.pic			\
-		bkg_sea_back.pic	\
-		airship_bg0.gfx		\
-		airship_bg1.gfx		\
-		airship_bg2.gfx		\
-		shop_bg0.gfx		\
-		shop_bg1.gfx		\
-		bkg_titlescreen.pic	\
+gfx:	spr_game.pic			\
+		spr_editor.pic			\
+		fonts.gfx				\
+		city_bg0.gfx			\
+		city_bg1.gfx			\
+		city_bg2.gfx			\
+		egypt_bg0.gfx			\
+		egypt_bg1.gfx			\
+		bkg_ship.pic			\
+		bkg_sea.pic				\
+		bkg_sea_back.pic		\
+		airship_bg0.gfx			\
+		airship_city_bg1.gfx	\
+		airship_city_bg2.gfx	\
+		airship_egypt_bg1.gfx	\
+		shop_bg0.gfx			\
+		shop_bg1.gfx			\
+		bkg_titlescreen.pic		\
 		bkg_sky_16.pic

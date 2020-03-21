@@ -4,12 +4,12 @@
 #include "vfx.h"
 
 // backgrounds
-extern char bkg_egypt_til_begin, bkg_egypt_til_end;
-extern char bkg_egypt_pal_begin, bkg_egypt_pal_end;
-extern char bkg_egypt_map_begin, bkg_egypt_map_end;
+extern char egypt_bg0_til_begin, egypt_bg0_til_end;
+extern char egypt_bg0_pal_begin, egypt_bg0_pal_end;
 
-extern char til_pyramid_til_begin, til_pyramid_til_end;
-extern char til_pyramid_pal_begin, til_pyramid_pal_end;
+extern char egypt_bg1_til_begin, egypt_bg1_til_end;
+extern char egypt_bg1_pal_begin, egypt_bg1_pal_end;
+extern char egypt_bg1_map_begin, egypt_bg1_map_end;
 
 u16 egypt_bg0_scroll_x = 0;
 u16 egypt_bg1_scroll_x = 0;
@@ -34,28 +34,28 @@ void init_egypt_level_gfx()
     // Init backgrounds
     bgInitTileSet(
         0,
-        &til_pyramid_til_begin,
-        &til_pyramid_pal_begin,
+        &egypt_bg0_til_begin,
+        &egypt_bg0_pal_begin,
         0,
-        (&til_pyramid_til_end - &til_pyramid_til_begin),
-        (&til_pyramid_pal_end - &til_pyramid_pal_begin),
+        (&egypt_bg0_til_end - &egypt_bg0_til_begin),
+        (&egypt_bg0_pal_end - &egypt_bg0_pal_begin),
         BG_4COLORS0,
         VRAM_ADDR_BG0_GFX
     );
     bgInitTileSet(
         1,
-        &bkg_egypt_til_begin,
-        &bkg_egypt_pal_begin,
+        &egypt_bg1_til_begin,
+        &egypt_bg1_pal_begin,
         0,
-        (&bkg_egypt_til_end - &bkg_egypt_til_begin),
-        (&bkg_egypt_pal_end - &bkg_egypt_pal_begin),
+        (&egypt_bg1_til_end - &egypt_bg1_til_begin),
+        (&egypt_bg1_pal_end - &egypt_bg1_pal_begin),
         BG_4COLORS0,
         VRAM_ADDR_BG1_GFX
     );
     bgInitMapSet(
         1,
-        &bkg_egypt_map_begin,
-        (&bkg_egypt_map_end - &bkg_egypt_map_begin),
+        &egypt_bg1_map_begin,
+        (&egypt_bg1_map_end - &egypt_bg1_map_begin),
         SC_32x32,
         VRAM_ADDR_BG1_MAP
     );
@@ -143,7 +143,7 @@ void build_egypt_level_editor_tilemap(u16 * tilemap)
         {
             u16 tile = tilemap[(j*32)+i];
             egypt_level_tilemap[j][i] = tile;
-            
+
             if (tile > 0 && tile < TIL_PYRAMID_BROKEN_FIRST_ID)
             {
                 egypt_block_count++;

@@ -84,25 +84,25 @@ city_bg2_map_begin:
 city_bg2_map_end:
 
 ; Egypt level
-til_pyramid_til_begin:
-.incbin "til_pyramid.pic"
-til_pyramid_til_end:
+egypt_bg0_til_begin:
+.incbin "egypt_bg0.pic"
+egypt_bg0_til_end:
 
-til_pyramid_pal_begin:
-.incbin "til_pyramid.pal"
-til_pyramid_pal_end:
+egypt_bg0_pal_begin:
+.incbin "egypt_bg0.pal"
+egypt_bg0_pal_end:
 
-bkg_egypt_til_begin:
-.incbin "bkg_egypt.pic"
-bkg_egypt_til_end:
+egypt_bg1_til_begin:
+.incbin "egypt_bg1.pic"
+egypt_bg1_til_end:
 
-bkg_egypt_pal_begin:
-.incbin "bkg_egypt.pal"
-bkg_egypt_pal_end:
+egypt_bg1_pal_begin:
+.incbin "egypt_bg1.pal"
+egypt_bg1_pal_end:
 
-bkg_egypt_map_begin:
-.incbin "bkg_egypt.map"
-bkg_egypt_map_end:
+egypt_bg1_map_begin:
+.incbin "egypt_bg1.map"
+egypt_bg1_map_end:
 
 .ends
 
@@ -158,29 +158,29 @@ airship_bg0_map_begin:
 .incbin "airship_bg0.map"
 airship_bg0_map_end:
 
-airship_bg1_til_begin:
-.incbin "airship_bg1.til"
-airship_bg1_til_end:
+airship_city_bg1_til_begin:
+.incbin "airship_city_bg1.til"
+airship_city_bg1_til_end:
 
-airship_bg1_pal_begin:
-.incbin "airship_bg1.pal"
-airship_bg1_pal_end:
+airship_city_bg1_pal_begin:
+.incbin "airship_city_bg1.pal"
+airship_city_bg1_pal_end:
 
-airship_bg1_map_begin:
-.incbin "airship_bg1.map"
-airship_bg1_map_end:
+airship_city_bg1_map_begin:
+.incbin "airship_city_bg1.map"
+airship_city_bg1_map_end:
 
-airship_bg2_til_begin:
-.incbin "airship_bg2.til"
-airship_bg2_til_end:
+airship_city_bg2_til_begin:
+.incbin "airship_city_bg2.til"
+airship_city_bg2_til_end:
 
-airship_bg2_pal_begin:
-.incbin "airship_bg2.pal"
-airship_bg2_pal_end:
+airship_city_bg2_pal_begin:
+.incbin "airship_city_bg2.pal"
+airship_city_bg2_pal_end:
 
-airship_bg2_map_begin:
-.incbin "airship_bg2.map"
-airship_bg2_map_end:
+airship_city_bg2_map_begin:
+.incbin "airship_city_bg2.map"
+airship_city_bg2_map_end:
 
 .ends
 
@@ -206,5 +206,17 @@ shop_bg1_pal_end:
 shop_bg1_map_begin:
 .incbin "shop_bg1.map"
 shop_bg1_map_end:
+
+airship_egypt_bg1_til_begin:
+.incbin "airship_egypt_bg1.til"
+airship_egypt_bg1_til_end:
+
+airship_egypt_bg1_pal_begin:
+.incbin "airship_egypt_bg1.pal"
+airship_egypt_bg1_pal_end:
+
+airship_egypt_bg1_map_begin:
+.incbin "airship_egypt_bg1.map"
+airship_egypt_bg1_map_end:
 
 .ends

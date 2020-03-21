@@ -31,7 +31,7 @@ struct level_t
 
 struct level_manager_t
 {
-    struct level_t levels[8];
+    struct level_t levels[16];
     u8             level_count;
     u8             current;
     u8             pad_0;

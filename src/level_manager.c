@@ -54,10 +54,11 @@ struct level_t * level_manager_init(u8 game_mode)
         level_manager.levels[i].loop                    = gameplay_loop;
         i++;
 
-        level_manager.levels[i].gfx_initializer         = init_airship_cutscene_gfx;
-        level_manager.levels[i].state_initializer       = init_airship_cutscene_state;
+        level_manager.levels[i].gfx_initializer         = init_airship_city_gfx;
+        level_manager.levels[i].state_initializer       = init_airship_state;
         level_manager.levels[i].tilemap_builder         = do_nothing_tilemap_builder;
-        level_manager.levels[i].loop                    = airship_cutscene_loop;
+        level_manager.levels[i].gfx_updater             = update_city_level_gfx;
+        level_manager.levels[i].loop                    = airship_loop;
         i++;
 
         level_manager.levels[i].gfx_initializer         = init_shop_gfx;
@@ -65,34 +66,6 @@ struct level_t * level_manager_init(u8 game_mode)
         level_manager.levels[i].tilemap_builder         = do_nothing_tilemap_builder;
         level_manager.levels[i].loop                    = shop_loop;
         i++;
-
-#if 0
-        level_manager.levels[i].level                   = 0;
-        level_manager.levels[i].sub_level               = 1;
-        level_manager.levels[i].speed                   = 12;
-        level_manager.levels[i].state_initializer       = init_city_level_state;
-        level_manager.levels[i].state_end_level_checker = check_city_level_done;
-        level_manager.levels[i].gfx_initializer         = init_city_level_gfx;
-        level_manager.levels[i].gfx_updater             = update_city_level_gfx;
-        level_manager.levels[i].tilemap_builder         = build_city_level_tilemap;
-        level_manager.levels[i].bomb_collider           = check_city_level_bomb_collision;
-        level_manager.levels[i].pilot_collider          = check_city_level_pilot_collision;
-        level_manager.levels[i].loop                    = gameplay_loop;
-        i++;
-
-        level_manager.levels[i].level                   = 0;
-        level_manager.levels[i].sub_level               = 2;
-        level_manager.levels[i].speed                   = 16;
-        level_manager.levels[i].state_initializer       = init_city_level_state;
-        level_manager.levels[i].state_end_level_checker = check_city_level_done;
-        level_manager.levels[i].gfx_initializer         = init_city_level_gfx;
-        level_manager.levels[i].gfx_updater             = update_city_level_gfx;
-        level_manager.levels[i].tilemap_builder         = build_city_level_tilemap;
-        level_manager.levels[i].bomb_collider           = check_city_level_bomb_collision;
-        level_manager.levels[i].pilot_collider          = check_city_level_pilot_collision;
-        level_manager.levels[i].loop                    = gameplay_loop;
-        i++;
-#endif
 
         level_manager.levels[i].level                   = 1;
         level_manager.levels[i].sub_level               = 0;
@@ -105,6 +78,13 @@ struct level_t * level_manager_init(u8 game_mode)
         level_manager.levels[i].bomb_collider           = check_egypt_level_bomb_collision;
         level_manager.levels[i].pilot_collider          = check_egypt_level_pilot_collision;
         level_manager.levels[i].loop                    = gameplay_loop;
+        i++;
+
+        level_manager.levels[i].gfx_initializer         = init_airship_egypt_gfx;
+        level_manager.levels[i].state_initializer       = init_airship_state;
+        level_manager.levels[i].tilemap_builder         = do_nothing_tilemap_builder;
+        level_manager.levels[i].gfx_updater             = update_egypt_level_gfx;
+        level_manager.levels[i].loop                    = airship_loop;
         i++;
 
         level_manager.levels[i].level                   = 2;

@@ -3,10 +3,12 @@
 
 #include <snes.h>
 
-void init_airship_cutscene_gfx();
+void init_airship_city_gfx();
 
-void init_airship_cutscene_state(u8 level);
+void init_airship_egypt_gfx();
 
-u8 airship_cutscene_loop();
+void init_airship_state(u8 level);
+
+u8 airship_loop();
 
 #endif // AIRSHIP_H
