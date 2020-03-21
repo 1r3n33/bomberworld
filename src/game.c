@@ -28,7 +28,7 @@ u8 run_game(u8 mode)
     {
         current_level->gfx_initializer();
 
-        current_level->state_initializer(current_level->sub_level);
+        current_level->state_initializer(current_level->level);
 
         if (mode & GAME_MODE_FLAG_EDITOR_MAP)
         {

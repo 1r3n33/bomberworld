@@ -30,7 +30,7 @@ u8 shop_available_items_mask;
 u8 shop_selected_items_mask;
 u8 shop_input_throttle;
 
-u16 shop_prices[] = { 200, 200, 200, 200, 200 };
+u16 shop_prices[] = { 400, 400, 1000, 1000, 1000 };
 
 void init_shop_gfx()
 {
@@ -77,11 +77,39 @@ void init_shop_gfx()
     bgSetScroll(3, 0, 0xFF);
 }
 
+void set_selected(u8 id)
+{
+    shop_bg0_map[16][(id*6)+2] = SHOP_GFX_GREEN_CHECK_MARK_4X4+0;
+    shop_bg0_map[16][(id*6)+3] = SHOP_GFX_GREEN_CHECK_MARK_4X4+1;
+    shop_bg0_map[16][(id*6)+4] = SHOP_GFX_GREEN_CHECK_MARK_4X4+2;
+    shop_bg0_map[16][(id*6)+5] = SHOP_GFX_GREEN_CHECK_MARK_4X4+3;
+    shop_bg0_map[17][(id*6)+2] = SHOP_GFX_GREEN_CHECK_MARK_4X4+4;
+    shop_bg0_map[17][(id*6)+3] = SHOP_GFX_GREEN_CHECK_MARK_4X4+5;
+    shop_bg0_map[17][(id*6)+4] = SHOP_GFX_GREEN_CHECK_MARK_4X4+6;
+    shop_bg0_map[17][(id*6)+5] = SHOP_GFX_GREEN_CHECK_MARK_4X4+7;
+    shop_bg0_map[18][(id*6)+2] = SHOP_GFX_GREEN_CHECK_MARK_4X4+8;
+    shop_bg0_map[18][(id*6)+3] = SHOP_GFX_GREEN_CHECK_MARK_4X4+9;
+    shop_bg0_map[18][(id*6)+4] = SHOP_GFX_GREEN_CHECK_MARK_4X4+10;
+    shop_bg0_map[18][(id*6)+5] = SHOP_GFX_GREEN_CHECK_MARK_4X4+11;
+    shop_bg0_map[19][(id*6)+2] = SHOP_GFX_GREEN_CHECK_MARK_4X4+12;
+    shop_bg0_map[19][(id*6)+3] = SHOP_GFX_GREEN_CHECK_MARK_4X4+13;
+    shop_bg0_map[19][(id*6)+4] = SHOP_GFX_GREEN_CHECK_MARK_4X4+14;
+    shop_bg0_map[19][(id*6)+5] = SHOP_GFX_GREEN_CHECK_MARK_4X4+15;
+}
+
 void init_shop_state(u8 level)
 {
+    u8 available_items[] =
+    {
+        SHOP_EXTRA_BOMB_FLAG | SHOP_EXTRA_LIFE_FLAG | SHOP_POWER_PROPELANT_FLAG,
+        SHOP_EXTRA_BOMB_FLAG | SHOP_EXTRA_LIFE_FLAG | SHOP_POWER_PROPELANT_FLAG | SHOP_MEGA_BOMB_FLAG,
+        SHOP_EXTRA_BOMB_FLAG | SHOP_EXTRA_LIFE_FLAG | SHOP_POWER_PROPELANT_FLAG | SHOP_MEGA_BOMB_FLAG | SHOP_UFO_FLAG,
+    };
+
     shop_current_selection = 0;
-    shop_available_items_mask = SHOP_EXTRA_BOMB_FLAG | SHOP_EXTRA_LIFE_FLAG | SHOP_POWER_PROPELANT_FLAG;
-    shop_selected_items_mask = 0;
+
+    shop_available_items_mask = available_items[level];
+
     shop_input_throttle = 0;
 
     // Set items
@@ -92,6 +120,18 @@ void init_shop_state(u8 level)
         {
             shop_bg0_map[j][i] = 0;
         }
+    }
+
+    shop_selected_items_mask = 0;
+    if (get_player_max_bombs(0) > 1)
+    {
+        shop_selected_items_mask |= SHOP_EXTRA_BOMB_FLAG;
+        set_selected(0);
+    }
+    if (get_player_max_lives(0) > 2)
+    {
+        shop_selected_items_mask |= SHOP_EXTRA_LIFE_FLAG;
+        set_selected(1);
     }
 
     for (i=0; i<5; i++)
@@ -183,22 +223,7 @@ u8 shop_selection()
                 if (flag && score_transaction(0, -shop_prices[shop_current_selection]))
                 {
                     shop_selected_items_mask |= flag;
-                    shop_bg0_map[16][(shop_current_selection*6)+2] = SHOP_GFX_GREEN_CHECK_MARK_4X4+0;
-                    shop_bg0_map[16][(shop_current_selection*6)+3] = SHOP_GFX_GREEN_CHECK_MARK_4X4+1;
-                    shop_bg0_map[16][(shop_current_selection*6)+4] = SHOP_GFX_GREEN_CHECK_MARK_4X4+2;
-                    shop_bg0_map[16][(shop_current_selection*6)+5] = SHOP_GFX_GREEN_CHECK_MARK_4X4+3;
-                    shop_bg0_map[17][(shop_current_selection*6)+2] = SHOP_GFX_GREEN_CHECK_MARK_4X4+4;
-                    shop_bg0_map[17][(shop_current_selection*6)+3] = SHOP_GFX_GREEN_CHECK_MARK_4X4+5;
-                    shop_bg0_map[17][(shop_current_selection*6)+4] = SHOP_GFX_GREEN_CHECK_MARK_4X4+6;
-                    shop_bg0_map[17][(shop_current_selection*6)+5] = SHOP_GFX_GREEN_CHECK_MARK_4X4+7;
-                    shop_bg0_map[18][(shop_current_selection*6)+2] = SHOP_GFX_GREEN_CHECK_MARK_4X4+8;
-                    shop_bg0_map[18][(shop_current_selection*6)+3] = SHOP_GFX_GREEN_CHECK_MARK_4X4+9;
-                    shop_bg0_map[18][(shop_current_selection*6)+4] = SHOP_GFX_GREEN_CHECK_MARK_4X4+10;
-                    shop_bg0_map[18][(shop_current_selection*6)+5] = SHOP_GFX_GREEN_CHECK_MARK_4X4+11;
-                    shop_bg0_map[19][(shop_current_selection*6)+2] = SHOP_GFX_GREEN_CHECK_MARK_4X4+12;
-                    shop_bg0_map[19][(shop_current_selection*6)+3] = SHOP_GFX_GREEN_CHECK_MARK_4X4+13;
-                    shop_bg0_map[19][(shop_current_selection*6)+4] = SHOP_GFX_GREEN_CHECK_MARK_4X4+14;
-                    shop_bg0_map[19][(shop_current_selection*6)+5] = SHOP_GFX_GREEN_CHECK_MARK_4X4+15;
+                    set_selected(shop_current_selection);
 
                     if (flag & SHOP_EXTRA_LIFE_FLAG)
                     {

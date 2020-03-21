@@ -27,7 +27,6 @@ struct level_t * level_manager_init(u8 game_mode)
     if (game_mode & GAME_MODE_FLAG_EDITOR_MAP)
     {
         level_manager.levels[i].level                   = 0;
-        level_manager.levels[i].sub_level               = 0;
         level_manager.levels[i].speed                   = 8;
         level_manager.levels[i].state_initializer       = init_city_level_state;
         level_manager.levels[i].state_end_level_checker = check_city_level_done;
@@ -42,7 +41,6 @@ struct level_t * level_manager_init(u8 game_mode)
     else
     {
         level_manager.levels[i].level                   = 0;
-        level_manager.levels[i].sub_level               = 0;
         level_manager.levels[i].speed                   = 8;
         level_manager.levels[i].state_initializer       = init_city_level_state;
         level_manager.levels[i].state_end_level_checker = check_city_level_done;
@@ -61,6 +59,7 @@ struct level_t * level_manager_init(u8 game_mode)
         level_manager.levels[i].loop                    = airship_loop;
         i++;
 
+        level_manager.levels[i].level                   = 0;
         level_manager.levels[i].gfx_initializer         = init_shop_gfx;
         level_manager.levels[i].state_initializer       = init_shop_state;
         level_manager.levels[i].tilemap_builder         = do_nothing_tilemap_builder;
@@ -68,7 +67,6 @@ struct level_t * level_manager_init(u8 game_mode)
         i++;
 
         level_manager.levels[i].level                   = 1;
-        level_manager.levels[i].sub_level               = 0;
         level_manager.levels[i].speed                   = 8;
         level_manager.levels[i].state_initializer       = init_egypt_level_state;
         level_manager.levels[i].state_end_level_checker = check_egypt_level_done;
@@ -87,8 +85,14 @@ struct level_t * level_manager_init(u8 game_mode)
         level_manager.levels[i].loop                    = airship_loop;
         i++;
 
+        level_manager.levels[i].level                   = 1;
+        level_manager.levels[i].gfx_initializer         = init_shop_gfx;
+        level_manager.levels[i].state_initializer       = init_shop_state;
+        level_manager.levels[i].tilemap_builder         = do_nothing_tilemap_builder;
+        level_manager.levels[i].loop                    = shop_loop;
+        i++;
+
         level_manager.levels[i].level                   = 2;
-        level_manager.levels[i].sub_level               = 0;
         level_manager.levels[i].speed                   = 8;
         level_manager.levels[i].state_initializer       = init_sea_level_state;
         level_manager.levels[i].state_end_level_checker = check_sea_level_done;

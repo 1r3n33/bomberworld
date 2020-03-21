@@ -54,6 +54,11 @@ u8 score_transaction(u8 id, s16 points)
     }
 }
 
+u8 get_player_max_lives(u8 id)
+{
+    return state.player_max_lives[id];
+}
+
 void max_out_player_lives(u8 id)
 {
     state.player_cur_lives[id] = 3;
@@ -73,6 +78,11 @@ u8 is_player_enabled(u8 id)
 u8 is_game_over()
 {
     return (state.player_cur_lives[0] == 0 && state.player_cur_lives[1] == 0);
+}
+
+u8 get_player_max_bombs(u8 id)
+{
+    return state.player_max_bombs[id];
 }
 
 u8 find_player_bomb(u8 id)

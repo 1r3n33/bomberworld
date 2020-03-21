@@ -22,6 +22,8 @@ struct level_t * get_next_level();
 
 u8 score_transaction(u8 id, s16 points);
 
+u8 get_player_max_lives(u8 id);
+
 void max_out_player_lives(u8 id);
 
 u8 set_player_death(u8 id);
@@ -29,6 +31,8 @@ u8 set_player_death(u8 id);
 u8 is_player_enabled(u8 id);
 
 u8 is_game_over();
+
+u8 get_player_max_bombs(u8 id);
 
 u8 find_player_bomb(u8 id);
 
