@@ -45,12 +45,11 @@ void max_out_player_bombs(u8 id);
 
 void max_out_player_mega_bombs(u8 id);
 
-void display_score(u8 id);
-
-void display_lives();
-
-void display_bombs(u8 id);
-
-void display_mega_bombs(u8 id);
+void compute_ui_elements();
+void display_ui_score(u8 id);
+void display_ui_lives(u8 id);
+void display_ui_bombs(u8 id);
+void display_ui_mega_bomb(u8 id);
+void display_ui_elements(u8 id);
 
 #endif // STATE_H

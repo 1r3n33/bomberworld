@@ -28,7 +28,7 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
     if (do_drop && can_drop && (bomb != 0xFF))
     {
         use_player_bomb(player_id, bomb);
-        display_bombs(player_id);
+        display_ui_bombs(player_id);
 
         // Take into account the pilot x pos is actually shifted by 512 to handle screen borders.
         drop_bomb(bomb_ids[bomb-1], (pilot->x>>4)-512, pilot->y+8);
@@ -54,10 +54,10 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
                 if (collision > 0)
                 {
                     score_transaction(player_id, GAMEPLAY_SCORE_INCREMENT);
-                    display_score(player_id);
+                    display_ui_score(player_id);
 
                     release_player_bomb(player_id, BOMB_0);
-                    display_bombs(player_id);
+                    display_ui_bombs(player_id);
 
                     init_explosion(bomb_ids[0], bomb->x, bomb->y+4);
                     spcPlaySound(0);
@@ -66,7 +66,7 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
             else // bomb hit the ground
             {
                 release_player_bomb(player_id, BOMB_0);
-                display_bombs(player_id);
+                display_ui_bombs(player_id);
 
                 init_explosion(bomb_ids[0], bomb->x, bomb->y);
                 spcPlaySound(0);
@@ -85,10 +85,10 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
                 if (collision > 0)
                 {
                     score_transaction(player_id, GAMEPLAY_SCORE_INCREMENT);
-                    display_score(player_id);
+                    display_ui_score(player_id);
 
                     release_player_bomb(player_id, BOMB_1);
-                    display_bombs(player_id);
+                    display_ui_bombs(player_id);
 
                     init_explosion(bomb_ids[1], bomb->x, bomb->y+4);
                     spcPlaySound(0);
@@ -97,7 +97,7 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
             else // bomb hit the ground
             {
                 release_player_bomb(player_id, BOMB_1);
-                display_bombs(player_id);
+                display_ui_bombs(player_id);
 
                 init_explosion(bomb_ids[1], bomb->x, bomb->y);
                 spcPlaySound(0);

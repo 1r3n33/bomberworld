@@ -57,16 +57,8 @@ u8 run_game(u8 mode)
             disable_explosion(2);
             disable_explosion(3);
 
-            display_score(0);
-            display_score(1);
-
-            display_bombs(0);
-            display_bombs(1);
-
-            display_mega_bombs(0);
-            display_mega_bombs(1);
-
-            display_lives();
+            display_ui_elements(0);
+            display_ui_elements(1);
 
             setFadeEffect(FADE_IN);
             u8 res = current_level->loop();

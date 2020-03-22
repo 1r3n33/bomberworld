@@ -31,9 +31,9 @@ void set_text(u16 id, u8 * text, u8 x, u8 y)
 
 void set_text_number(u16 id, u16 number, u8 x, u8 y)
 {
-    char text[8];
+    char text[6];
 
-    u8 i = 7;
+    u8 i = 5;
     do
     {
         u16 div = number/10;

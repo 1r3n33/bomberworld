@@ -8,6 +8,18 @@
 
 struct state_t state;
 
+u16 display_scores_oam_ids[2];
+u8 display_scores_oam_pos[2];
+
+u16 display_lives_oam_ids[2];
+u8 display_lives_oam_pos[2];
+
+u16 display_bombs_oam_ids[2];
+u8 display_bombs_oam_pos[2];
+
+u16 display_mega_bombs_oam_ids[2];
+u8 display_mega_bombs_oam_pos[2];
+
 void init_game_state(u8 mode)
 {
     state.game_mode = mode;
@@ -25,16 +37,18 @@ void init_game_state(u8 mode)
     state.player_cur_lives[1] = (mode & GAME_MODE_FLAG_2P) ? 2 : 0;
 
     state.player_max_lives[0] = 2;
-    state.player_max_lives[1] = 2;
+    state.player_max_lives[1] = (mode & GAME_MODE_FLAG_2P) ? 2 : 0;
 
     state.player_cur_bombs[0] = BOMB_0 | BOMB_1;
     state.player_cur_bombs[1] = (mode & GAME_MODE_FLAG_2P) ? BOMB_0 | BOMB_1 : 0;
 
     state.player_max_bombs[0] = 1;
-    state.player_max_bombs[1] = 1;
+    state.player_max_bombs[1] = (mode & GAME_MODE_FLAG_2P) ? 1 : 0;
 
     state.player_mega_bombs[0] = 0;
-    state.player_mega_bombs[1] = 0;
+    state.player_mega_bombs[1] = (mode & GAME_MODE_FLAG_2P) ? 0 : 0;
+
+    compute_ui_elements();
 }
 
 struct level_t * get_current_level()
@@ -126,129 +140,86 @@ void max_out_player_mega_bombs(u8 id)
     state.player_mega_bombs[id] = 1;
 }
 
-void display_score(u8 id)
-{
-    if (id == 0)
-    {
-        set_text_number(OBJ_TEXT, state.player_scores[0], 0, 0);
-    }
-    else
-    {
-        set_text_number(OBJ_TEXT+32, state.player_scores[1], SCREEN_WIDTH-64, 0);
-    }
-}
-
 #define EMPTY_HEART (96+32)
 #define PLAIN_HEART (97+32)
-
-void display_lives()
-{
-    u8 player_enabled[] = {
-        (state.player_cur_lives[0] != 0),
-        (state.player_cur_lives[1] != 0),
-    };
-
-    u8 hearts[] = { 0, 0, 0 };
-
-    if (player_enabled[0])
-    {
-        hearts[0] = state.player_cur_lives[0] > 1 ? PLAIN_HEART : EMPTY_HEART;
-        if (state.player_max_lives[0] > 2)
-        {
-            hearts[1] = state.player_cur_lives[0] > 2 ? PLAIN_HEART : EMPTY_HEART;
-        }
-        else
-        {
-            hearts[1] = 0;
-        }
-    }
-    else
-    {
-        hearts[0] = 0;
-    }
-    set_text(OBJ_TEXT+64, hearts, 72, 0);
-
-    if (player_enabled[1])
-    {
-        hearts[0] = state.player_cur_lives[1] > 1 ? PLAIN_HEART : EMPTY_HEART;
-        if (state.player_max_lives[1] > 2)
-        {
-            hearts[1] = state.player_cur_lives[1] > 2 ? PLAIN_HEART : EMPTY_HEART;
-        }
-        else
-        {
-            hearts[1] = 0;
-        }
-    }
-    else
-    {
-        hearts[0] = 0;
-    }
-    set_text(OBJ_TEXT+72, hearts, SCREEN_WIDTH-88, 0);
-}
-
 #define EMPTY_BOMB (98+32)
 #define PLAIN_BOMB (99+32)
-
-void display_bombs(u8 id)
-{
-    u8 bombs[] = { 0, 0, 0 };
-
-    if (state.player_cur_lives[id] != 0)
-    {
-        bombs[0] = state.player_cur_bombs[id] & BOMB_0 ? PLAIN_BOMB : EMPTY_BOMB;
-        if (state.player_max_bombs[id] > 1)
-        {
-            bombs[1] = state.player_cur_bombs[id] & BOMB_1 ? PLAIN_BOMB : EMPTY_BOMB;
-        }
-        else
-        {
-            bombs[1] = 0;
-        }
-    }
-    else
-    {
-        bombs[0] = 0;
-    }
-
-    if (id == 0)
-    {
-        set_text(OBJ_TEXT+80, bombs, 96, 0);
-    }
-    else
-    {
-        set_text(OBJ_TEXT+88, bombs, SCREEN_WIDTH-112, 0);
-    }
-}
-
 #define MEGA_BOMB (100+32)
 
-void display_mega_bombs(u8 id)
+void compute_ui_elements()
 {
-    u8 bombs[] = { 0, 0 };
+    display_scores_oam_ids[0] = OBJ_TEXT;
+    display_scores_oam_pos[0] = 0;
 
-    if (state.player_cur_lives[id] != 0)
+    display_lives_oam_ids[0] = display_scores_oam_ids[0] + (6*4);
+    display_lives_oam_pos[0] = display_scores_oam_pos[0] + (6*8) + 1;
+
+    display_bombs_oam_ids[0] = display_lives_oam_ids[0] + ((state.player_max_lives[0]-1)*4);
+    display_bombs_oam_pos[0] = display_lives_oam_pos[0] + ((state.player_max_lives[0]-1)*8) - 1;
+
+    display_mega_bombs_oam_ids[0] = display_bombs_oam_ids[0] + (state.player_max_bombs[0]*4);
+    display_mega_bombs_oam_pos[0] = display_bombs_oam_pos[0] + (state.player_max_bombs[0]*8);
+
+    display_scores_oam_ids[1] = OBJ_TEXT + 64;
+    display_scores_oam_pos[1] = SCREEN_WIDTH - (6*8);
+
+    display_lives_oam_ids[1] = display_scores_oam_ids[1] + (6*4);
+    display_lives_oam_pos[1] = display_scores_oam_pos[1] - ((state.player_max_lives[1]-1)*8);
+
+    display_bombs_oam_ids[1] = display_lives_oam_ids[1] + ((state.player_max_lives[1]-1)*4);
+    display_bombs_oam_pos[1] = display_lives_oam_pos[1] - (state.player_max_bombs[1]*8);
+
+    display_mega_bombs_oam_ids[1] = display_bombs_oam_ids[1] + (state.player_max_bombs[1]*4);
+    display_mega_bombs_oam_pos[1] = display_bombs_oam_pos[1] - 8;
+}
+
+void display_ui_score(u8 id)
+{
+    set_text_number(display_scores_oam_ids[id], state.player_scores[id], display_scores_oam_pos[id], 0);
+}
+
+void display_ui_lives(u8 id)
+{
+    u8 hearts[] = { 0, 0, 0 };
+    hearts[0] = (state.player_cur_lives[id] > 1) ? PLAIN_HEART : EMPTY_HEART;
+    hearts[1] = (state.player_max_lives[id] > 2) ? (state.player_cur_lives[id] > 2) ? PLAIN_HEART : EMPTY_HEART : 0;
+    set_text(display_lives_oam_ids[id], hearts, display_lives_oam_pos[id], 0);
+}
+
+void display_ui_bombs(u8 id)
+{
+    u8 bombs[] = { 0, 0, 0 };
+    bombs[0] = (state.player_cur_bombs[id] & BOMB_0) ? PLAIN_BOMB : EMPTY_BOMB;
+    bombs[1] = (state.player_max_bombs[id] > 1) ? (state.player_cur_bombs[id] & BOMB_1) ? PLAIN_BOMB : EMPTY_BOMB : 0;
+    set_text(display_bombs_oam_ids[id], bombs, display_bombs_oam_pos[id], 0);
+}
+
+void display_ui_mega_bomb(u8 id)
+{
+    u8 mega_bomb[] = { 0, 0 };
+    mega_bomb[0] = (state.player_mega_bombs[id] > 0) ? MEGA_BOMB : 0;
+    set_text(display_mega_bombs_oam_ids[id], mega_bomb, display_mega_bombs_oam_pos[id], 0);
+}
+
+void display_ui_elements(u8 id)
+{
+    if (state.player_max_lives[id] > 0)
     {
-        if (state.player_mega_bombs[id] > 0)
+        display_ui_score(id);
+
+        if (state.player_cur_lives[id] > 0)
         {
-            bombs[0] = MEGA_BOMB;
+            display_ui_lives(id);
+            display_ui_bombs(id);
+            display_ui_mega_bomb(id);
         }
         else
         {
-            bombs[0] = 0;
+            u16 i;
+            for (i=display_lives_oam_ids[id]; i<=display_mega_bombs_oam_ids[id]; i+=4)
+            {
+                oamSetVisible(i, 1);
+            }
         }
-    }
-    else
-    {
-        bombs[0] = 0;
-    }
-
-    if (id == 0)
-    {
-        set_text(OBJ_TEXT+96, bombs, 112, 0);
-    }
-    else
-    {
-        set_text(OBJ_TEXT+104, bombs, SCREEN_WIDTH-120, 0);
     }
 }

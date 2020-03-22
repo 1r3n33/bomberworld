@@ -244,10 +244,9 @@ u8 shop_selection()
                         max_out_player_mega_bombs(0);
                     }
 
-                    display_score(0);
-                    display_bombs(0);
-                    display_mega_bombs(0);
-                    display_lives();
+                    compute_ui_elements();
+                    display_ui_elements(0);
+                    display_ui_elements(1);
                 }
             }
         }
