@@ -63,6 +63,9 @@ u8 run_game(u8 mode)
             display_bombs(0);
             display_bombs(1);
 
+            display_mega_bombs(0);
+            display_mega_bombs(1);
+
             display_lives();
 
             setFadeEffect(FADE_IN);

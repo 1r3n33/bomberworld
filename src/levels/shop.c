@@ -1,4 +1,5 @@
 #include <snes.h>
+#include "bomb.h"
 #include "graphics.h"
 #include "shop.h"
 #include "state.h"
@@ -30,7 +31,7 @@ u8 shop_available_items_mask;
 u8 shop_selected_items_mask;
 u8 shop_input_throttle;
 
-u16 shop_prices[] = { 400, 400, 1000, 1000, 1000 };
+u16 shop_prices[] = { 400, 400, 1000, 1000, 2000 };
 
 void init_shop_gfx()
 {
@@ -165,6 +166,9 @@ void init_shop_state(u8 level)
         SC_32x32,
         VRAM_ADDR_BG0_MAP
     );
+
+    release_player_bomb(0, BOMB_0 | BOMB_1);
+    release_player_bomb(1, BOMB_0 | BOMB_1);
 }
 
 u8 shop_selection()
@@ -235,8 +239,14 @@ u8 shop_selection()
                         max_out_player_bombs(0);
                     }
 
+                    if (flag & SHOP_MEGA_BOMB_FLAG)
+                    {
+                        max_out_player_mega_bombs(0);
+                    }
+
                     display_score(0);
                     display_bombs(0);
+                    display_mega_bombs(0);
                     display_lives();
                 }
             }
