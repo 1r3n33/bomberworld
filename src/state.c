@@ -25,13 +25,8 @@ void init_game_state(u8 mode)
     state.game_mode = mode;
     state.current_level = level_manager_init(mode);
 
-#if 1
     state.player_scores[0] = 0;
     state.player_scores[1] = 0;
-#else
-    state.player_scores[0] = 5000;
-    state.player_scores[1] = 5000;
-#endif
 
     state.player_cur_lives[0] = 2;
     state.player_cur_lives[1] = (mode & GAME_MODE_FLAG_2P) ? 2 : 0;
@@ -47,6 +42,13 @@ void init_game_state(u8 mode)
 
     state.player_mega_bombs[0] = 0;
     state.player_mega_bombs[1] = (mode & GAME_MODE_FLAG_2P) ? 0 : 0;
+
+#if 0
+    state.player_scores[0] = 5000;
+    state.player_scores[1] = 5000;
+    state.player_mega_bombs[0] = 1;
+    state.player_mega_bombs[1] = 1;
+#endif
 
     compute_ui_elements();
 }
@@ -135,6 +137,16 @@ void max_out_player_bombs(u8 id)
     state.player_max_bombs[id] = 2;
 }
 
+u8 find_player_mega_bomb(u8 id)
+{
+    return state.player_mega_bombs[id]; 
+}
+
+void use_player_mega_bomb(u8 id)
+{
+    state.player_mega_bombs[id] = 0;
+}
+
 void max_out_player_mega_bombs(u8 id)
 {
     state.player_mega_bombs[id] = 1;
@@ -197,7 +209,7 @@ void display_ui_bombs(u8 id)
 void display_ui_mega_bomb(u8 id)
 {
     u8 mega_bomb[] = { 0, 0 };
-    mega_bomb[0] = (state.player_mega_bombs[id] > 0) ? MEGA_BOMB : 0;
+    mega_bomb[0] = (state.player_mega_bombs[id] > 0) ? MEGA_BOMB : ' ';
     set_text(display_mega_bombs_oam_ids[id], mega_bomb, display_mega_bombs_oam_pos[id], 0);
 }
 

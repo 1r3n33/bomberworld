@@ -43,6 +43,10 @@ void release_player_bomb(u8 id, u8 bomb_flag);
 
 void max_out_player_bombs(u8 id);
 
+u8 find_player_mega_bomb(u8 id);
+
+void use_player_mega_bomb(u8 id);
+
 void max_out_player_mega_bombs(u8 id);
 
 void compute_ui_elements();

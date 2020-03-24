@@ -51,6 +51,8 @@ u8 run_game(u8 mode)
             init_bomb(1);
             init_bomb(2);
             init_bomb(3);
+            init_bomb(4);
+            init_bomb(5);
 
             disable_explosion(0);
             disable_explosion(1);

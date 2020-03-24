@@ -21,12 +21,14 @@ void init_graphics();
 #define OBJ_PILOT_EXPLOSION_0   16 //
 #define OBJ_PILOT_EXPLOSION_1   20 //
 
-#define OBJ_PILOT_0     24  //
-#define OBJ_P0_BOMB_0   28  // Draw bomb behind pilot_0
-#define OBJ_P0_BOMB_1   32  // Draw bomb behind pilot_0
-#define OBJ_PILOT_1     36  // Draw pilot_1 behind pilot_0 bombs
-#define OBJ_P1_BOMB_0   40  // Draw bomb behind pilot_1
-#define OBJ_P1_BOMB_1   44  // Draw bomb behind pilot_1
+#define OBJ_PILOT_0      24  //
+#define OBJ_P0_BOMB_0    28  // Draw bomb behind pilot_0
+#define OBJ_P0_BOMB_1    32  // Draw bomb behind pilot_0
+#define OBJ_P0_BOMB_MEGA 36  // Draw bomb behind pilot_0
+#define OBJ_PILOT_1      40  // Draw pilot_1 behind pilot_0 bombs
+#define OBJ_P1_BOMB_0    44  // Draw bomb behind pilot_1
+#define OBJ_P1_BOMB_1    48  // Draw bomb behind pilot_1
+#define OBJ_P1_BOMB_MEGA 52  // Draw bomb behind pilot_1
 
 #define OBJ_TEXT    256
 
@@ -40,6 +42,7 @@ void init_graphics();
 #define SPR_EXPLOSION_FRAME_1   12
 #define SPR_EXPLOSION_FRAME_2   14
 #define SPR_EXPLOSION_FRAME_3   32
+#define SPR_MEGA_BOMB           34
 
 #define SPR_ASCIITABLE          256
 

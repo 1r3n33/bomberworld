@@ -17,14 +17,13 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
     struct level_t * current_level = get_current_level();
 
     // Bomb ids of the current player.
-    u8 bomb_ids[] = { (player_id*2), (player_id*2)+1 };
+    u8 bomb_ids[] = { (player_id*3), (player_id*3)+1 };
 
-    u8 do_drop = (pad & KEY_A);
+    u16 do_drop = (pad & KEY_A);
     u8 can_drop = (player_bomb_throttles[player_id] == 0) && is_pilot_entirely_on_screen(player_id, BOMB_COLLISION_OFFSET_LEFT, BOMB_COLLISION_OFFSET_RIGHT);
     u8 bomb = find_player_bomb(player_id);
 
     // Drop bomb from the pilot position.
-    // Constraint the bomb drop position to be entirely on screen
     if (do_drop && can_drop && (bomb != 0xFF))
     {
         use_player_bomb(player_id, bomb);
@@ -106,6 +105,43 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
     }
 }
 
+void update_mega_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
+{
+    struct level_t * current_level = get_current_level();
+
+    // Bomb ids of the current player.
+    u8 bomb_id = (player_id*3)+2;
+
+    u16 do_drop = (pad & KEY_B);
+    u8 can_drop = find_player_mega_bomb(player_id) && is_pilot_entirely_on_screen(player_id, BOMB_COLLISION_OFFSET_LEFT, BOMB_COLLISION_OFFSET_RIGHT);
+
+    // Drop bomb from the pilot position.
+    if (do_drop && can_drop)
+    {
+        use_player_mega_bomb(player_id);
+        display_ui_mega_bomb(player_id);
+
+        // Take into account the pilot x pos is actually shifted by 512 to handle screen borders.
+        drop_bomb(bomb_id, (pilot->x>>4)-512, pilot->y+8);
+    }
+
+    struct bomb_t * bomb = get_bomb(bomb_id);
+    if (bomb->dropped)
+    {
+        move_bomb(bomb_id);
+        if (bomb->dropped)
+        {
+            u8 collision = bomb_tilemap_collision(bomb_id, current_level->bomb_collider);
+            if (collision > 0)
+            {
+            }
+        }
+        else // bomb hit the ground
+        {
+        }
+    }
+}
+
 // Internal gameplay loop returns 0 for reset, 1 for completed level, 2 for game over
 u8 gameplay_loop()
 {
@@ -157,13 +193,17 @@ u8 gameplay_loop()
         update_explosion(3);
 
         update_bombs(0, pad0, p0);
+        update_mega_bombs(0, pad0, p0);
         update_bombs(1, pad1, p1);
+        update_mega_bombs(1, pad1, p1);
 
-        u8 b2p0_collision = bomb_pilot_collision(get_bomb(2), p0);
         u8 b3p0_collision = bomb_pilot_collision(get_bomb(3), p0);
+        u8 b4p0_collision = bomb_pilot_collision(get_bomb(4), p0);
+        u8 b5p0_collision = bomb_pilot_collision(get_bomb(5), p0);
 
         u8 b0p1_collision = bomb_pilot_collision(get_bomb(0), p1);
         u8 b1p1_collision = bomb_pilot_collision(get_bomb(1), p1);
+        u8 b2p1_collision = bomb_pilot_collision(get_bomb(2), p1);
 
         u8 p0_collision = pilot_tilemap_collision(0, current_level->pilot_collider);
         u8 p1_collision = pilot_tilemap_collision(1, current_level->pilot_collider);
@@ -173,14 +213,14 @@ u8 gameplay_loop()
             return 1;
         }
 
-        if (b2p0_collision | b3p0_collision | p0_collision)
+        if (b3p0_collision | b4p0_collision | b5p0_collision | p0_collision)
         {
             set_player_death(0);
             init_explosion(PILOT_0_EXPLOSION_ID, (p0->x>>4)-512, p0->y);
             return 2;
         }
 
-        if (b0p1_collision | b1p1_collision | p1_collision)
+        if (b0p1_collision | b1p1_collision | b2p1_collision | p1_collision)
         {
             set_player_death(1);
             init_explosion(PILOT_1_EXPLOSION_ID, (p1->x>>4)-512, p1->y);
