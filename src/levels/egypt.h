@@ -39,4 +39,6 @@ u8 check_egypt_level_pilot_collision(u8 x, u8 y);
 
 u8 check_egypt_level_done();
 
+void mega_bomb_collision(u8 x, u8 y);
+
 #endif // EGYPT_H

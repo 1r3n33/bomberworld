@@ -23,6 +23,21 @@ u8 egypt_max_building_size = 8;
 
 u16 egypt_level_tilemap[32][32];
 
+u8 mega_bomb_mask[11][11] = 
+{
+    {0,0,0,1,1,1,1,1,0,0,0},
+    {0,0,1,1,1,1,1,1,1,0,0},
+    {0,1,1,1,1,1,1,1,1,1,0},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {0,1,1,1,1,1,1,1,1,1,0},
+    {0,0,1,1,1,1,1,1,1,0,0},
+    {0,0,0,1,1,1,1,1,0,0,0},
+};
+
 void init_egypt_level_state(u8 level)
 {
 }
@@ -77,6 +92,40 @@ void init_egypt_level_gfx()
 
     // Heat fx
     init_vfx_bkg_waves();
+}
+
+void mega_bomb_collision(u8 x, u8 y)
+{
+    s8 map_x = x / 8;
+    s8 map_y = y / 8;
+
+    s8 i;
+    s8 j;
+    for (j=0; j<11; j++)
+    {
+        for (i=0; i<11; i++)
+        {
+            s8 xx = (map_x-5)+i;    
+            s8 yy = (map_y-5)+j;    
+
+            if (xx >= 0 && xx < 32 && yy >= 0 && yy < 32 && mega_bomb_mask[j][i])
+            {
+                if (egypt_level_tilemap[yy][xx] > 0)
+                {
+                    egypt_level_tilemap[yy][xx] = 0;
+                    egypt_block_count--;
+                }
+            }
+        }
+    }
+
+    bgInitMapSet(
+        0,
+        (u8*)egypt_level_tilemap,
+        32*32*2,
+        SC_32x32,
+        VRAM_ADDR_BG0_MAP
+    );
 }
 
 void build_egypt_level_tilemap()
