@@ -109,41 +109,41 @@ egypt_bg1_map_end:
 .section ".rodata2" superfree
 
 ; Sea level
-bkg_sea_til_begin:
-.incbin "bkg_sea.pic"
-bkg_sea_til_end:
+sea_bg0_til_begin:
+.incbin "sea_bg0.pic"
+sea_bg0_til_end:
 
-bkg_sea_pal_begin:
-.incbin "bkg_sea.pal"
-bkg_sea_pal_end:
+sea_bg0_pal_begin:
+.incbin "sea_bg0.pal"
+sea_bg0_pal_end:
 
-bkg_sea_map_begin:
-.incbin "bkg_sea.map"
-bkg_sea_map_end:
+sea_bg0_map_begin:
+.incbin "sea_bg0.map"
+sea_bg0_map_end:
 
-bkg_ship_til_begin:
-.incbin "bkg_ship.pic"
-bkg_ship_til_end:
+sea_bg1_til_begin:
+.incbin "sea_bg1.pic"
+sea_bg1_til_end:
 
-bkg_ship_pal_begin:
-.incbin "bkg_ship.pal"
-bkg_ship_pal_end:
+sea_bg1_pal_begin:
+.incbin "sea_bg1.pal"
+sea_bg1_pal_end:
 
-bkg_ship_map_begin:
-.incbin "bkg_ship.map"
-bkg_ship_map_end:
+sea_bg1_map_begin:
+.incbin "sea_bg1.map"
+sea_bg1_map_end:
 
-bkg_sea_back_til_begin:
-.incbin "bkg_sea_back.pic"
-bkg_sea_back_til_end:
+sea_bg2_til_begin:
+.incbin "sea_bg2.pic"
+sea_bg2_til_end:
 
-bkg_sea_back_pal_begin:
-.incbin "bkg_sea_back.pal"
-bkg_sea_back_pal_end:
+sea_bg2_pal_begin:
+.incbin "sea_bg2.pal"
+sea_bg2_pal_end:
 
-bkg_sea_back_map_begin:
-.incbin "bkg_sea_back.map"
-bkg_sea_back_map_end:
+sea_bg2_map_begin:
+.incbin "sea_bg2.map"
+sea_bg2_map_end:
 
 ; Larry's airship
 airship_bg0_til_begin:

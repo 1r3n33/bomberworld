@@ -3,17 +3,17 @@
 #include "sea.h"
 
 // backgrounds
-extern char bkg_sea_til_begin, bkg_sea_til_end;
-extern char bkg_sea_pal_begin, bkg_sea_pal_end;
-extern char bkg_sea_map_begin, bkg_sea_map_end;
+extern char sea_bg0_til_begin, sea_bg0_til_end;
+extern char sea_bg0_pal_begin, sea_bg0_pal_end;
+extern char sea_bg0_map_begin, sea_bg0_map_end;
 
-extern char bkg_ship_til_begin, bkg_ship_til_end;
-extern char bkg_ship_pal_begin, bkg_ship_pal_end;
-extern char bkg_ship_map_begin, bkg_ship_map_end;
+extern char sea_bg1_til_begin, sea_bg1_til_end;
+extern char sea_bg1_pal_begin, sea_bg1_pal_end;
+extern char sea_bg1_map_begin, sea_bg1_map_end;
 
-extern char bkg_sea_back_til_begin, bkg_sea_back_til_end;
-extern char bkg_sea_back_pal_begin, bkg_sea_back_pal_end;
-extern char bkg_sea_back_map_begin, bkg_sea_back_map_end;
+extern char sea_bg2_til_begin, sea_bg2_til_end;
+extern char sea_bg2_pal_begin, sea_bg2_pal_end;
+extern char sea_bg2_map_begin, sea_bg2_map_end;
 
 u16 sea_block_count = 0;
 
@@ -37,49 +37,49 @@ void init_sea_level_gfx()
     // Init backgrounds
     bgInitTileSet(
         0,
-        &bkg_sea_til_begin,
-        &bkg_sea_pal_begin,
+        &sea_bg0_til_begin,
+        &sea_bg0_pal_begin,
         0,
-        (&bkg_sea_til_end - &bkg_sea_til_begin),
-        (&bkg_sea_pal_end - &bkg_sea_pal_begin),
+        (&sea_bg0_til_end - &sea_bg0_til_begin),
+        (&sea_bg0_pal_end - &sea_bg0_pal_begin),
         BG_4COLORS0,
         VRAM_ADDR_BG0_GFX
     );
 
     bgInitMapSet(
         0,
-        &bkg_sea_map_begin,
-        (&bkg_sea_map_end - &bkg_sea_map_begin),
+        &sea_bg0_map_begin,
+        (&sea_bg0_map_end - &sea_bg0_map_begin),
         SC_32x32,
         VRAM_ADDR_BG0_MAP
     );
 
     bgInitTileSet(
         1,
-        &bkg_ship_til_begin,
-        &bkg_ship_pal_begin,
+        &sea_bg1_til_begin,
+        &sea_bg1_pal_begin,
         0,
-        (&bkg_ship_til_end - &bkg_ship_til_begin),
-        (&bkg_ship_pal_end - &bkg_ship_pal_begin),
+        (&sea_bg1_til_end - &sea_bg1_til_begin),
+        (&sea_bg1_pal_end - &sea_bg1_pal_begin),
         BG_4COLORS0,
         VRAM_ADDR_BG1_GFX
     );
 
     bgInitTileSet(
         2,
-        &bkg_sea_back_til_begin,
-        &bkg_sea_back_pal_begin,
+        &sea_bg2_til_begin,
+        &sea_bg2_pal_begin,
         0,
-        (&bkg_sea_back_til_end - &bkg_sea_back_til_begin),
-        (&bkg_sea_back_pal_end - &bkg_sea_back_pal_begin),
+        (&sea_bg2_til_end - &sea_bg2_til_begin),
+        (&sea_bg2_pal_end - &sea_bg2_pal_begin),
         BG_4COLORS0,
         VRAM_ADDR_BG2_GFX
     );
 
     bgInitMapSet(
         2,
-        &bkg_sea_back_map_begin,
-        (&bkg_sea_back_map_end - &bkg_sea_back_map_begin),
+        &sea_bg2_map_begin,
+        (&sea_bg2_map_end - &sea_bg2_map_begin),
         SC_32x32,
         VRAM_ADDR_BG2_MAP
     );
@@ -97,7 +97,7 @@ void build_sea_level_tilemap(u16 tilemap[32][32])
     {
         for (i=0; i<32; i++)
         {
-            u16 tile = ((u16*)&bkg_ship_map_begin)[j*32+i];
+            u16 tile = ((u16*)&sea_bg1_map_begin)[j*32+i];
             sea_level_tilemap[j][i] = tile;
 
             if (tile > 0)

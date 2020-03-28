@@ -72,16 +72,28 @@ egypt_bg1.gfx: bkg_egypt.bmp
 # Sea level (mode 0 BGs)
 # BG0 used for the front sea waves.
 # This image will generate 2 4-colors palettes
-bkg_sea.pic: bkg_sea.bmp
+sea_bg0.gfx: bkg_sea.bmp
 	$(GFXCONV) -gs8 -m -pc4 -pe0 -pr -fbmp -n $<
+	mv bkg_sea.pic sea_bg0.pic
+	mv bkg_sea.pal sea_bg0.pal
+	mv bkg_sea.map sea_bg0.map
+	touch $@
 # BG1 used for the ship tiles.
 # This image will generate 4 4-colors palettes
-bkg_ship.pic: bkg_ship.bmp
+sea_bg1.gfx: bkg_ship.bmp
 	$(GFXCONV) -gs8 -m -pc4 -pe0 -pr -fbmp -n $<
+	mv bkg_ship.pic sea_bg1.pic
+	mv bkg_ship.pal sea_bg1.pal
+	mv bkg_ship.map sea_bg1.map
+	touch $@
 # BG2 used for the back sea waves.
 # This image will generate 2 4-colors palettes
-bkg_sea_back.pic: bkg_sea_back.bmp
+sea_bg2.gfx: bkg_sea_back.bmp
 	$(GFXCONV) -gs8 -m -pc4 -pe0 -pr -fbmp -n $<
+	mv bkg_sea_back.pic sea_bg2.pic
+	mv bkg_sea_back.pal sea_bg2.pal
+	mv bkg_sea_back.map sea_bg2.map
+	touch $@
 
 # Larry's airship (Mode 1)
 # This image will generate 1 16-colors palette
@@ -150,9 +162,9 @@ gfx:	spr_game.pic			\
 		city_bg2.gfx			\
 		egypt_bg0.gfx			\
 		egypt_bg1.gfx			\
-		bkg_ship.pic			\
-		bkg_sea.pic				\
-		bkg_sea_back.pic		\
+		sea_bg0.gfx				\
+		sea_bg1.gfx				\
+		sea_bg2.gfx				\
 		airship_bg0.gfx			\
 		airship_city_bg1.gfx	\
 		airship_city_bg2.gfx	\
