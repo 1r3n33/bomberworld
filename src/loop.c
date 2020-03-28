@@ -192,6 +192,10 @@ u8 gameplay_loop()
         {
             return 0;
         }
+        if (pad0 & KEY_SELECT)
+        {
+            return 1;
+        }
 
         move_pilot(0, player_enabled[0] ? speed : 0, player_enabled[1]);
         move_pilot(1, player_enabled[1] ? speed : 0, player_enabled[0]);
