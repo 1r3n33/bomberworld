@@ -219,4 +219,28 @@ airship_egypt_bg1_map_begin:
 .incbin "airship_egypt_bg1.map"
 airship_egypt_bg1_map_end:
 
+airship_sea_bg1_til_begin:
+.incbin "airship_sea_bg1.til"
+airship_sea_bg1_til_end:
+
+airship_sea_bg1_pal_begin:
+.incbin "airship_sea_bg1.pal"
+airship_sea_bg1_pal_end:
+
+airship_sea_bg1_map_begin:
+.incbin "airship_sea_bg1.map"
+airship_sea_bg1_map_end:
+
+airship_sea_bg2_til_begin:
+.incbin "airship_sea_bg2.til"
+airship_sea_bg2_til_end:
+
+airship_sea_bg2_pal_begin:
+.incbin "airship_sea_bg2.pal"
+airship_sea_bg2_pal_end:
+
+airship_sea_bg2_map_begin:
+.incbin "airship_sea_bg2.map"
+airship_sea_bg2_map_end:
+
 .ends

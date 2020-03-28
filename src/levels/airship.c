@@ -22,6 +22,14 @@ extern char airship_egypt_bg1_til_begin, airship_egypt_bg1_til_end;
 extern char airship_egypt_bg1_pal_begin, airship_egypt_bg1_pal_end;
 extern char airship_egypt_bg1_map_begin, airship_egypt_bg1_map_end;
 
+extern char airship_sea_bg1_til_begin, airship_sea_bg1_til_end;
+extern char airship_sea_bg1_pal_begin, airship_sea_bg1_pal_end;
+extern char airship_sea_bg1_map_begin, airship_sea_bg1_map_end;
+
+extern char airship_sea_bg2_til_begin, airship_sea_bg2_til_end;
+extern char airship_sea_bg2_pal_begin, airship_sea_bg2_pal_end;
+extern char airship_sea_bg2_map_begin, airship_sea_bg2_map_end;
+
 u16 airship_bg0_scroll_y;
 u16 airship_bg2_scroll_x;
 
@@ -36,7 +44,7 @@ void init_airship_city_gfx()
         0,
         &airship_bg0_til_begin,
         &airship_bg0_pal_begin,
-        1,
+        2,
         (&airship_bg0_til_end - &airship_bg0_til_begin),
         (&airship_bg0_pal_end - &airship_bg0_pal_begin),
         BG_16COLORS,
@@ -54,7 +62,7 @@ void init_airship_city_gfx()
         1,
         &airship_city_bg1_til_begin,
         &airship_city_bg1_pal_begin,
-        2,
+        3,
         (&airship_city_bg1_til_end - &airship_city_bg1_til_begin),
         (&airship_city_bg1_pal_end - &airship_city_bg1_pal_begin),
         BG_16COLORS,
@@ -105,7 +113,7 @@ void init_airship_egypt_gfx()
         0,
         &airship_bg0_til_begin,
         &airship_bg0_pal_begin,
-        1,
+        2,
         (&airship_bg0_til_end - &airship_bg0_til_begin),
         (&airship_bg0_pal_end - &airship_bg0_pal_begin),
         BG_16COLORS,
@@ -123,7 +131,7 @@ void init_airship_egypt_gfx()
         1,
         &airship_egypt_bg1_til_begin,
         &airship_egypt_bg1_pal_begin,
-        2,
+        3,
         (&airship_egypt_bg1_til_end - &airship_egypt_bg1_til_begin),
         (&airship_egypt_bg1_pal_end - &airship_egypt_bg1_pal_begin),
         BG_16COLORS,
@@ -148,6 +156,81 @@ void init_airship_egypt_gfx()
     bgSetScroll(3, 0, 0xFF);
 
     init_vfx_bkg_waves();
+}
+
+void init_airship_sea_gfx()
+{
+    REG_HDMAEN = 0;
+
+    // Init backgrounds
+    bgInitTileSet(
+        0,
+        &airship_bg0_til_begin,
+        &airship_bg0_pal_begin,
+        2,
+        (&airship_bg0_til_end - &airship_bg0_til_begin),
+        (&airship_bg0_pal_end - &airship_bg0_pal_begin),
+        BG_16COLORS,
+        VRAM_ADDR_BG0_GFX
+    );
+    bgInitMapSet(
+        0,
+        &airship_bg0_map_begin,
+        (&airship_bg0_map_end - &airship_bg0_map_begin),
+        SC_32x64,
+        VRAM_ADDR_BG0_MAP
+    );
+
+    bgInitTileSet(
+        1,
+        &airship_sea_bg1_til_begin,
+        &airship_sea_bg1_pal_begin,
+        3,
+        (&airship_sea_bg1_til_end - &airship_sea_bg1_til_begin),
+        (&airship_sea_bg1_pal_end - &airship_sea_bg1_pal_begin),
+        BG_16COLORS,
+        VRAM_ADDR_BG1_GFX
+    );
+    bgInitMapSet(
+        1,
+        &airship_sea_bg1_map_begin,
+        (&airship_sea_bg1_map_end - &airship_sea_bg1_map_begin),
+        SC_32x32,
+        VRAM_ADDR_BG1_MAP
+    );
+
+    bgInitTileSet(
+        2,
+        &airship_sea_bg2_til_begin,
+        &airship_sea_bg2_pal_begin,
+        0,
+        (&airship_sea_bg2_til_end - &airship_sea_bg2_til_begin),
+        (&airship_sea_bg2_pal_end - &airship_sea_bg2_pal_begin),
+        BG_4COLORS,
+        VRAM_ADDR_BG2_GFX
+    );
+    bgInitMapSet(
+        2,
+        &airship_sea_bg2_map_begin,
+        (&airship_sea_bg2_map_end - &airship_sea_bg2_map_begin),
+        SC_32x32,
+        VRAM_ADDR_BG2_MAP
+    );
+
+    setMode(BG_MODE1, 0);
+
+    bgSetDisable(3);
+
+    bgSetScroll(0, 0, 0xFF);
+    bgSetScroll(1, 0, 0xFF);
+    bgSetScroll(2, 0, 0xFF);
+    bgSetScroll(3, 0, 0xFF);  
+}
+
+void update_airship_sea_level_gfx(u8 frame)
+{
+    bgSetScroll(1, frame>>1, (frame>>5)&1);
+    bgSetScroll(2, frame>>2, (frame>>6)&1);
 }
 
 void init_airship_state(u8 level)

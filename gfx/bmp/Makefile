@@ -96,16 +96,19 @@ sea_bg2.gfx: bkg_sea_back.bmp
 	touch $@
 
 # Larry's airship (Mode 1)
+# Palette 0 & 1 are reserved to the 4-colors BG2
+# Palette 2 is reserved for the 16-colors BG0 (larry's airship)
+# Palette 3 is reserved for the 16-colors BG1 
 # This image will generate 1 16-colors palette
 airship_bg0.gfx: bkg_airship.bmp
-	$(GFXCONV) -gs8 -m -mp -pc16 -po16 -pe1 -pr -fbmp -n $<
+	$(GFXCONV) -gs8 -m -mp -pc16 -po16 -pe2 -pr -fbmp -n $<
 	mv bkg_airship.pic airship_bg0.til
 	mv bkg_airship.pal airship_bg0.pal
 	mv bkg_airship.map airship_bg0.map
 	touch $@
 # This image will generate 1 16-colors palette
 airship_city_bg1.gfx: bkg_city0.bmp
-	$(GFXCONV) -gs8 -m -pc16 -po16 -pe2 -pr -fbmp -n $<
+	$(GFXCONV) -gs8 -m -pc16 -po16 -pe3 -pr -fbmp -n $<
 	mv bkg_city0.pic airship_city_bg1.til
 	mv bkg_city0.pal airship_city_bg1.pal
 	mv bkg_city0.map airship_city_bg1.map
@@ -120,10 +123,25 @@ airship_city_bg2.gfx: bkg_sky_4.bmp
 	touch $@
 # This image will generate 1 16-colors palette
 airship_egypt_bg1.gfx: bkg_egypt.bmp
-	$(GFXCONV) -gs8 -m -pc16 -po16 -pe2 -pr -fbmp -n $<
+	$(GFXCONV) -gs8 -m -pc16 -po16 -pe3 -pr -fbmp -n $<
 	mv bkg_egypt.pic airship_egypt_bg1.til
 	mv bkg_egypt.pal airship_egypt_bg1.pal
 	mv bkg_egypt.map airship_egypt_bg1.map
+	touch $@
+# This image will generate 1 16-colors palette
+airship_sea_bg1.gfx: bkg_sea.bmp
+	$(GFXCONV) -gs8 -m -pc16 -po16 -pe3 -pr -fbmp -n $<
+	mv bkg_sea.pic airship_sea_bg1.til
+	mv bkg_sea.pal airship_sea_bg1.pal
+	mv bkg_sea.map airship_sea_bg1.map
+	touch $@
+# This image will generate 2 4-colors palette
+# TODO: this is exactely the same setup as in the city level
+airship_sea_bg2.gfx: bkg_sea_back.bmp
+	$(GFXCONV) -gs8 -m -pc4 -pe0 -pr -fbmp -n $<
+	mv bkg_sea_back.pic airship_sea_bg2.til
+	mv bkg_sea_back.pal airship_sea_bg2.pal
+	mv bkg_sea_back.map airship_sea_bg2.map
 	touch $@
 
 # Larry's shop (Mode 1)
@@ -169,6 +187,8 @@ gfx:	spr_game.pic			\
 		airship_city_bg1.gfx	\
 		airship_city_bg2.gfx	\
 		airship_egypt_bg1.gfx	\
+		airship_sea_bg1.gfx		\
+		airship_sea_bg2.gfx		\
 		shop_bg0.gfx			\
 		shop_bg1.gfx			\
 		bkg_titlescreen.pic		\
