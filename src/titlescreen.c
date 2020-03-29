@@ -87,7 +87,7 @@ void init_titlescreen()
     set_text(OBJ_TEXT+68, "Map Editor", (SCREEN_WIDTH/2)-32, (SCREEN_HEIGHT/2)+(2*16));
 
     // Use pilot as menu cursor
-    init_pilot(0);
+    init_pilot(0, 0);
 
     // Reset color math
     REG_CGWSEL = 0x00;

@@ -41,8 +41,12 @@ void init_graphics();
 #define SPR_EXPLOSION_FRAME_0   10
 #define SPR_EXPLOSION_FRAME_1   12
 #define SPR_EXPLOSION_FRAME_2   14
+
 #define SPR_EXPLOSION_FRAME_3   32
 #define SPR_MEGA_BOMB           34
+#define SPR_UFO_FRAME_0         36
+#define SPR_UFO_FRAME_1         38
+#define SPR_UFO_FRAME_2         40
 
 #define SPR_ASCIITABLE          256
 
