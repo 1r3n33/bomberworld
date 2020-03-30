@@ -44,8 +44,8 @@ u8 run_game(u8 mode)
         u8 level_loop = 1;
         while (level_loop)
         {
-            init_pilot(0, 0);
-            init_pilot(1, 0);
+            init_pilot(0, get_player_ufo(0));
+            init_pilot(1, get_player_ufo(1));
 
             init_bomb(0);
             init_bomb(1);

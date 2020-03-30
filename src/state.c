@@ -43,11 +43,16 @@ void init_game_state(u8 mode)
     state.player_mega_bombs[0] = 0;
     state.player_mega_bombs[1] = (mode & GAME_MODE_FLAG_2P) ? 0 : 0;
 
+    state.player_ufos[0] = 0;
+    state.player_ufos[1] = (mode & GAME_MODE_FLAG_2P) ? 0 : 0;
+
 #if 0
     state.player_scores[0] = 5000;
     state.player_scores[1] = 5000;
     state.player_mega_bombs[0] = 1;
     state.player_mega_bombs[1] = 1;
+    state.player_ufos[0] = 0;
+    state.player_ufos[1] = 0;
 #endif
 
     compute_ui_elements();
@@ -150,6 +155,16 @@ void use_player_mega_bomb(u8 id)
 void max_out_player_mega_bombs(u8 id)
 {
     state.player_mega_bombs[id] = 1;
+}
+
+void set_player_ufo(u8 id)
+{
+    state.player_ufos[id] = 1;
+}
+
+u8 get_player_ufo(u8 id)
+{
+    return state.player_ufos[id];
 }
 
 #define EMPTY_HEART (96+32)

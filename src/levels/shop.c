@@ -244,6 +244,11 @@ u8 shop_selection()
                         max_out_player_mega_bombs(0);
                     }
 
+                    if (flag & SHOP_UFO_FLAG)
+                    {
+                        set_player_ufo(0);
+                    }
+
                     compute_ui_elements();
                     display_ui_elements(0);
                     display_ui_elements(1);

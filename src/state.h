@@ -12,6 +12,7 @@ struct state_t
     u8  player_cur_bombs[2];
     u8  player_max_bombs[2];
     u8  player_mega_bombs[2];
+    u8  player_ufos[2];
     struct level_t * current_level;
 };
 
@@ -48,6 +49,10 @@ u8 find_player_mega_bomb(u8 id);
 void use_player_mega_bomb(u8 id);
 
 void max_out_player_mega_bombs(u8 id);
+
+void set_player_ufo(u8 id);
+
+u8 get_player_ufo(u8 id);
 
 void compute_ui_elements();
 void display_ui_score(u8 id);
