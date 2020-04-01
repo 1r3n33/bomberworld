@@ -95,6 +95,26 @@ sea_bg2.gfx: bkg_sea_back.bmp
 	mv bkg_sea_back.map sea_bg2.map
 	touch $@
 
+# Moon level (mode 0 BGs)
+# BG0 used for the front.
+# This image will generate 1 4-colors palettes
+moon_bg0.gfx: bkg_moon_front.bmp
+	$(GFXCONV) -gs8 -m -pc4 -po4 -pe0 -pr -fbmp -n $<
+	mv bkg_moon_front.pic moon_bg0.pic
+	mv bkg_moon_front.pal moon_bg0.pal
+	mv bkg_moon_front.map moon_bg0.map
+	touch $@
+# BG1 used for the tentacles.
+#
+# BG2 used for the back.
+# This image will generate 1 4-colors palettes
+moon_bg2.gfx: bkg_moon_back.bmp
+	$(GFXCONV) -gs8 -m -pc4 -po4 -pe0 -pr -fbmp -n $<
+	mv bkg_moon_back.pic moon_bg2.pic
+	mv bkg_moon_back.pal moon_bg2.pal
+	mv bkg_moon_back.map moon_bg2.map
+	touch $@
+
 # Larry's airship (Mode 1)
 # Palette 0 & 1 are reserved to the 4-colors BG2
 # Palette 2 is reserved for the 16-colors BG0 (larry's airship)
@@ -183,6 +203,8 @@ gfx:	spr_game.pic			\
 		sea_bg0.gfx				\
 		sea_bg1.gfx				\
 		sea_bg2.gfx				\
+		moon_bg0.gfx			\
+		moon_bg2.gfx			\
 		airship_bg0.gfx			\
 		airship_city_bg1.gfx	\
 		airship_city_bg2.gfx	\
