@@ -105,7 +105,12 @@ moon_bg0.gfx: bkg_moon_front.bmp
 	mv bkg_moon_front.map moon_bg0.map
 	touch $@
 # BG1 used for the tentacles.
-#
+# This image will generate 1 4-colors palettes
+moon_bg1.gfx: til_tentacles.bmp
+	$(GFXCONV) -gs8 -m -mR! -pc4 -po4 -pe0 -pr -fbmp -n $<
+	mv til_tentacles.pic moon_bg1.pic
+	mv til_tentacles.pal moon_bg1.pal
+	touch $@
 # BG2 used for the back.
 # This image will generate 1 4-colors palettes
 moon_bg2.gfx: bkg_moon_back.bmp
@@ -204,6 +209,7 @@ gfx:	spr_game.pic			\
 		sea_bg1.gfx				\
 		sea_bg2.gfx				\
 		moon_bg0.gfx			\
+		moon_bg1.gfx			\
 		moon_bg2.gfx			\
 		airship_bg0.gfx			\
 		airship_city_bg1.gfx	\

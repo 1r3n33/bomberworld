@@ -259,6 +259,14 @@ moon_bg0_map_begin:
 .incbin "moon_bg0.map"
 moon_bg0_map_end:
 
+moon_bg1_til_begin:
+.incbin "moon_bg1.pic"
+moon_bg1_til_end:
+
+moon_bg1_pal_begin:
+.incbin "moon_bg1.pal"
+moon_bg1_pal_end:
+
 moon_bg2_til_begin:
 .incbin "moon_bg2.pic"
 moon_bg2_til_end:
