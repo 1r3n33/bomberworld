@@ -175,6 +175,35 @@ void update_moon_level_gfx(u8 frame)
 
 u8 check_moon_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
 {
+    u8 map_min_x = (left) / 8;
+    u8 map_max_x = ((right)-1) / 8;
+    u8 map_max_y = ((bottom)-1) / 8;
+
+    u8 x = map_min_x;
+    u8 y = map_max_y;
+    for (; x<=map_max_x; x++)
+    {
+        u16 tile = moon_level_tilemap[y][x];
+        if (tile > 0)
+        {
+            moon_block_count--;
+            moon_level_tilemap[y][x] = 0;
+            if (moon_level_tilemap[y+1][x] == TENTACLE_BODY)
+            {
+                moon_level_tilemap[y+1][x] = TENTACLE_HEAD;
+            }
+            bgInitMapSet(
+                1,
+                (u8*)moon_level_tilemap,
+                32*32*2,
+                SC_32x32,
+                VRAM_ADDR_BG1_MAP
+            );
+
+            return 2;
+        }
+    }
+
     return 0;
 }
 
