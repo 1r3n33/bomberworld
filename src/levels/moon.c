@@ -46,7 +46,7 @@ void init_moon_level_gfx()
         0,
         &moon_bg0_map_begin,
         (&moon_bg0_map_end - &moon_bg0_map_begin),
-        SC_32x32,
+        SC_64x32,
         VRAM_ADDR_BG0_MAP
     );
 
@@ -76,7 +76,7 @@ void init_moon_level_gfx()
         2,
         &moon_bg2_map_begin,
         (&moon_bg2_map_end - &moon_bg2_map_begin),
-        SC_32x32,
+        SC_64x32,
         VRAM_ADDR_BG2_MAP
     );
 
