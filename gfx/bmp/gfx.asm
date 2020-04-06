@@ -280,3 +280,19 @@ moon_bg2_map_begin:
 moon_bg2_map_end:
 
 .ends
+
+.section ".rodata4" superfree
+
+moon_boss_bg1_til_begin:
+.incbin "moon_boss_bg1.pic"
+moon_boss_bg1_til_end:
+
+moon_boss_bg1_pal_begin:
+.incbin "moon_boss_bg1.pal"
+moon_boss_bg1_pal_end:
+
+moon_boss_bg1_map_begin:
+.incbin "moon_boss_bg1.map"
+moon_boss_bg1_map_end:
+
+.ends

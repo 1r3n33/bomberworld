@@ -111,6 +111,14 @@ moon_bg1.gfx: til_tentacles.bmp
 	mv til_tentacles.pic moon_bg1.pic
 	mv til_tentacles.pal moon_bg1.pal
 	touch $@
+# BG1 used for the boss.
+# This image will generate 8 4-colors palettes
+moon_boss_bg1.gfx: bkg_moon_boss.bmp
+	$(GFXCONV) -gs8 -m -pc4 -pe0 -po32 -pr -fbmp -n $<
+	mv bkg_moon_boss.pic moon_boss_bg1.pic
+	mv bkg_moon_boss.pal moon_boss_bg1.pal
+	mv bkg_moon_boss.map moon_boss_bg1.map
+	touch $@
 # BG2 used for the back.
 # This image will generate 1 4-colors palettes
 moon_bg2.gfx: bkg_moon_back.bmp
@@ -210,6 +218,7 @@ gfx:	spr_game.pic			\
 		sea_bg2.gfx				\
 		moon_bg0.gfx			\
 		moon_bg1.gfx			\
+		moon_boss_bg1.gfx		\
 		moon_bg2.gfx			\
 		airship_bg0.gfx			\
 		airship_city_bg1.gfx	\
