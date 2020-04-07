@@ -10,6 +10,10 @@ extern char moon_bg0_map_begin, moon_bg0_map_end;
 extern char moon_bg1_til_begin, moon_bg1_til_end;
 extern char moon_bg1_pal_begin, moon_bg1_pal_end;
 
+extern char moon_boss_bg1_til_begin, moon_boss_bg1_til_end;
+extern char moon_boss_bg1_pal_begin, moon_boss_bg1_pal_end;
+extern char moon_boss_bg1_map_begin, moon_boss_bg1_map_end;
+
 extern char moon_bg2_til_begin, moon_bg2_til_end;
 extern char moon_bg2_pal_begin, moon_bg2_pal_end;
 extern char moon_bg2_map_begin, moon_bg2_map_end;
@@ -20,7 +24,10 @@ extern char moon_bg2_map_begin, moon_bg2_map_end;
 
 u16 moon_block_count = 0;
 
-u16 moon_level_tilemap[32][32];
+u16 moon_level_tilemap[64][32];
+
+u16 moon_bg1_scroll_x = 0;
+u16 moon_bg1_scroll_y = 0;
 
 void init_moon_level_state(u8 level)
 {
@@ -85,15 +92,82 @@ void init_moon_level_gfx()
     // Important to disable non-used bkg to avoid artefacts
     bgSetDisable(3);
 
-    bgSetScroll(0, 0, 0xFF);
-    bgSetScroll(1, 0, 0xFF);
-    bgSetScroll(2, 0, 0xFF);
-    bgSetScroll(3, 0, 0xFF);
+    bgSetScroll(0, 0, 255);
+    bgSetScroll(1, 0, 511);
+    bgSetScroll(2, 0, 255);
+    bgSetScroll(3, 0, 255);
 
     init_vfx_moon_bkg();
 }
 
-void build_moon_level_tilemap(u16 tilemap[32][32])
+void init_moon_boss_level_gfx()
+{
+    REG_HDMAEN = 0;
+
+    // Init backgrounds
+    bgInitTileSet(
+        0,
+        &moon_bg0_til_begin,
+        &moon_bg0_pal_begin,
+        0,
+        (&moon_bg0_til_end - &moon_bg0_til_begin),
+        (&moon_bg0_pal_end - &moon_bg0_pal_begin),
+        BG_4COLORS0,
+        VRAM_ADDR_BG0_GFX
+    );
+
+    bgInitMapSet(
+        0,
+        &moon_bg0_map_begin,
+        (&moon_bg0_map_end - &moon_bg0_map_begin),
+        SC_64x32,
+        VRAM_ADDR_BG0_MAP
+    );
+
+    bgInitTileSet(
+        1,
+        &moon_boss_bg1_til_begin,
+        &moon_boss_bg1_pal_begin,
+        0,
+        (&moon_boss_bg1_til_end - &moon_boss_bg1_til_begin),
+        (&moon_boss_bg1_pal_end - &moon_boss_bg1_pal_begin),
+        BG_4COLORS0,
+        VRAM_ADDR_BG1_GFX
+    );
+
+    bgInitTileSet(
+        2,
+        &moon_bg2_til_begin,
+        &moon_bg2_pal_begin,
+        0,
+        (&moon_bg2_til_end - &moon_bg2_til_begin),
+        (&moon_bg2_pal_end - &moon_bg2_pal_begin),
+        BG_4COLORS0,
+        VRAM_ADDR_BG2_GFX
+    );
+
+    bgInitMapSet(
+        2,
+        &moon_bg2_map_begin,
+        (&moon_bg2_map_end - &moon_bg2_map_begin),
+        SC_64x32,
+        VRAM_ADDR_BG2_MAP
+    );
+
+    setMode(BG_MODE0, 0);
+
+    // Important to disable non-used bkg to avoid artefacts
+    bgSetDisable(3);
+
+    moon_bg1_scroll_y = 80;
+
+    bgSetScroll(0, 256, 0xFF);
+    bgSetScroll(1, 0,   moon_bg1_scroll_y);
+    bgSetScroll(2, 256, 0xFF);
+    bgSetScroll(3, 0,   0xFF);
+}
+
+void build_moon_level_tilemap()
 {
     u8 i, j;
     for (j=0; j<32; j++)
@@ -162,8 +236,35 @@ void build_moon_level_tilemap(u16 tilemap[32][32])
     bgInitMapSet(
         1,
         (u8*)moon_level_tilemap,
-        32*32*2,
-        SC_32x32,
+        64*32*2,
+        SC_32x64,
+        VRAM_ADDR_BG1_MAP
+    );
+}
+
+void build_moon_boss_level_tilemap()
+{
+    REG_HDMAEN = 0;
+
+    u8 i, j;
+    for (j=0; j<64; j++)
+    {
+        for (i=0; i<32; i++)
+        {
+            u16 tile = ((u16*)&moon_boss_bg1_map_begin)[j*32+i];
+            moon_level_tilemap[j][i] = tile;
+
+            if (tile > 0)
+            {
+                moon_block_count++;
+            }
+        }
+    }
+    bgInitMapSet(
+        1,
+        (u8*)moon_level_tilemap,
+        64*32*2,
+        SC_32x64,
         VRAM_ADDR_BG1_MAP
     );
 }
@@ -171,6 +272,15 @@ void build_moon_level_tilemap(u16 tilemap[32][32])
 void update_moon_level_gfx(u8 frame)
 {
     update_vfx_moon_bkg(frame);
+}
+
+void update_moon_boss_level_gfx(u8 frame)
+{
+    if ((moon_bg1_scroll_y < 191) && ((frame & 7) == 7))
+    {
+        moon_bg1_scroll_y++;
+        bgSetScroll(1, 0, moon_bg1_scroll_y);
+    }
 }
 
 u8 check_moon_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
@@ -195,8 +305,8 @@ u8 check_moon_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
             bgInitMapSet(
                 1,
                 (u8*)moon_level_tilemap,
-                32*32*2,
-                SC_32x32,
+                64*32*2,
+                SC_32x64,
                 VRAM_ADDR_BG1_MAP
             );
 
