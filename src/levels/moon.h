@@ -21,6 +21,8 @@ void update_moon_boss_level_gfx(u8 frame);
 
 u8 check_moon_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right);
 
+u8 check_moon_boss_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right);
+
 u8 check_moon_level_pilot_collision(u8 x, u8 y);
 
 u8 check_moon_level_done();

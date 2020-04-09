@@ -49,10 +49,16 @@ void init_game_state(u8 mode)
 #if 0
     state.player_scores[0] = 5000;
     state.player_scores[1] = 5000;
+    state.player_cur_lives[0] = 3;
+    state.player_cur_lives[1] = 0;
+    state.player_max_lives[0] = 3;
+    state.player_max_lives[1] = 0;
+    state.player_max_bombs[0] = 2;
+    state.player_max_bombs[1] = 2;
     state.player_mega_bombs[0] = 1;
     state.player_mega_bombs[1] = 1;
-    state.player_ufos[0] = 0;
-    state.player_ufos[1] = 0;
+    state.player_ufos[0] = 1;
+    state.player_ufos[1] = 1;
 #endif
 
     compute_ui_elements();
