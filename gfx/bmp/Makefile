@@ -129,6 +129,13 @@ moon_bg2.gfx: bkg_moon_back.bmp
 	touch $@
 
 # Ending level (mode 0)
+# BG0 for scrolling game information
+# This image generates 1 4-colors palette
+ending_bg0.gfx: spr_fonts.bmp
+	$(GFXCONV) -gs8 -pc4 -po4 -pe0 -fbmp -n $<
+	mv spr_fonts.pic ending_bg0.pic
+	mv spr_fonts.pal ending_bg0.pal
+	touch $@	
 # BG1 for sunset
 # This image generates 1 4-colors palette
 ending_bg1.gfx: bkg_sunset.bmp
@@ -230,6 +237,7 @@ gfx:	spr_game.pic			\
 		moon_bg1.gfx			\
 		moon_boss_bg1.gfx		\
 		moon_bg2.gfx			\
+		ending_bg0.gfx			\
 		ending_bg1.gfx			\
 		airship_bg0.gfx			\
 		airship_city_bg1.gfx	\

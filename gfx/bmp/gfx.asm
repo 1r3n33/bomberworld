@@ -295,6 +295,14 @@ moon_boss_bg1_map_begin:
 .incbin "moon_boss_bg1.map"
 moon_boss_bg1_map_end:
 
+ending_bg0_til_begin:
+.incbin "ending_bg0.pic"
+ending_bg0_til_end:
+
+ending_bg0_pal_begin:
+.incbin "ending_bg0.pal"
+ending_bg0_pal_end:
+
 ending_bg1_til_begin:
 .incbin "ending_bg1.pic"
 ending_bg1_til_end:

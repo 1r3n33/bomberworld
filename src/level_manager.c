@@ -6,6 +6,7 @@
 #include "levels/airship.h"
 #include "levels/city.h"
 #include "levels/egypt.h"
+#include "levels/ending.h"
 #include "levels/moon.h"
 #include "levels/sea.h"
 #include "levels/shop.h"
@@ -119,7 +120,6 @@ struct level_t * level_manager_init(u8 game_mode)
         level_manager.levels[i].tilemap_builder         = do_nothing_tilemap_builder;
         level_manager.levels[i].loop                    = shop_loop;
         i++;
-#endif
 
         level_manager.levels[i].level                   = 3;
         level_manager.levels[i].speed                   = 16;
@@ -142,6 +142,19 @@ struct level_t * level_manager_init(u8 game_mode)
         level_manager.levels[i].tilemap_builder         = build_moon_boss_level_tilemap;
         level_manager.levels[i].bomb_collider           = check_moon_boss_level_bomb_collision;
         level_manager.levels[i].pilot_collider          = check_moon_level_pilot_collision;
+        level_manager.levels[i].loop                    = gameplay_loop;
+        i++;
+#endif
+
+        level_manager.levels[i].level                   = 5;
+        level_manager.levels[i].speed                   = 8;
+        level_manager.levels[i].state_initializer       = init_ending_level_state;
+        level_manager.levels[i].state_end_level_checker = check_ending_level_done;
+        level_manager.levels[i].gfx_initializer         = init_ending_level_gfx;
+        level_manager.levels[i].gfx_updater             = update_ending_level_gfx;
+        level_manager.levels[i].tilemap_builder         = build_ending_level_tilemap;
+        level_manager.levels[i].bomb_collider           = check_ending_level_bomb_collision;
+        level_manager.levels[i].pilot_collider          = check_ending_level_pilot_collision;
         level_manager.levels[i].loop                    = gameplay_loop;
         i++;
     }
