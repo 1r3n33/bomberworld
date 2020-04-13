@@ -24,14 +24,15 @@ u8 explosion_gfx_frames[] =
     SPR_EXPLOSION_FRAME_0, SPR_EXPLOSION_FRAME_0,
 };
 
-void init_explosion(u8 id, u8 x, u8 y)
+void init_explosion(u8 id, u16 x, u16 y)
 {
     explosions[id].x = x;
     explosions[id].y = y;
     explosions[id].frame = sizeof(explosion_gfx_frames)-1;
 
-    oamSet(explosion_oam_ids[id], explosions[id].x, explosions[id].y, 3, 0, 0, explosion_gfx_frames[explosions[id].frame], 0);
+    oamSet(explosion_oam_ids[id], 0xFF, 0xFF, 3, 0, 0, explosion_gfx_frames[explosions[id].frame], 0);
     oamSetEx(explosion_oam_ids[id], OBJ_LARGE, OBJ_SHOW);
+    oamSetXY(explosion_oam_ids[id], explosions[id].x, explosions[id].y);
 }
 
 u8 update_explosion(u8 id)
