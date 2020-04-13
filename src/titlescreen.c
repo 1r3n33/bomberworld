@@ -149,7 +149,7 @@ u8 run_titlescreen()
         }
 
         // Move cursor according to the selection.
-        set_pilot_pos(0, (SCREEN_WIDTH/2)-64, (SCREEN_HEIGHT/2)+(selection*16)-4);
+        set_pilot_pos(0, (SCREEN_WIDTH/2)-60, (SCREEN_HEIGHT/2)+(selection*16)-5);
 
         // Animate.
         animate_pilot(0);
