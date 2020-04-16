@@ -6,7 +6,6 @@
 struct pilot_t pilots[2];
 
 #define GAMEPLAY_PILOT_ID1_OFFSET 			0
-#define GAMEPLAY_PILOT_EOL_ALTITUDE_DROP	8
 
 struct pilot_t * get_pilot(u8 id)
 {
@@ -47,7 +46,7 @@ void init_pilot(u8 id, u8 ufo)
     }
 }
 
-void move_pilot(u8 id, u8 speed, u8 second_player)
+void move_pilot(u8 id, u8 speed, u8 second_player, u8 drop)
 {
     if (id == 0)
     {
@@ -91,7 +90,7 @@ void move_pilot(u8 id, u8 speed, u8 second_player)
         if (pilots[id].x >= ((512+256+16)<<4))
         {
             pilots[id].x = ((512-16) << 4);
-            pilots[id].y_baseline += GAMEPLAY_PILOT_EOL_ALTITUDE_DROP;
+            pilots[id].y_baseline += drop;
             pilots[id].y = pilots[id].y_baseline;
             pilots[id].hovering_count++;
         }
@@ -101,7 +100,7 @@ void move_pilot(u8 id, u8 speed, u8 second_player)
         if (pilots[id].x <= ((512-(16+16))<<4))
         {
             pilots[id].x = ((512+256) << 4);
-            pilots[id].y_baseline += GAMEPLAY_PILOT_EOL_ALTITUDE_DROP;
+            pilots[id].y_baseline += drop;
             pilots[id].y = pilots[id].y_baseline;
             pilots[id].hovering_count++;
         }

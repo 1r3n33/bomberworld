@@ -170,6 +170,7 @@ u8 gameplay_loop()
 
     struct level_t * current_level = get_current_level();
     u8 speed = current_level->speed;
+    u8 drop = current_level->drop;
 
     struct pilot_t * p0 = get_pilot(0);
     struct pilot_t * p1 = get_pilot(1);
@@ -197,8 +198,8 @@ u8 gameplay_loop()
             return 1;
         }
 
-        move_pilot(0, player_enabled[0] ? speed : 0, player_enabled[1]);
-        move_pilot(1, player_enabled[1] ? speed : 0, player_enabled[0]);
+        move_pilot(0, player_enabled[0] ? speed : 0, player_enabled[1], drop);
+        move_pilot(1, player_enabled[1] ? speed : 0, player_enabled[0], drop);
 
         update_explosion(0);
         update_explosion(1);

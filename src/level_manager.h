@@ -16,6 +16,7 @@ struct level_t
 {
     u8                        level;
     u8                        speed;
+    u8                        drop;
     state_initializer_t       state_initializer;
     state_end_level_checker_t state_end_level_checker;
     graphics_initializer_t    gfx_initializer;

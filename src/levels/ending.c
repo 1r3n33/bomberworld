@@ -3,47 +3,35 @@
 
 char credits[32][33] =
 {
-//---0123456789ABCDEF0123456789ABCDEF"
-    " Thanks for playing Bomberworld ",
+    "           Bomberworld ",
+    "      Thank you for playing!",
     "",
     "",
     "",
-//---"0123456789ABCDEF0123456789ABCDEF"
+    "",
+    "",
     " Design, Prog, Gfx and Sound by ",
     "        Ulysse Caroulle",
     "        Irenee Caroulle",
     "",
-//---"0123456789ABCDEF0123456789ABCDEF"
+    "",
+    "",
     "",
     "",
     "       Special Thanks to",
     "            Alekmaul",
-//---"0123456789ABCDEF0123456789ABCDEF"
     "            Dave Town",
     "         Juhani Junkala",
     "      Olivier Guittonneau",
     "             NoCash",
-//---"0123456789ABCDEF0123456789ABCDEF"
     "              Near",
     "",
     "",
     "",
-//---"0123456789ABCDEF0123456789ABCDEF"
+    "",
+    "",
     "            The End",
-    "",
-    "",
-    "",
-//---"0123456789ABCDEF0123456789ABCDEF"
-    "",
-    "",
-    "",
-    "",
-//---"0123456789ABCDEF0123456789ABCDEF"
-    "",
-    "",
-    "",
-    "",
-//---"0123456789ABCDEF0123456789ABCDEF"
+    0,
 };
 
 extern char ending_bg0_til_begin, ending_bg0_til_end;
@@ -145,7 +133,7 @@ void build_ending_level_tilemap()
 
 void update_ending_level_gfx(u8 frame)
 {
-    if ((frame & 15) == 15)
+    if ((frame & 31) == 31)
     {
         ending_bg0_scroll_y++;
         bgSetScroll(0, 0, ending_bg0_scroll_y);
@@ -192,5 +180,5 @@ u8 check_ending_level_pilot_collision(u8 x, u8 y)
 
 u8 check_ending_level_done()
 {
-    return (ending_bg0_scroll_y > 680) || (ending_block_count == 0);
+    return (ending_bg0_scroll_y > 740) || (ending_block_count == 0);
 }

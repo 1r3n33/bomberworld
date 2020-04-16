@@ -30,6 +30,7 @@ struct level_t * level_manager_init(u8 game_mode)
     {
         level_manager.levels[i].level                   = 0;
         level_manager.levels[i].speed                   = 8;
+        level_manager.levels[i].drop                    = 8;
         level_manager.levels[i].state_initializer       = init_city_level_state;
         level_manager.levels[i].state_end_level_checker = check_city_level_done;
         level_manager.levels[i].gfx_initializer         = init_city_level_gfx;
@@ -45,6 +46,7 @@ struct level_t * level_manager_init(u8 game_mode)
 #if 1
         level_manager.levels[i].level                   = 0;
         level_manager.levels[i].speed                   = 8;
+        level_manager.levels[i].drop                    = 8;
         level_manager.levels[i].state_initializer       = init_city_level_state;
         level_manager.levels[i].state_end_level_checker = check_city_level_done;
         level_manager.levels[i].gfx_initializer         = init_city_level_gfx;
@@ -71,6 +73,7 @@ struct level_t * level_manager_init(u8 game_mode)
 
         level_manager.levels[i].level                   = 1;
         level_manager.levels[i].speed                   = 8;
+        level_manager.levels[i].drop                    = 8;
         level_manager.levels[i].state_initializer       = init_egypt_level_state;
         level_manager.levels[i].state_end_level_checker = check_egypt_level_done;
         level_manager.levels[i].gfx_initializer         = init_egypt_level_gfx;
@@ -97,6 +100,7 @@ struct level_t * level_manager_init(u8 game_mode)
 
         level_manager.levels[i].level                   = 2;
         level_manager.levels[i].speed                   = 8;
+        level_manager.levels[i].drop                    = 8;
         level_manager.levels[i].state_initializer       = init_sea_level_state;
         level_manager.levels[i].state_end_level_checker = check_sea_level_done;
         level_manager.levels[i].gfx_initializer         = init_sea_level_gfx;
@@ -123,6 +127,7 @@ struct level_t * level_manager_init(u8 game_mode)
 
         level_manager.levels[i].level                   = 3;
         level_manager.levels[i].speed                   = 16;
+        level_manager.levels[i].drop                    = 8;
         level_manager.levels[i].state_initializer       = init_moon_level_state;
         level_manager.levels[i].state_end_level_checker = check_moon_level_done;
         level_manager.levels[i].gfx_initializer         = init_moon_level_gfx;
@@ -135,6 +140,7 @@ struct level_t * level_manager_init(u8 game_mode)
 
         level_manager.levels[i].level                   = 4;
         level_manager.levels[i].speed                   = 12;
+        level_manager.levels[i].drop                    = 8;
         level_manager.levels[i].state_initializer       = init_moon_level_state;
         level_manager.levels[i].state_end_level_checker = check_moon_level_done;
         level_manager.levels[i].gfx_initializer         = init_moon_boss_level_gfx;
@@ -148,6 +154,7 @@ struct level_t * level_manager_init(u8 game_mode)
 
         level_manager.levels[i].level                   = 5;
         level_manager.levels[i].speed                   = 8;
+        level_manager.levels[i].drop                    = 0;
         level_manager.levels[i].state_initializer       = init_ending_level_state;
         level_manager.levels[i].state_end_level_checker = check_ending_level_done;
         level_manager.levels[i].gfx_initializer         = init_ending_level_gfx;

@@ -26,7 +26,7 @@ struct pilot_t * get_pilot(u8 id);
 
 void init_pilot(u8 id, u8 ufo);
 
-void move_pilot(u8 id, u8 speed, u8 second_player);
+void move_pilot(u8 id, u8 speed, u8 second_player, u8 drop);
 
 void set_pilot_pos(u8 id, u16 x, u16 y);
 
