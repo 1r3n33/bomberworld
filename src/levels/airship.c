@@ -256,6 +256,9 @@ u8 airship_loop()
     p1->x = (512-64)<<4;
     p1->y = 94;
 
+    oamSetXY(OBJ_PILOT_0, p0->x>>4, p0->y);
+    oamSetXY(OBJ_PILOT_1, p1->x>>4, p1->y);
+
     while(1)
     {
         spcProcess();

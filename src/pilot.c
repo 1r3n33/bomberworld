@@ -29,6 +29,7 @@ void init_pilot(u8 id, u8 ufo)
         // Define sprites parameters
         oamSet(pilots[id].spr, 0xFF, 0xFF, 3, 0, 0, pilots[id].ufo ? SPR_UFO_FRAME_0 : SPR_PILOT_0_FRAME_0, 0);
         oamSetEx(pilots[id].spr, OBJ_LARGE, OBJ_SHOW);
+        oamSetXY(pilots[id].spr, pilots[id].x>>4, pilots[id].y);
     }
     else
     {
@@ -43,6 +44,7 @@ void init_pilot(u8 id, u8 ufo)
         // Define sprites parameters, mirrored.
         oamSet(pilots[id].spr, 0xFF, 0xFF, 3, 1, 0, pilots[id].ufo ? SPR_UFO_FRAME_0 : SPR_PILOT_1_FRAME_0, 0);
         oamSetEx(pilots[id].spr, OBJ_LARGE, OBJ_SHOW);
+        oamSetXY(pilots[id].spr, pilots[id].x>>4, pilots[id].y);
     }
 }
 
