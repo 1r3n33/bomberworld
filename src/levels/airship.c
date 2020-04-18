@@ -224,7 +224,7 @@ void init_airship_sea_gfx()
     bgSetScroll(0, 0, 0xFF);
     bgSetScroll(1, 0, 0xFF);
     bgSetScroll(2, 0, 0xFF);
-    bgSetScroll(3, 0, 0xFF);  
+    bgSetScroll(3, 0, 0xFF);
 }
 
 void update_airship_sea_level_gfx(u8 frame)
@@ -246,6 +246,11 @@ u8 airship_loop()
 
     struct pilot_t * p0 = get_pilot(0);
     struct pilot_t * p1 = get_pilot(1);
+
+    u8 player_enabled[] = {
+        is_player_enabled(0),
+        is_player_enabled(1),
+    };
 
     // Adjust pilot gfx
     oamSet(OBJ_PILOT_0, 0xFF, 0xFF, 2, 0, 0, SPR_PILOT_0_FRAME_0, 0);
@@ -286,14 +291,19 @@ u8 airship_loop()
 
         if (frame > 60*7)
         {
-            p0->x += 12;
-            p1->x += 12;
+            if (player_enabled[0])
+            {
+                p0->x += 12;
+                oamSetXY(OBJ_PILOT_0, p0->x>>4, p0->y);
+                animate_pilot(0);
+            }
 
-            oamSetXY(OBJ_PILOT_0, p0->x>>4, p0->y);
-            oamSetXY(OBJ_PILOT_1, p1->x>>4, p1->y);
-
-            animate_pilot(0);
-            animate_pilot(1);
+            if (player_enabled[1])
+            {
+                p1->x += 12;
+                oamSetXY(OBJ_PILOT_1, p1->x>>4, p1->y);
+                animate_pilot(1);
+            }
         }
 
         frame++;
