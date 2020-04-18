@@ -5,31 +5,34 @@
 
 void reset_text()
 {
-    u16 text_char_id = OBJ_TEXT;
-
-    u16 i=0;
-    for (i=0; i<64; i++)
+    u16 id=0;
+    for (id=OBJ_TEXT; id<512; id+=4)
     {
-        oamSet(OBJ_TEXT+(i*4), 0xFF, 0xFF, 3, 0, 0, SPR_ASCIITABLE+(' '-32), 1);
-        oamSetEx(OBJ_TEXT+(i*4), OBJ_SMALL, OBJ_HIDE);
+        oamSet(id, 0xFF, 0xFF, 3, 0, 0, SPR_ASCIITABLE+(' '-32), 1);
+        oamSetEx(id, OBJ_SMALL, OBJ_HIDE);
     }
 }
 
-void set_text(u16 id, u8 * text, u8 x, u8 y)
+u16 set_text(u16 id, u8 * text, u8 x, u8 y)
 {
     u8 len = strlen(text);
 
     u8 i=0;
     for (i=0; i<len; i++)
     {
-        oamSet(id, x+(i*8), y, 3, 0, 0, SPR_ASCIITABLE+(text[i]-32), 1);
-        oamSetEx(id, OBJ_SMALL, OBJ_SHOW);
+        if (text[i] != ' ')
+        {
+            oamSet(id, x+(i*8), y, 3, 0, 0, SPR_ASCIITABLE+(text[i]-32), 1);
+            oamSetEx(id, OBJ_SMALL, OBJ_SHOW);
 
-        id += 4;
+            id += 4;
+        }
     }
+
+    return id;
 }
 
-void set_text_number(u16 id, u16 number, u8 x, u8 y)
+u16 set_text_number(u16 id, u16 number, u8 x, u8 y)
 {
     char text[6];
 
@@ -55,4 +58,6 @@ void set_text_number(u16 id, u16 number, u8 x, u8 y)
         id += 4;
         i--;
     }
+
+    return id;
 }

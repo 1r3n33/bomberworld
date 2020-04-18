@@ -30,7 +30,7 @@ void init_graphics();
 #define OBJ_P1_BOMB_1    48  // Draw bomb behind pilot_1
 #define OBJ_P1_BOMB_MEGA 52  // Draw bomb behind pilot_1
 
-#define OBJ_TEXT    256
+#define OBJ_TEXT    192
 
 // 16x16 sprite id (spr_game.bmp)
 #define SPR_PILOT_0_FRAME_0     0
