@@ -1,5 +1,6 @@
 #include <snes.h>
 #include "bomb.h"
+#include "debris.h"
 #include "explosion.h"
 #include "graphics.h"
 #include "level_manager.h"
@@ -62,6 +63,8 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
 
                     init_explosion(bomb_ids[0], bomb->x, bomb->y+4);
                     spcPlaySound(0);
+                    
+                    init_debris(bomb->x, bomb->y+4);
                 }
             }
             else // bomb hit the ground
@@ -93,6 +96,8 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
 
                     init_explosion(bomb_ids[1], bomb->x, bomb->y+4);
                     spcPlaySound(0);
+                    
+                    init_debris(bomb->x, bomb->y+4);
                 }
             }
             else // bomb hit the ground
@@ -205,6 +210,8 @@ u8 gameplay_loop()
         update_explosion(1);
         update_explosion(2);
         update_explosion(3);
+
+        update_debris(frame);
 
         update_bombs(0, pad0, p0);
         update_mega_bombs(0, pad0, p0);

@@ -29,8 +29,24 @@ void init_graphics();
 #define OBJ_P1_BOMB_0    44  // Draw bomb behind pilot_1
 #define OBJ_P1_BOMB_1    48  // Draw bomb behind pilot_1
 #define OBJ_P1_BOMB_MEGA 52  // Draw bomb behind pilot_1
+#define OBJ_DEBRIS_0     56
+#define OBJ_DEBRIS_1     60
+#define OBJ_DEBRIS_2     64
+#define OBJ_DEBRIS_3     68
+#define OBJ_DEBRIS_4     72
+#define OBJ_DEBRIS_5     76
+#define OBJ_DEBRIS_6     80
+#define OBJ_DEBRIS_7     84
+#define OBJ_DEBRIS_8     88
+#define OBJ_DEBRIS_9     92
+#define OBJ_DEBRIS_10    96
+#define OBJ_DEBRIS_11    100
+#define OBJ_DEBRIS_12    104
+#define OBJ_DEBRIS_13    108
+#define OBJ_DEBRIS_14    112
+#define OBJ_DEBRIS_15    116
 
-#define OBJ_TEXT    192
+#define OBJ_TEXT         192
 
 // 16x16 sprite id (spr_game.bmp)
 #define SPR_PILOT_0_FRAME_0     0
@@ -47,6 +63,7 @@ void init_graphics();
 #define SPR_UFO_FRAME_0         36
 #define SPR_UFO_FRAME_1         38
 #define SPR_UFO_FRAME_2         40
+#define SPR_DEBRIS              42
 
 #define SPR_ASCIITABLE          256
 

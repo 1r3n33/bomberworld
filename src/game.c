@@ -1,5 +1,6 @@
 #include <snes.h>
 #include "bomb.h"
+#include "debris.h"
 #include "editor.h"
 #include "explosion.h"
 #include "game.h"
@@ -58,6 +59,8 @@ u8 run_game(u8 mode)
             disable_explosion(1);
             disable_explosion(2);
             disable_explosion(3);
+
+            reset_debris();
 
             display_ui_elements(0);
             display_ui_elements(1);
