@@ -24,16 +24,26 @@ u8 debris_oam_ids[] =
     OBJ_DEBRIS_15,
 };
 
+u8 debris_spr_ids[] =
+{
+    SPR_DEBRIS_CITY,
+    SPR_DEBRIS_EGYPT,
+    SPR_DEBRIS_SHIP,
+    SPR_DEBRIS_CITY,
+    SPR_DEBRIS_CITY,
+    SPR_DEBRIS_CITY,
+};
+
 u8 debris_counter = 0;
 
-void reset_debris()
+void reset_debris(u8 level)
 {
     u8 i=0;
     for (i=0; i<16; i++)
     {
         debris[i].x = 256;
         debris[i].y = 256;
-        oamSet(debris_oam_ids[i], 0xFF, 0xFF, 3, 0, 0, SPR_DEBRIS, 0);
+        oamSet(debris_oam_ids[i], 0xFF, 0xFF, 3, 0, 0, debris_spr_ids[level], 0);
         oamSetEx(debris_oam_ids[i], OBJ_LARGE, OBJ_SHOW);
         oamSetXY(debris_oam_ids[i], debris[i].x, debris[i].y);
     }

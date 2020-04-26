@@ -60,7 +60,7 @@ u8 run_game(u8 mode)
             disable_explosion(2);
             disable_explosion(3);
 
-            reset_debris();
+            reset_debris(current_level->level);
 
             display_ui_elements(0);
             display_ui_elements(1);

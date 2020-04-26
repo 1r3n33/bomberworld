@@ -63,7 +63,9 @@ void init_graphics();
 #define SPR_UFO_FRAME_0         36
 #define SPR_UFO_FRAME_1         38
 #define SPR_UFO_FRAME_2         40
-#define SPR_DEBRIS              42
+#define SPR_DEBRIS_CITY         42
+#define SPR_DEBRIS_EGYPT        44
+#define SPR_DEBRIS_SHIP         46
 
 #define SPR_ASCIITABLE          256
 

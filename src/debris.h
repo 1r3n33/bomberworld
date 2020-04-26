@@ -8,7 +8,7 @@ struct debris_t
     u16 x, y;
 };
 
-void reset_debris();
+void reset_debris(u8 level);
 
 void init_debris(u16 x, u16 y);
 
