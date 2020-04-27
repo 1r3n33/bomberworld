@@ -59,12 +59,16 @@ void init_debris(u16 x, u16 y)
     oamSetXY(debris_oam_ids[i], debris[i].x, debris[i].y);
 }
 
-void update_debris(u8 frame)
+void update_debris(u8 frame, u8 ground_y_pos)
 {
-    u8 i=0;
+    u8 i = 0;
+
+    // If there is an actual ground stop a little before for better looking vfx.
+    u8 y = ground_y_pos == SCREEN_HEIGHT ? SCREEN_HEIGHT : ground_y_pos-6;
+
     for (i=0; i<16; i++)
     {
-        if (debris[i].y < 202)
+        if (debris[i].y < ground_y_pos)
         {
             debris[i].y += 2;
             oamSetXY(debris_oam_ids[i], debris[i].x, debris[i].y);

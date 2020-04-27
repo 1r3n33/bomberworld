@@ -27,6 +27,6 @@ void init_bomb(u8 id);
 
 void drop_bomb(u8 id, u16 x, u16 y);
 
-void move_bomb(u8 id);
+void move_bomb(u8 id, u8 ground_y_pos);
 
 #endif // BOMB_H

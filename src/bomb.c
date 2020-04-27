@@ -3,7 +3,6 @@
 #include "graphics.h"
 
 #define GAMEPLAY_BOMB_DROP_SPEED    1
-#define GAMEPLAY_BOMB_GROUND_Y_POS  (224-16)
 
 struct bomb_t bombs[8];
 
@@ -41,12 +40,12 @@ void drop_bomb(u8 id, u16 x, u16 y)
     }
 }
 
-void move_bomb(u8 id)
+void move_bomb(u8 id, u8 ground_y_pos)
 {
     //if (bombs[id].dropped) Checked in update_bomb
     {
         bombs[id].y += GAMEPLAY_BOMB_DROP_SPEED;
-        if (bombs[id].y >= GAMEPLAY_BOMB_GROUND_Y_POS)
+        if (bombs[id].y >= ground_y_pos)
         {
             init_bomb(id);
         }

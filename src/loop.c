@@ -49,7 +49,7 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
         struct bomb_t * bomb = get_bomb(bomb_ids[0]);
         if (bomb->dropped)
         {
-            move_bomb(bomb_ids[0]);
+            move_bomb(bomb_ids[0], current_level->ground);
             if (bomb->dropped)
             {
                 u8 collision = bomb_tilemap_collision(bomb_ids[0], current_level->bomb_collider);
@@ -63,17 +63,20 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
 
                     init_explosion(bomb_ids[0], bomb->x, bomb->y+4);
                     spcPlaySound(0);
-                    
+
                     init_debris(bomb->x, bomb->y+4);
                 }
             }
-            else // bomb hit the ground
+            else // bomb hit the ground or past screen height
             {
                 release_player_bomb(player_id, BOMB_0);
                 display_ui_bombs(player_id);
 
-                init_explosion(bomb_ids[0], bomb->x, bomb->y);
-                spcPlaySound(0);
+                if (bomb->y < SCREEN_HEIGHT)
+                {
+                    init_explosion(bomb_ids[0], bomb->x, bomb->y);
+                    spcPlaySound(0);
+                }
             }
         }
     }
@@ -82,7 +85,7 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
         struct bomb_t * bomb = get_bomb(bomb_ids[1]);
         if (bomb->dropped)
         {
-            move_bomb(bomb_ids[1]);
+            move_bomb(bomb_ids[1], current_level->ground);
             if (bomb->dropped)
             {
                 u8 collision = bomb_tilemap_collision(bomb_ids[1], current_level->bomb_collider);
@@ -96,17 +99,20 @@ void update_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
 
                     init_explosion(bomb_ids[1], bomb->x, bomb->y+4);
                     spcPlaySound(0);
-                    
+
                     init_debris(bomb->x, bomb->y+4);
                 }
             }
-            else // bomb hit the ground
+            else // bomb hit the ground or past screen height
             {
                 release_player_bomb(player_id, BOMB_1);
                 display_ui_bombs(player_id);
 
-                init_explosion(bomb_ids[1], bomb->x, bomb->y);
-                spcPlaySound(0);
+                if (bomb->y < SCREEN_HEIGHT)
+                {
+                    init_explosion(bomb_ids[1], bomb->x, bomb->y);
+                    spcPlaySound(0);
+                }
             }
         }
     }
@@ -135,7 +141,7 @@ void update_mega_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
     struct bomb_t * bomb = get_bomb(bomb_id);
     if (bomb->dropped)
     {
-        move_bomb(bomb_id);
+        move_bomb(bomb_id, current_level->ground);
         if (bomb->dropped)
         {
             u8 collision = bomb_tilemap_collision(bomb_id, current_level->bomb_collider);
@@ -211,7 +217,7 @@ u8 gameplay_loop()
         update_explosion(2);
         update_explosion(3);
 
-        update_debris(frame);
+        update_debris(frame, current_level->ground);
 
         update_bombs(0, pad0, p0);
         update_mega_bombs(0, pad0, p0);
