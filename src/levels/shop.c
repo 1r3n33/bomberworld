@@ -81,6 +81,22 @@ char * shop_str_ufo[3] =
     "$1000",
 };
 
+char * shop_str_not_yet_available[3] =
+{
+    "This item is not",
+    "yet available.",
+};
+
+char * shop_str_already_bought[3] =
+{
+    "No more in stock!",
+};
+
+char * shop_str_exit[3] =
+{
+    "Already leaving?",
+};
+
 void print_text(char ** text)
 {
     u16 id = OBJ_TEXT+128;
@@ -438,31 +454,49 @@ u8 shop_selection()
         }
         else if (shop_has_moved == 1)
         {
-            u8 flag = 1 << shop_current_selection;
-            switch (flag)
+            if (shop_current_selection == 0xFF)
             {
-            case SHOP_EXTRA_LIFE_FLAG:
-                shop_current_text = shop_str_life;
-                break;
+                shop_current_text = shop_str_exit;
+            }
+            else
+            {
+                u8 flag = 1 << shop_current_selection;
+                if ((flag & shop_available_items_mask) == 0)
+                {
+                    shop_current_text = shop_str_not_yet_available;
+                }
+                else if ((flag & shop_selected_items_mask))
+                {
+                    shop_current_text = shop_str_already_bought;
+                }
+                else
+                {
+                    switch (flag)
+                    {
+                    case SHOP_EXTRA_LIFE_FLAG:
+                        shop_current_text = shop_str_life;
+                        break;
 
-            case SHOP_EXTRA_BOMB_FLAG:
-                shop_current_text = shop_str_bomb;
-                break;
+                    case SHOP_EXTRA_BOMB_FLAG:
+                        shop_current_text = shop_str_bomb;
+                        break;
 
-            case SHOP_POWER_PROPELANT_FLAG:
-                shop_current_text = shop_str_propellant;
-                break;
+                    case SHOP_POWER_PROPELANT_FLAG:
+                        shop_current_text = shop_str_propellant;
+                        break;
 
-            case SHOP_MEGA_BOMB_FLAG:
-                shop_current_text = shop_str_megabomb;
-                break;
+                    case SHOP_MEGA_BOMB_FLAG:
+                        shop_current_text = shop_str_megabomb;
+                        break;
 
-            case SHOP_UFO_FLAG:
-                shop_current_text = shop_str_ufo;
-                break;
+                    case SHOP_UFO_FLAG:
+                        shop_current_text = shop_str_ufo;
+                        break;
 
-            default:
-                break;
+                    default:
+                        break;
+                    }
+                }
             }
         }
     }
