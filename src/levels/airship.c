@@ -269,6 +269,12 @@ u8 airship_loop()
         spcProcess();
         WaitForVBlank();
 
+        u16 pad0 = padsCurrent(0);
+        if (pad0 & KEY_SELECT)
+        {
+            return 1;
+        }
+
         // The airship goes down...
         if (airship_anim_frame < 60*9)
         {
