@@ -19,6 +19,8 @@ u16 sea_block_count = 0;
 
 u16 sea_level_tilemap[32][32];
 
+u8 sea_level_frame = 0;
+
 u8 ship_scroll_x = 0;
 u8 ship_scroll_y = 0;
 
@@ -26,6 +28,8 @@ s8 scroll_offset[2] = { 1, -1 };
 
 void init_sea_level_state(u8 level)
 {
+    sea_level_frame = 0;
+
     ship_scroll_x = 0;
     ship_scroll_y = 0;
 }
@@ -139,24 +143,26 @@ void build_sea_level_editor_tilemap(u16 * tilemap)
         32*32*2,
         SC_32x32,
         VRAM_ADDR_BG1_MAP
-    );    
+    );
 }
 
 void update_sea_level_gfx(u8 frame)
 {
-    if ((frame&7)==7) // Every 7 frames
+    if ((sea_level_frame&7)==7) // Every 7 frames
     {
-        u8 x = (frame >> 7) & 1;
+        u8 x = (sea_level_frame >> 7) & 1;
         ship_scroll_x += scroll_offset[x];
 
-        u8 y = (frame >> 5) & 1;
+        u8 y = (sea_level_frame >> 5) & 1;
         ship_scroll_y += scroll_offset[y];
 
         bgSetScroll(1, ship_scroll_x, ship_scroll_y);
     }
 
-    bgSetScroll(0, frame>>1, (frame>>5)&1);
-    bgSetScroll(2, frame>>2, (frame>>6)&1);
+    bgSetScroll(0, sea_level_frame>>1, (sea_level_frame>>5)&1);
+    bgSetScroll(2, sea_level_frame>>2, (sea_level_frame>>6)&1);
+
+    sea_level_frame++;
 }
 
 u8 check_sea_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
