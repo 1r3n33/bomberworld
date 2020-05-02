@@ -13,6 +13,7 @@ struct state_t
     u8  player_max_bombs[2];
     u8  player_mega_bombs[2];
     u8  player_ufos[2];
+    u8  player_propellant[2];
     struct level_t * current_level;
 };
 
@@ -50,6 +51,11 @@ void use_player_mega_bomb(u8 id);
 
 void max_out_player_mega_bombs(u8 id);
 
+void max_out_player_propellant(u8 id);
+void use_player_propellant(u8 id);
+void refill_player_propellant(u8 id);
+u8 get_player_propellant(u8);
+
 void set_player_ufo(u8 id);
 
 u8 get_player_ufo(u8 id);
@@ -59,6 +65,7 @@ void display_ui_score(u8 id);
 void display_ui_lives(u8 id);
 void display_ui_bombs(u8 id);
 void display_ui_mega_bomb(u8 id);
+void display_ui_propellant(u8 id);
 void display_ui_elements(u8 id);
 
 #endif // STATE_H

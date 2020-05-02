@@ -321,6 +321,21 @@ void init_shop_state(u8 level)
         shop_selected_items_mask |= SHOP_EXTRA_LIFE_FLAG;
         set_selected(1);
     }
+    if (get_player_propellant(0) != 0xFF)
+    {
+        shop_selected_items_mask |= SHOP_POWER_PROPELANT_FLAG;
+        set_selected(2);
+    }
+    if (find_player_mega_bomb(0) > 0)
+    {
+        shop_selected_items_mask |= SHOP_MEGA_BOMB_FLAG;
+        set_selected(3);
+    }
+    if (get_player_ufo(0) > 0)
+    {
+        shop_selected_items_mask |= SHOP_UFO_FLAG;
+        set_selected(4);
+    }
 
     for (i=0; i<5; i++)
     {
@@ -429,6 +444,11 @@ u8 shop_selection()
                     if (flag & SHOP_EXTRA_LIFE_FLAG)
                     {
                         max_out_player_lives(0);
+                    }
+
+                    if (flag & SHOP_POWER_PROPELANT_FLAG)
+                    {
+                        max_out_player_propellant(0);
                     }
 
                     if (flag & SHOP_EXTRA_BOMB_FLAG)
