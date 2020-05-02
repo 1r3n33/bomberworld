@@ -98,9 +98,11 @@ void init_airship_city_gfx()
 
     bgSetDisable(3);
 
+    // Keep scroll from the city level.
     bgSetScroll(0, 0, 0xFF);
     bgSetScroll(1, 0, 0xFF);
-    bgSetScroll(2, 0, 0xFF);
+    extern u16 city_bg2_scroll_x;
+    bgSetScroll(2, city_bg2_scroll_x >> 4, 0xFF);
     bgSetScroll(3, 0, 0xFF);
 }
 
