@@ -2,7 +2,7 @@
 #include "debris.h"
 #include "graphics.h"
 
-struct debris_t debris[8];
+struct debris_t debris[16];
 
 u8 debris_oam_ids[] =
 {
