@@ -4,9 +4,13 @@ SNES homebrew inspired by the [Bomber](https://www.mobygames.com/game/cpc/bomber
 
 [![Build Status](https://travis-ci.com/1r3n33/bomberworld.svg?branch=master)](https://travis-ci.com/1r3n33/bomberworld)
 
+## Screenshots
+
+![intro](./screenshots/bw-001.bmp)
+
 ## Installation on Linux
 
-## Wine
+### Wine
 
 Most of the toolchain is Windows-based.
 
@@ -16,7 +20,7 @@ Install [Wine](https://www.winehq.org/) to properly build the project and run th
 sudo apt-get install wine
 ```
 
-## PVSnesLib
+### PVSnesLib
 
 1. Install the following fork of the [PVSnesLib](https://www.portabledev.com/jeux/supernes/pvsneslib/) SDK:
    ```bash
