@@ -6,7 +6,7 @@ SNES homebrew inspired by the [Bomber](https://www.mobygames.com/game/cpc/bomber
 
 ## Screenshots
 
-![intro](./screenshots/bw-001.bmp)
+![intro](./screenshots/bw-001.bmp) ![sea](./screenshots/bw-002.bmp)
 
 ## Installation on Linux
 
