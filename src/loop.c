@@ -162,11 +162,121 @@ void update_mega_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
     }
 }
 
+u8 propellant_grace_period[2] = { 0, 0 };
+
+void update_pilot(u8 id, u16 pad)
+{
+    struct pilot_t * pilot = get_pilot(id);
+
+    struct level_t * current_level = get_current_level();
+
+    u8 speed  = current_level->speed;
+    u8 drop   = current_level->drop;
+    u8 ground = current_level->ground;
+
+    u8 propellant = get_player_propellant(id);
+    if (propellant == 0xFF)
+    {
+        propellant = 0;
+    }
+
+    if (propellant)
+    {
+        if ((pad & (KEY_UP|KEY_DOWN|KEY_LEFT|KEY_RIGHT))==0)
+        {
+            propellant_grace_period[id] = 0;
+        }
+
+        if (pad & KEY_UP)
+        {
+            if (pilot->y > 0)
+            {
+                pilot->y -= 1;
+                pilot->y_baseline -= 1;
+            }
+            if (propellant_grace_period[id] == 0)
+            {
+                use_player_propellant(id);
+                propellant_grace_period[id] = 8;
+            }
+            else
+            {
+                propellant_grace_period[id]--;
+            }
+        }
+
+        if (pad & KEY_DOWN)
+        {
+            if (pilot->y < ground)
+            {
+                pilot->y += 1;
+                pilot->y_baseline += 1;
+            }
+            if (propellant_grace_period[id] == 0)
+            {
+                use_player_propellant(id);
+                propellant_grace_period[id] = 8;
+            }
+            else
+            {
+                propellant_grace_period[id]--;
+            }
+        }
+
+        if (pad & KEY_RIGHT)
+        {
+            if (id == 0)
+            {
+                speed = speed*4;
+            }
+            else
+            {
+                speed = speed/4;
+            }
+            if (propellant_grace_period[id] == 0)
+            {
+                use_player_propellant(id);
+                propellant_grace_period[id] = 16;
+            }
+            else
+            {
+                propellant_grace_period[id]--;
+            }
+        }
+
+        if (pad & KEY_LEFT)
+        {
+            if (id == 0)
+            {
+                speed = speed/4;
+            }
+            else
+            {
+                speed = speed*4;
+            }
+            if (propellant_grace_period[id] == 0)
+            {
+                use_player_propellant(id);
+                propellant_grace_period[id] = 16;
+            }
+            else
+            {
+                propellant_grace_period[id]--;
+            }
+        }
+    }
+    else
+    {
+        propellant_grace_period[id] = 0;
+    }
+
+    move_pilot(id, is_player_enabled(id) ? speed : 0, is_player_enabled(1-id), drop);
+}
+
 // Internal gameplay loop returns 0 for reset, 1 for completed level, 2 for game over
 u8 gameplay_loop()
 {
     u8 frame = 0;
-    u16 pad0, pad1;
 
     release_player_bomb(0, BOMB_0 | BOMB_1);
     release_player_bomb(1, BOMB_0 | BOMB_1);
@@ -174,14 +284,7 @@ u8 gameplay_loop()
     player_bomb_throttles[0] = 0;
     player_bomb_throttles[1] = 0;
 
-    u8 player_enabled[] = {
-        is_player_enabled(0),
-        is_player_enabled(1),
-    };
-
     struct level_t * current_level = get_current_level();
-    u8 speed = current_level->speed;
-    u8 drop = current_level->drop;
 
     struct pilot_t * p0 = get_pilot(0);
     struct pilot_t * p1 = get_pilot(1);
@@ -193,8 +296,8 @@ u8 gameplay_loop()
 
         current_level->gfx_updater(frame);
 
-        pad0 = padsCurrent(0);
-        pad1 = padsCurrent(1);
+        u16 pad0 = padsCurrent(0);
+        u16 pad1 = padsCurrent(1);
 
         if (pad0 & KEY_START)
         {
@@ -209,8 +312,8 @@ u8 gameplay_loop()
             return 1;
         }
 
-        move_pilot(0, player_enabled[0] ? speed : 0, player_enabled[1], drop);
-        move_pilot(1, player_enabled[1] ? speed : 0, player_enabled[0], drop);
+        update_pilot(0, pad0);
+        update_pilot(1, pad1);
 
         update_explosion(0);
         update_explosion(1);

@@ -1,5 +1,6 @@
 #include "graphics.h"
 #include "pilot.h"
+#include "state.h"
 
 // TODO: smaller struct for pilot: spr & y could be 1 byte
 
@@ -95,6 +96,7 @@ void move_pilot(u8 id, u8 speed, u8 second_player, u8 drop)
             pilots[id].y_baseline += drop;
             pilots[id].y = pilots[id].y_baseline;
             pilots[id].hovering_count++;
+            refill_player_propellant(id);
         }
     }
     else
@@ -105,6 +107,7 @@ void move_pilot(u8 id, u8 speed, u8 second_player, u8 drop)
             pilots[id].y_baseline += drop;
             pilots[id].y = pilots[id].y_baseline;
             pilots[id].hovering_count++;
+            refill_player_propellant(id);
         }
     }
 

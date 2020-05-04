@@ -174,6 +174,7 @@ void max_out_player_mega_bombs(u8 id)
 void max_out_player_propellant(u8 id)
 {
     state.player_propellant[id] = 5;
+    display_ui_propellant(id);
 }
 
 void use_player_propellant(u8 id)
@@ -181,6 +182,7 @@ void use_player_propellant(u8 id)
     if (state.player_propellant[id] != 0xFF && state.player_propellant[id] > 0)
     {
         state.player_propellant[id]--;
+        display_ui_propellant(id);
     }
 }
 
@@ -189,6 +191,7 @@ void refill_player_propellant(u8 id)
     if (state.player_propellant[id] != 0xFF && state.player_propellant[id] < 5)
     {
         state.player_propellant[id]++;
+        display_ui_propellant(id);
     }
 }
 
