@@ -1,6 +1,7 @@
 #include <snes.h>
 #include "graphics.h"
 #include "moon.h"
+#include "pilot.h"
 #include "vfx.h"
 
 extern char moon_bg0_til_begin, moon_bg0_til_end;
@@ -28,6 +29,16 @@ u16 moon_level_tilemap[64][32];
 
 u16 moon_bg1_scroll_x = 0;
 u16 moon_bg1_scroll_y = 0;
+
+u8 boss_eyes_oam_ids[] = { OBJ_BOSS_EYE_0, OBJ_BOSS_EYE_1, OBJ_BOSS_EYE_2, OBJ_BOSS_EYE_3, OBJ_BOSS_EYE_4 };
+u8 boss_eyes_spr_ids[] = { SPR_BOSS_EYE, SPR_BOSS_EYE, SPR_BOSS_EYE, SPR_BOSS_EYE, SPR_BOSS_EYE };
+
+struct simple_sprite_t
+{
+    u8 x, y;
+};
+
+struct simple_sprite_t boss_eyes[4];
 
 void init_moon_level_state(u8 level)
 {
@@ -167,6 +178,28 @@ void init_moon_boss_level_gfx()
     bgSetScroll(1, 0,   moon_bg1_scroll_y);
     bgSetScroll(2, 256, 0xFF);
     bgSetScroll(3, 0,   0xFF);
+
+    boss_eyes[0].x = 72;
+    boss_eyes[0].y = 112;
+
+    boss_eyes[1].x = 100;
+    boss_eyes[1].y = 116;
+
+    boss_eyes[2].x = 124;
+    boss_eyes[2].y = 108;
+
+    boss_eyes[3].x = 148;
+    boss_eyes[3].y = 108;
+
+    boss_eyes[4].x = 172;
+    boss_eyes[4].y = 116;
+
+    u8 i=0;
+    for (i=0; i<5; i++)
+    {
+        oamSet(boss_eyes_oam_ids[i], 0xFF, 0xFF, 2, 0, 0, boss_eyes_spr_ids[i], 0);
+        oamSetEx(boss_eyes_oam_ids[i], OBJ_LARGE, OBJ_SHOW);
+    }
 }
 
 void build_moon_level_tilemap()
@@ -274,8 +307,49 @@ void update_moon_level_gfx(u8 frame)
     update_vfx_moon_bkg(frame);
 }
 
+void update_eye_pos(u8 id, u16 px, u16 py, u8 max)
+{
+    u16 ex = boss_eyes[id].x+512;
+    u16 ey = boss_eyes[id].y+(192-moon_bg1_scroll_y);
+
+    u16 dx = 0;
+    if (px > ex)
+    {
+        dx = px - ex;
+        dx = dx / 8;
+        if (dx > max) dx = max;
+        dx = dx + ex;
+    }
+    else
+    {
+        dx = ex - px;
+        dx = dx / 8;
+        if (dx > max) dx = max;
+        dx = ex - dx;
+    }
+
+    u16 dy = 0;
+    dy = ey - py;
+    dy = dy / 8;
+    if (dy > max) dy = max;
+    dy = ey - dy;
+
+    oamSetXY(boss_eyes_oam_ids[id], dx, dy);
+}
+
 void update_moon_boss_level_gfx(u8 frame)
 {
+    struct pilot_t * p = get_pilot(0);
+
+    u16 px = (p->x >> 4);
+    u16 py = (p->y);
+
+    update_eye_pos(0, px, py, 6);
+    update_eye_pos(1, px, py, 8);
+    update_eye_pos(2, px, py, 3);
+    update_eye_pos(3, px, py, 8);
+    update_eye_pos(4, px, py, 3);
+
     if ((moon_bg1_scroll_y < 191) && ((frame & 15) == 15))
     {
         moon_bg1_scroll_y++;

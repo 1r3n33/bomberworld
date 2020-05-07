@@ -99,7 +99,7 @@ sea_bg2.gfx: bkg_sea_back.bmp
 # BG0 used for the front.
 # This image will generate 1 4-colors palettes
 moon_bg0.gfx: bkg_moon_front.bmp
-	$(GFXCONV) -gs8 -m -pc4 -po4 -pe0 -pr -fbmp -n $<
+	$(GFXCONV) -gs8 -m -mp -pc4 -po4 -pe0 -pr -fbmp -n $<
 	mv bkg_moon_front.pic moon_bg0.pic
 	mv bkg_moon_front.pal moon_bg0.pal
 	mv bkg_moon_front.map moon_bg0.map

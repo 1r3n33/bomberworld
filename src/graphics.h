@@ -45,6 +45,11 @@ void init_graphics();
 #define OBJ_DEBRIS_13    108
 #define OBJ_DEBRIS_14    112
 #define OBJ_DEBRIS_15    116
+#define OBJ_BOSS_EYE_0   120
+#define OBJ_BOSS_EYE_1   124
+#define OBJ_BOSS_EYE_2   128
+#define OBJ_BOSS_EYE_3   132
+#define OBJ_BOSS_EYE_4   136
 
 #define OBJ_TEXT         192
 
@@ -66,6 +71,9 @@ void init_graphics();
 #define SPR_DEBRIS_CITY         42
 #define SPR_DEBRIS_EGYPT        44
 #define SPR_DEBRIS_SHIP         46
+
+#define SPR_DEBRIS_TENTACLES    64
+#define SPR_BOSS_EYE            66
 
 #define SPR_ASCIITABLE          256
 
