@@ -50,7 +50,7 @@ u8 pilot_tilemap_collision(u8 pilot_id, tilemap_point_collider_t collider)
     u16 pilot_x = ((pilot->x>>4) - 512) + ((pilot_id == 0) ? PILOT_COLLISION_OFFSET_RIGHT : PILOT_COLLISION_OFFSET_LEFT);
     u16 pilot_y = pilot->y + PILOT_BUILDING_COLLISION_OFFSET_BOTTOM;
 
-    // Check x pos out of bound.
+    // Check y pos out of bound.
     if (pilot_y > 256)
     {
         return;
