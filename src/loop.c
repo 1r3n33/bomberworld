@@ -9,8 +9,6 @@
 #include "state.h"
 #include "text.h"
 
-#include "levels/egypt.h"
-
 #define GAMEPLAY_SCORE_INCREMENT 5
 
 u8  player_bomb_throttles[2];   // Prevent dropping next bomb too fast.
@@ -157,7 +155,7 @@ void update_mega_bombs(u8 player_id, u16 pad, struct pilot_t * pilot)
             init_explosion(bomb_id, bomb->x, bomb->y);
             spcPlaySound(0);
 
-            mega_bomb_collision(bomb->x, bomb->y);
+            mega_bomb_tilemap_collision(bomb_id, current_level->megabomb_collider);
         }
     }
 }

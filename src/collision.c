@@ -42,6 +42,18 @@ u8 bomb_tilemap_collision(u8 bomb_id, tilemap_box_collider_t collider)
     return 0;
 }
 
+u8 mega_bomb_tilemap_collision(u8 bomb_id, tilemap_box_collider_t collider)
+{
+    struct bomb_t * bomb = get_bomb(bomb_id);
+
+    // Compute bomb bounding box
+    u8 bomb_bottom = bomb->y + BOMB_COLLISION_OFFSET_BOTTOM;
+    u8 bomb_left = bomb->x + BOMB_COLLISION_OFFSET_LEFT;
+    u8 bomb_right = bomb->x + BOMB_COLLISION_OFFSET_RIGHT;
+
+    return collider(0, bomb_bottom, bomb_left, bomb_right);
+}
+
 u8 pilot_tilemap_collision(u8 pilot_id, tilemap_point_collider_t collider)
 {
     struct pilot_t * pilot = get_pilot(pilot_id);

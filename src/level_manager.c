@@ -65,7 +65,6 @@ struct level_t * level_manager_init(u8 game_mode)
         level_manager.levels[i].gfx_updater             = update_city_level_gfx;
         level_manager.levels[i].loop                    = airship_loop;
         i++;
-#endif
 
         level_manager.levels[i].level                   = 0;
         level_manager.levels[i].gfx_initializer         = init_shop_gfx;
@@ -84,6 +83,7 @@ struct level_t * level_manager_init(u8 game_mode)
         level_manager.levels[i].gfx_updater             = update_egypt_level_gfx;
         level_manager.levels[i].tilemap_builder         = build_egypt_level_tilemap;
         level_manager.levels[i].bomb_collider           = check_egypt_level_bomb_collision;
+        level_manager.levels[i].megabomb_collider       = egypt_mega_bomb_collision;
         level_manager.levels[i].pilot_collider          = check_egypt_level_pilot_collision;
         level_manager.levels[i].loop                    = gameplay_loop;
         i++;
@@ -129,6 +129,7 @@ struct level_t * level_manager_init(u8 game_mode)
         level_manager.levels[i].tilemap_builder         = do_nothing_tilemap_builder;
         level_manager.levels[i].loop                    = shop_loop;
         i++;
+#endif
 
         level_manager.levels[i].level                   = 3;
         level_manager.levels[i].speed                   = 16;

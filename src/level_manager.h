@@ -25,6 +25,7 @@ struct level_t
     tilemap_builder_t         tilemap_builder;
     editor_tilemap_builder_t  editor_tilemap_builder;
     tilemap_box_collider_t    bomb_collider;
+    tilemap_box_collider_t    megabomb_collider;
     tilemap_point_collider_t  pilot_collider;
     loop_t                    loop;
 };
