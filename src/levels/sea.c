@@ -195,6 +195,42 @@ u8 check_sea_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
     return 0;
 }
 
+u8 sea_mega_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
+{
+    u8 map_x = (right-1) / 8;
+    u8 map_y = (bottom-1) / 8;
+
+    s8 i;
+    s8 j;
+    for (j=0; j<11; j++)
+    {
+        for (i=0; i<11; i++)
+        {
+            s8 xx = (map_x-5)+i;
+            s8 yy = (map_y-5)+j;
+
+            if (xx >= 0 && xx < 32 && yy >= 0 && yy < 32 && get_mega_bomb_mask(i, j))
+            {
+                if (sea_level_tilemap[yy][xx] > 0)
+                {
+                    sea_level_tilemap[yy][xx] = 0;
+                    sea_block_count--;
+                }
+            }
+        }
+    }
+
+    bgInitMapSet(
+        1,
+        (u8*)sea_level_tilemap,
+        32*32*2,
+        SC_32x32,
+        VRAM_ADDR_BG1_MAP
+    );
+
+    return 0;
+}
+
 u8 check_sea_level_pilot_collision(u8 x, u8 y)
 {
     u8 map_x = (x+ship_scroll_x) / 8;
