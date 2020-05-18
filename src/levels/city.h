@@ -51,6 +51,8 @@ void update_city_level_gfx(u8 frame);
 
 u8 check_city_level_bomb_collision(u8 top, u8 bottom, u8 left, u8 right);
 
+u8 city_mega_bomb_collision(u8 top, u8 bottom, u8 left, u8 right);
+
 u8 check_city_level_pilot_collision(u8 x, u8 y);
 
 u8 check_city_level_done();

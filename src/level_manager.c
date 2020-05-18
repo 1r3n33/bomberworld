@@ -55,6 +55,7 @@ struct level_t * level_manager_init(u8 game_mode)
         level_manager.levels[i].gfx_updater             = update_city_level_gfx;
         level_manager.levels[i].tilemap_builder         = build_city_level_tilemap;
         level_manager.levels[i].bomb_collider           = check_city_level_bomb_collision;
+        level_manager.levels[i].megabomb_collider       = city_mega_bomb_collision;
         level_manager.levels[i].pilot_collider          = check_city_level_pilot_collision;
         level_manager.levels[i].loop                    = gameplay_loop;
         i++;

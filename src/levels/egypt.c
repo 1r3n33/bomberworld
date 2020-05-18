@@ -79,21 +79,6 @@ void init_egypt_level_gfx()
     init_vfx_bkg_waves();
 }
 
-u8 mega_bomb_mask[11][11] = 
-{
-    {0,0,0,1,1,1,1,1,0,0,0},
-    {0,0,1,1,1,1,1,1,1,0,0},
-    {0,1,1,1,1,1,1,1,1,1,0},
-    {1,1,1,1,1,1,1,1,1,1,1},
-    {1,1,1,1,1,1,1,1,1,1,1},
-    {1,1,1,1,1,1,1,1,1,1,1},
-    {1,1,1,1,1,1,1,1,1,1,1},
-    {1,1,1,1,1,1,1,1,1,1,1},
-    {0,1,1,1,1,1,1,1,1,1,0},
-    {0,0,1,1,1,1,1,1,1,0,0},
-    {0,0,0,1,1,1,1,1,0,0,0},
-};
-
 u8 egypt_mega_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
 {
     u8 map_x = (right-1) / 8;
@@ -105,10 +90,10 @@ u8 egypt_mega_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)
     {
         for (i=0; i<11; i++)
         {
-            s8 xx = (map_x-5)+i;    
-            s8 yy = (map_y-5)+j;    
+            s8 xx = (map_x-5)+i;
+            s8 yy = (map_y-5)+j;
 
-            if (xx >= 0 && xx < 32 && yy >= 0 && yy < 32 && mega_bomb_mask[j][i])
+            if (xx >= 0 && xx < 32 && yy >= 0 && yy < 32 && get_mega_bomb_mask(i, j))
             {
                 if (egypt_level_tilemap[yy][xx] > 0)
                 {
