@@ -1,4 +1,5 @@
 #include <snes.h>
+#include "bomb.h"
 #include "egypt.h"
 #include "graphics.h"
 #include "vfx.h"
