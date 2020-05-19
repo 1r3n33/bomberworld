@@ -315,4 +315,16 @@ ending_bg1_map_begin:
 .incbin "ending_bg1.map"
 ending_bg1_map_end:
 
+ending_bg2_til_begin:
+.incbin "ending_bg2.pic"
+ending_bg2_til_end:
+
+ending_bg2_pal_begin:
+.incbin "ending_bg2.pal"
+ending_bg2_pal_end:
+
+ending_bg2_map_begin:
+.incbin "ending_bg2.map"
+ending_bg2_map_end:
+
 .ends

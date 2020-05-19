@@ -41,6 +41,10 @@ extern char ending_bg1_til_begin, ending_bg1_til_end;
 extern char ending_bg1_pal_begin, ending_bg1_pal_end;
 extern char ending_bg1_map_begin, ending_bg1_map_end;
 
+extern char ending_bg2_til_begin, ending_bg2_til_end;
+extern char ending_bg2_pal_begin, ending_bg2_pal_end;
+extern char ending_bg2_map_begin, ending_bg2_map_end;
+
 u16 ending_level_tilemap[64][32];
 u16 ending_block_count = 0;
 
@@ -84,15 +88,32 @@ void init_ending_level_gfx()
         VRAM_ADDR_BG1_MAP
     );
 
+    bgInitTileSet(
+        2,
+        &ending_bg2_til_begin,
+        &ending_bg2_pal_begin,
+        0,
+        (&ending_bg2_til_end - &ending_bg2_til_begin),
+        (&ending_bg2_pal_end - &ending_bg2_pal_begin),
+        BG_4COLORS0,
+        VRAM_ADDR_BG2_GFX
+    );
+    bgInitMapSet(
+        2,
+        &ending_bg2_map_begin,
+        (&ending_bg2_map_end - &ending_bg2_map_begin),
+        SC_32x32,
+        VRAM_ADDR_BG2_MAP
+    );
+
     setMode(BG_MODE0, 0);
 
     ending_bg0_scroll_y = 280;
 
-    bgSetDisable(2);
     bgSetDisable(3);
     bgSetScroll(0, 0, ending_bg0_scroll_y);
     bgSetScroll(1, 0, 247);
-    bgSetScroll(2, 0, 0xFF);
+    bgSetScroll(2, 0, 247);
     bgSetScroll(3, 0, 0xFF);
 }
 

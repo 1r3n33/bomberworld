@@ -138,11 +138,19 @@ ending_bg0.gfx: spr_fonts.bmp
 	touch $@	
 # BG1 for sunset
 # This image generates 1 4-colors palette
-ending_bg1.gfx: bkg_sunset.bmp
+ending_bg1.gfx: bkg_sunset_sea.bmp
 	$(GFXCONV) -gs8 -m -pc4 -po4 -pe0 -pr -fbmp -n $<
-	mv bkg_sunset.pic ending_bg1.pic
-	mv bkg_sunset.pal ending_bg1.pal
-	mv bkg_sunset.map ending_bg1.map
+	mv bkg_sunset_sea.pic ending_bg1.pic
+	mv bkg_sunset_sea.pal ending_bg1.pal
+	mv bkg_sunset_sea.map ending_bg1.map
+	touch $@
+# BG2 for sunset
+# This image generates 1 4-colors palette
+ending_bg2.gfx: bkg_sunset_sky.bmp
+	$(GFXCONV) -gs8 -m -pc4 -po4 -pe0 -pr -fbmp -n $<
+	mv bkg_sunset_sky.pic ending_bg2.pic
+	mv bkg_sunset_sky.pal ending_bg2.pal
+	mv bkg_sunset_sky.map ending_bg2.map
 	touch $@
 
 # Larry's airship (Mode 1)
@@ -239,6 +247,7 @@ gfx:	spr_game.pic			\
 		moon_bg2.gfx			\
 		ending_bg0.gfx			\
 		ending_bg1.gfx			\
+		ending_bg2.gfx			\
 		airship_bg0.gfx			\
 		airship_city_bg1.gfx	\
 		airship_city_bg2.gfx	\
