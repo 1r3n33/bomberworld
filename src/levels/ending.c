@@ -1,5 +1,6 @@
 #include <snes.h>
 #include "graphics.h"
+#include "vfx.h"
 
 char credits[32][33] =
 {
@@ -115,6 +116,8 @@ void init_ending_level_gfx()
     bgSetScroll(1, 0, 247);
     bgSetScroll(2, 0, 247);
     bgSetScroll(3, 0, 0xFF);
+
+    init_vfx_bkg_waves(-1);
 }
 
 void build_ending_level_tilemap()
@@ -154,6 +157,8 @@ void build_ending_level_tilemap()
 
 void update_ending_level_gfx(u8 frame)
 {
+    update_vfx_bkg_waves(frame);
+
     if ((frame & 31) == 31)
     {
         ending_bg0_scroll_y++;

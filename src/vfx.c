@@ -22,7 +22,7 @@ struct hdma_buffer_t hdma_buffer;
 
 u8 vfx_bkg_waves_offset = 0;
 
-void init_vfx_bkg_waves()
+void init_vfx_bkg_waves(s8 shift)
 {
     // bkg_waves:
     // Use HDMA to set H_SCROLL value for each line.
@@ -46,27 +46,27 @@ void init_vfx_bkg_waves()
     for (i=0; i<VFX_BKG_WAVES_TOTAL_SIZE; i+=18)
     {
         hdma_buffer.data[i+0]  = 1; // header byte: 1 line
-        hdma_buffer.data[i+1]  = 0; // value for the H_SCROLL register (8-bit low)
-        hdma_buffer.data[i+2]  = 0; // value for the H_SCROLL register (8-bit high)
+        hdma_buffer.data[i+1]  = 0+shift; // value for the H_SCROLL register (8-bit low)
+        hdma_buffer.data[i+2]  = 0;       // value for the H_SCROLL register (8-bit high)
 
         hdma_buffer.data[i+3]  = 1;
-        hdma_buffer.data[i+4]  = 1;
+        hdma_buffer.data[i+4]  = 1+shift;
         hdma_buffer.data[i+5]  = 0;
 
         hdma_buffer.data[i+6]  = 1;
-        hdma_buffer.data[i+7]  = 2;
+        hdma_buffer.data[i+7]  = 2+shift;
         hdma_buffer.data[i+8]  = 0;
 
         hdma_buffer.data[i+9]  = 1;
-        hdma_buffer.data[i+10] = 3;
+        hdma_buffer.data[i+10] = 3+shift;
         hdma_buffer.data[i+11] = 0;
 
         hdma_buffer.data[i+12] = 1;
-        hdma_buffer.data[i+13] = 2;
+        hdma_buffer.data[i+13] = 2+shift;
         hdma_buffer.data[i+14] = 0;
 
         hdma_buffer.data[i+15] = 1;
-        hdma_buffer.data[i+16] = 1;
+        hdma_buffer.data[i+16] = 1+shift;
         hdma_buffer.data[i+17] = 0;
     }
     hdma_buffer.data[i] = 0; // header byte: terminate hdma

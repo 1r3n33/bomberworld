@@ -77,7 +77,7 @@ void init_egypt_level_gfx()
     bgSetScroll(3, egypt_bg3_scroll_x >> 4, 0xFF);
 
     // Heat fx
-    init_vfx_bkg_waves();
+    init_vfx_bkg_waves(0);
 }
 
 u8 egypt_mega_bomb_collision(u8 top, u8 bottom, u8 left, u8 right)

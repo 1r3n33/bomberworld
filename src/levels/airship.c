@@ -157,7 +157,7 @@ void init_airship_egypt_gfx()
     bgSetScroll(2, 0, 0xFF);
     bgSetScroll(3, 0, 0xFF);
 
-    init_vfx_bkg_waves();
+    init_vfx_bkg_waves(0);
 }
 
 void init_airship_sea_gfx()

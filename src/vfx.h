@@ -3,7 +3,7 @@
 
 #include <snes.h>
 
-void init_vfx_bkg_waves();
+void init_vfx_bkg_waves(s8 shift);
 
 void update_vfx_bkg_waves(u8 frame);
 
