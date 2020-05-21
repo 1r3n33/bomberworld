@@ -118,6 +118,12 @@ void init_ending_level_gfx()
     bgSetScroll(3, 0, 0xFF);
 
     init_vfx_bkg_waves(-1);
+
+    oamSetEx(OBJ_BOSS_EYE_0, OBJ_LARGE, OBJ_HIDE);
+    oamSetEx(OBJ_BOSS_EYE_1, OBJ_LARGE, OBJ_HIDE);
+    oamSetEx(OBJ_BOSS_EYE_2, OBJ_LARGE, OBJ_HIDE);
+    oamSetEx(OBJ_BOSS_EYE_3, OBJ_LARGE, OBJ_HIDE);
+    oamSetEx(OBJ_BOSS_EYE_4, OBJ_LARGE, OBJ_HIDE);
 }
 
 void build_ending_level_tilemap()
