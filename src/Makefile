@@ -9,9 +9,9 @@ endif
 include $(DEVKIT65XX)/snes_rules
 
 #---------------------------------------------------------------------------------
-# SOURCES is a list of directories containing source code
+# SOURCES is a list of directories containing source code.
 #---------------------------------------------------------------------------------
-SOURCES		:=	. $(shell ls -d */)
+SOURCES	:= .
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -24,8 +24,8 @@ CFLAGS	+=	$(INCLUDE)
 #---------------------------------------------------------------------------------
 LIBDIRS	:=	$(PVSNESLIB)
 
-CFILES		:=	$(foreach dir,$(SOURCES),$(wildcard $(dir)/*.c))
-SFILES		:=	$(foreach dir,$(SOURCES),$(wildcard $(dir)/*.asm))
+CFILES		:=	$(shell find $(SOURCES) -type f -name '*.c')
+SFILES		:=	$(shell find $(SOURCES) -type f -name '*.asm')
 
 #---------------------------------------------------------------------------------
 export OFILES	:=	$(BINFILES:.bin=.obj) $(CFILES:.c=.obj) $(SFILES:.asm=.obj)
